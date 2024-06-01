@@ -10,11 +10,11 @@ An essentials library for Kotlin multiplatform that makes it easier to work with
 <br/>
 
 <p align="center">
-   <a href="[https://central.sonatype.com/artifact/io.github.thearchitect123/titansocket](https://central.sonatype.com/artifact/io.github.thearchitect123/kmpEssentials)">
+   <a href="[https://central.sonatype.com/artifact/io.github.thearchitect123/kmpEssentials](https://central.sonatype.com/artifact/io.github.thearchitect123/kmpEssentials)">
     <img alt="GitHub" src="https://img.shields.io/maven-central/v/io.github.thearchitect123/kmpEssentials.svg">
   </a>
 
-  <a href="[https://github.com/TheArchitect123/TitanSocket](https://github.com/TheArchitect123/KmpEssentials)">
+  <a href="[https://github.com/TheArchitect123/kmpEssentials](https://github.com/TheArchitect123/KmpEssentials)">
     <img alt="GitHub" src="https://img.shields.io/badge/_Android,_iOS-white.svg">
   </a>
 </p
