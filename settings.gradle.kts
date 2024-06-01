@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "KmpEssentials"
 include(":shared")
+
