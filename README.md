@@ -1,6 +1,6 @@
 <br/>
 <p align="center">
-    <a href="https://github.com/TheArchitect123/TitanSocket"><img src="./kotlin.jpg" align="center" width=350/></a>
+    <a href="[https://github.com/TheArchitect123/TitanSocket](https://github.com/TheArchitect123/KmpEssentials)"><img src="./kotlin.jpg" align="center" width=350/></a>
 </p>
 
 <p align="center">
