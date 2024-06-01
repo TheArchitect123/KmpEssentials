@@ -4,16 +4,14 @@ actual class KmpLauncher {
     actual companion object {
         actual fun launchExternalMapsAppWithAddress(
             address: String,
-            markerTitle: String,
-            externalApp: MapsApplication
+            markerTitle: String
         ) {
         }
 
         actual fun launchExternalMapsAppWithCoordinates(
             latitude: Double,
             longitude: Double,
-            markerTitle: String,
-            externalApp: MapsApplication
+            markerTitle: String
         ) {
         }
 

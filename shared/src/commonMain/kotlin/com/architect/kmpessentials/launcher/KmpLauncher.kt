@@ -5,15 +5,13 @@ expect class KmpLauncher {
     companion object {
         fun launchExternalMapsAppWithAddress(
             address: String,
-            markerTitle: String = "",
-            externalApp: MapsApplication = MapsApplication.Default
+            markerTitle: String = ""
         )
 
         fun launchExternalMapsAppWithCoordinates(
             latitude: Double,
             longitude: Double,
-            markerTitle: String = "",
-            externalApp: MapsApplication = MapsApplication.Default
+            markerTitle: String = ""
         )
 
         fun launchExternalUrlViaBrowser(linkPath: String)
@@ -21,4 +19,3 @@ expect class KmpLauncher {
         fun launchAppInternalSettings()
     }
 }
-
