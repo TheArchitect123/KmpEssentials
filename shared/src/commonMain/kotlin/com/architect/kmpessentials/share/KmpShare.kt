@@ -1,4 +1,7 @@
 package com.architect.kmpessentials.share
 
-class KmpShare {
+expect class KmpShare {
+    companion object{
+
+    }
 }

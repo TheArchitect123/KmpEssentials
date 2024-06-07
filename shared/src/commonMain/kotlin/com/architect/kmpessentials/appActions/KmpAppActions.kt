@@ -1,4 +1,7 @@
 package com.architect.kmpessentials.appActions
 
-class KmpAppActions {
+expect class KmpAppActions {
+    companion object{
+        fun isSupported(): Boolean
+    }
 }

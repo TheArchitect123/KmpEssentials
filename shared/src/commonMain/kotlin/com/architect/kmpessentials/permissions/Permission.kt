@@ -8,6 +8,5 @@ enum class Permission {
     CoarseLocation,
     Sms,
     Microphone,
-
 }
 

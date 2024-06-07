@@ -1,4 +1,9 @@
 package com.architect.kmpessentials.contacts
 
-class KmpContacts {
+expect class KmpContacts {
+    companion object {
+        fun getAllContacts(): List<Contact>
+        fun pickContact(): Contact
+    }
 }
+

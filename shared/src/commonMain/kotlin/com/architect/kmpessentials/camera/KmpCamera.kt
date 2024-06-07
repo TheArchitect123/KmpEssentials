@@ -1,4 +1,7 @@
 package com.architect.kmpessentials.camera
 
-class KmpCamera {
+expect class KmpCamera {
+    companion object{
+        fun isSupported(): Boolean
+    }
 }

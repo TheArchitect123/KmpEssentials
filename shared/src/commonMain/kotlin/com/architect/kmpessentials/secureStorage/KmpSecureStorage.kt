@@ -1,4 +1,8 @@
 package com.architect.kmpessentials.secureStorage
 
-class KmpSecureStorage {
+expect class KmpSecureStorage {
+   companion object{
+//       fun writeToSecureStore(key: String, value: String)
+//       fun writeToSecureStore(key: String, value: String)
+   }
 }
