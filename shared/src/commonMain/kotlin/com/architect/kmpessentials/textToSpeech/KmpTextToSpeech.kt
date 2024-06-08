@@ -1,4 +1,4 @@
-package com.architect.kmpessentials.TextToSpeech
+package com.architect.kmpessentials.textToSpeech
 
 expect class KmpTextToSpeech {
     companion object{
