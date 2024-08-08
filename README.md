@@ -21,6 +21,7 @@ An essentials library for Kotlin multiplatform that makes it easier to work with
 
 
 ## How it works
+
 KmpEssentials is a library that contains apis to accelerate your development. Everything from managing the Battery, File System, or getting Package information. 
 
 To get started, import the library into your project:
