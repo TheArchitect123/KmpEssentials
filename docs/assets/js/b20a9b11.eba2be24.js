@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkkmp_essentials=self.webpackChunkkmp_essentials||[]).push([[2521],{4518:e=>{e.exports=JSON.parse('{"metadata":{"permalink":"/KmpEssentials/blog","page":1,"postsPerPage":10,"totalPages":1,"totalCount":4,"blogDescription":"Blog","blogTitle":"Blog"}}')}}]);
