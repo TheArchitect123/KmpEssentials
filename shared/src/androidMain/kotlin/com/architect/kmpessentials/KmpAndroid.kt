@@ -1,12 +1,12 @@
 package com.architect.kmpessentials
 
-import android.content.Context
+import android.app.Activity
 
 class KmpAndroid {
     companion object {
-        internal lateinit var clientAppContext: Context
+        internal lateinit var clientAppContext: Activity
 
-        fun initializeApp(context: Context) {
+        fun initializeApp(context: Activity) {
             clientAppContext = context
         }
     }

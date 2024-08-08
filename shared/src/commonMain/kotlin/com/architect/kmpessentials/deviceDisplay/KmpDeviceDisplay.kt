@@ -1,10 +1,9 @@
 package com.architect.kmpessentials.deviceDisplay
 
 expect class KmpDeviceDisplay {
-    companion object{
-        fun preventScreenAutoTurnOff()
-        fun allowScreenAutoTurnOff()
-        fun preventScreenLock()
+    companion object {
+        fun keepScreenOnActive()
+        fun disableScreenOnActive()
         fun adjustScreenBrightness(brightness: Double)
     }
 }

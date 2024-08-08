@@ -1,28 +1,36 @@
 package com.architect.kmpessentials.appInfo
 
-actual class KmpAppInfo {
+import android.content.res.Configuration
+import com.architect.kmpessentials.KmpAndroid
 
+actual class KmpAppInfo {
     actual companion object {
         actual fun getPackageName(): String {
-            return ""
+            return KmpAndroid.clientAppContext.packageName
         }
 
         actual fun getPackageVersion(): String {
-            return ""
+            return KmpAndroid.clientAppContext.packageManager.getPackageInfo(
+                getPackageName(),
+                0
+            ).versionName
         }
 
-        actual fun getPackageBuild(): String {
-            return ""
+        actual fun getSystemThemeMode(): AppDeviceTheme {
+            if (KmpAndroid.clientAppContext.resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES) {
+                return AppDeviceTheme.Dark
+            }
+            return AppDeviceTheme.Light
         }
 
-        actual fun getPackageMinor(): String {
-            return ""
+        actual fun getPackageVersionCode(): Int {
+            return KmpAndroid.clientAppContext.packageManager.getPackageInfo(getPackageName(), 0).versionCode
         }
 
-        actual fun getAppTheme(): AppDeviceTheme {
-            return AppDeviceTheme.Dark
+        actual fun getPackageMinOS(): Int {
+            val packageManager = KmpAndroid.clientAppContext.packageManager.getPackageInfo(getPackageName(), 0)
+            return packageManager.applicationInfo.targetSdkVersion
         }
     }
-
 }
 

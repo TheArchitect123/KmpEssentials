@@ -1,13 +1,14 @@
 package com.architect.kmpessentials.deviceInfo
 
+import android.os.Build
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+
 actual class KmpDeviceInfo {
     actual companion object {
         actual fun getDeviceTimeZone(): String {
-            return ""
-        }
-
-        actual fun getDeviceCurrentTimeUtc(): String {
-            return ""
+            return TimeZone.currentSystemDefault().id
         }
 
         actual fun getRunningPlatform(): DevicePlatform {
@@ -15,7 +16,7 @@ actual class KmpDeviceInfo {
         }
 
         actual fun getDeviceSpecs(): DeviceSpecs {
-            return DeviceSpecs("", "", "")
+            return DeviceSpecs(Build.MODEL, Build.VERSION.CODENAME, Build.MANUFACTURER)
         }
     }
 }

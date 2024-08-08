@@ -1,9 +1,18 @@
 package com.architect.kmpessentials.battery
 
+import android.content.Context
+import android.hardware.BatteryState
+import android.os.BatteryManager
+import com.architect.kmpessentials.KmpAndroid
+
 actual class KmpBattery {
     actual companion object {
+        val batteryService =
+            KmpAndroid.clientAppContext.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
+
         actual fun getCurrentChargeLevel(): Double {
-            return 0.0
+
+          return 0.0
         }
 
         actual fun getCurrentChargeState(): BatteryChargeState {

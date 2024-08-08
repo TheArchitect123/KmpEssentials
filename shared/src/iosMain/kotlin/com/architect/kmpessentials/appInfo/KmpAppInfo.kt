@@ -1,25 +1,33 @@
 package com.architect.kmpessentials.appInfo
 
+import platform.Foundation.NSBundle
+import platform.UIKit.UIApplication
+import platform.UIKit.UIUserInterfaceStyle
+
 actual class KmpAppInfo {
     actual companion object {
         actual fun getPackageName(): String {
-            return ""
+            return NSBundle.mainBundle.infoDictionary?.getValue("CFBundleName") as? String ?: ""
         }
 
         actual fun getPackageVersion(): String {
-            return ""
+            return NSBundle.mainBundle.infoDictionary?.getValue("CFBundleVersion") as? String ?: ""
         }
 
-        actual fun getPackageBuild(): String {
-            return ""
+        actual fun getPackageVersionCode(): Int {
+            return "${NSBundle.mainBundle.infoDictionary?.getValue("CFBundleShortVersionString") as? String ?: "1"}".toInt()
         }
 
-        actual fun getPackageMinor(): String {
-            return ""
+        actual fun getPackageMinOS(): Int {
+            return 0
         }
 
-        actual fun getAppTheme(): AppDeviceTheme {
-            return AppDeviceTheme.Dark
+        actual fun getSystemThemeMode(): AppDeviceTheme {
+            if(UIApplication.sharedApplication.keyWindow?.rootViewController?.traitCollection?.userInterfaceStyle() == UIUserInterfaceStyle.UIUserInterfaceStyleDark){
+                return AppDeviceTheme.Dark
+            }
+
+            return AppDeviceTheme.Light
         }
     }
 }
