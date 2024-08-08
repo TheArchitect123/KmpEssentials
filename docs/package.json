@@ -1,0 +1,61 @@
+{
+  "name": "terra-docs",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "docusaurus": "docusaurus",
+    "start": "docusaurus start",
+    "build": "docusaurus build",
+    "swizzle": "docusaurus swizzle",
+    "deploy": "docusaurus deploy",
+    "clear": "docusaurus clear",
+    "serve": "docusaurus serve",
+    "write-translations": "docusaurus write-translations",
+    "write-heading-ids": "docusaurus write-heading-ids"
+  },
+  "dependencies": {
+    "@code-hike/mdx": "^0.7.4",
+    "@docusaurus/core": "^2.3.1",
+    "@docusaurus/preset-classic": "^2.3.1",
+    "@emotion/react": "^11.9.3",
+    "@mdx-js/react": "^2.1.2",
+    "@rebass/preset": "^4.0.5",
+    "clsx": "^1.2.1",
+    "docusaurus-plugin-matomo": "^0.0.6",
+    "docusaurus-plugin-sass": "^0.2.2",
+    "docusaurus-theme-mdx-v2": "^0.1.2",
+    "emotion-theming": "^11.0.0",
+    "hast-util-is-element": "1.1.0",
+    "prism-react-renderer": "^1.3.5",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-player": "^2.10.1",
+    "rebass": "^4.0.7",
+    "redocusaurus": "^1.3.0",
+    "rehype-katex": "^6.0.2",
+    "remark-math": "^5.1.1",
+    "sass": "^1.54.5"
+  },
+  "devDependencies": {
+    "@docusaurus/module-type-aliases": "2.0.0-rc.1",
+    "@typescript-eslint/parser": "^5.0.1",
+    "eslint": "^8.7.0",
+    "prettier": "^2.5.1",
+    "typescript": "^4.4.4"
+  },
+  "browserslist": {
+    "production": [
+      ">0.5%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "engines": {
+    "node": ">=16.14"
+  }
+}

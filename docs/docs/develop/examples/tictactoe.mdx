@@ -1,0 +1,68 @@
+# Tic-tac-toe app example
+
+This app example was created to illustrate the structure of an application with smart contracts and a basic front end. The open-source application code, including the smart contract code, can be found in the [emidev98/tic-tac-toe](https://github.com/emidev98/tic-tac-toe/tree/main/contracts/tic_tac_toe) repository. 
+
+The [website frontend](https://github.com/emidev98/tic-tac-toe/tree/main/frontend) that allows you to interact with the smart contract is deployed to [tic-tac-toe.emidev98.xyz](http://tic-tac-toe.emidev98.xyz/).
+
+
+| Network     | Code ID     | Contract Address |
+| ----------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Testnet     |   1945      | [terra1nccc7q0x2gpa9ykhmar85rfrzd4uggzlepepw20ktt2ltp4eguuqmyxfc9](https://finder.terra.money/testnet/address/terra1nccc7q0x2gpa9ykhmar85rfrzd4uggzlepepw20ktt2ltp4eguuqmyxfc9) |
+
+## Rules
+
+Two players take turns placing **X**s and **O**s on a 3x3 grid.  The first to align three units in a row wins. For more information on the rules, visit the [Tic-tac-toe Wikipedia page](https://en.wikipedia.org/wiki/Tic-tac-toe).
+
+## Smart contract architecture
+
+This smart contract is built with 1 query and 4 different executes. To enable a permissionless and trustless game, this contract contains a state machine with the following states:
+
+- `INVITED`: only one game can be in this status at a time per host and opponent pair. This status is achieved by creating a new game. The following possible statuses are PLAYING or REJECTED.
+- `PLAYING`: only one game can be in this status at a time per host and opponent pair. This status must mutate from `INVITED`.
+- `COMPLETED`: multiple games can be in this status. This status must mutate from `PLAYING`.
+- `REJECTED`: multiple games can be in this status. This status must mutate from `INVITED`. 
+
+A host creates the game and invites an opponent to play. This game can only be played by 1 host and 1 opponent at a time. After a match is completed or rejected, a new game can be started.
+
+# QueryMsg
+
+The Games query contains the optional `key` and `status` parameters, which will query the games with the given status. If none of these optional parameters are submitted, the smart contract will return all stored data.
+
+
+# ExecuteMsg
+
+- 'Invite': create a new game if there is no game in the status 'PLAYING' or 'INVITED'. 
+- 'Reject': reject a game in the status 'INVITED' and return the funds to the player who requested to play.
+- 'AcceptGame': accept a game in status 'INVITED' only when the sent funds match the game prize. The game will change the status to 'PLAYING'.
+- 'Play': continues the match of an existing game in the `PLAYING` status, following the rules of [Tic Tac Toe](https://en.wikipedia.org/wiki/Tic-tac-toe). This method also checks the status of the game to validate if a game is finished or not. After a game is finished, the funds will be transferred to the winner or split between the players in the case of a tie.
+
+# Tests
+
+The game only contains unit tests with the KISS approach, so you may see some duplicated code in the testing module. 
+
+The following is the last test coverage achieved with the current version of the module asserting all responses from the smart contract:
+
+```bash
+test result: ok. 28 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+Jul 11 09:00:26.273  INFO cargo_tarpaulin::report: Coverage Results:
+|| Uncovered Lines:
+|| src/contract/execute.rs: 61, 92-93
+|| src/contract/query.rs: 48-49, 51-54
+|| src/models/state.rs: 87, 90, 116, 149, 183, 224, 229
+
+|| Tested/Total Lines:
+|| src/contract/execute.rs: 124/127 +97.64%
+|| src/contract/instantiate.rs: 2/2 +100.00%
+|| src/contract/query.rs: 25/31 +80.65%
+|| src/models/state.rs: 58/65 +89.23%
+|| src/test/accept.rs: 193/193
+|| src/test/happy_paths.rs: 225/225
+|| src/test/invite.rs: 91/91
+|| src/test/play.rs: 219/219
+|| src/test/query_handled_errors.rs: 28/28
+|| src/test/query_happy_path.rs: 24/24
+|| src/test/reject.rs: 40/40
+
+98.47% coverage, 1029/1045 lines covered
+```

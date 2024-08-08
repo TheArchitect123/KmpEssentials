@@ -1,0 +1,99 @@
+import Admonition from '@theme/Admonition';
+
+# Station Chrome extension
+
+This tutorial walks you through how to install and use the Station extension for the Google Chrome browser.
+
+## Prerequisites
+
+- Download [Google Chrome](https://www.google.com/chrome/).
+
+## Install the Station extension
+
+1. Open your Chrome browser and visit the [the Station Chrome extension](https://chrome.google.com/webstore/detail/station/aiifbnbfobpmeekipheeijimdpnlpgpp).
+
+2. Install the extension and add it to your browser.
+
+## Create a wallet
+
+In this tutorial, you will learn how to create a new wallet on the Station Chrome extension. To connect to an existing wallet, you may view the instructions on how to [recover a wallet](../wallet.mdx#connect-to-a-wallet-using-a-private-key).
+
+1. Open the browser extension and click **New wallet**.
+
+<img
+  className="readme-img-md"
+  style={{ padding: '1rem' }}
+  src="/img/screens/ext-new-wallet.png"
+/>
+
+2. Type in a secure wallet name and password.
+
+3. Confirm your password.
+
+4. Using pen and paper, write down your 24-word seed phrase exactly as it appears. Number each word to make verifying easier.
+
+<Admonition type="danger" icon="🔥" title="Protect your seed phrase">
+Anyone who gains access to your seed phrase can access the contents of the corresponding wallet. Be cognizant of the fact that there is no recourse for theft of a seed phrase. To protect your seed phrase, consider the following tips.
+
+- Never save or store your seed phrase as a digital file on any device.
+- Always write down your seed phrase with a pen and paper.
+- Store the paper with your seed phrase on it somewhere safe.
+- Never give your seed phrase to anyone, not even support staff.
+
+</Admonition>
+
+5. Verify the written seed phrase to ensure every word is spelled correctly and that each word is in the correct order.
+
+6. Check the box to confirm that your seed phrase has been written down and click **Submit**.
+
+<img className="readme-img-md" src="/img/screens/ext-wallet-input.png" />
+
+7. Confirm your seed phrase by selecting the correct words in each prompt and click **Submit**.
+
+<img className="readme-img-md" src="/img/screens/ext-confirm.png" />
+
+8. Click **Connect** to connect to your new wallet.
+
+<img className="readme-img-md" src="/img/screens/ext-wallet-complete.png" />
+
+Congratulations! You have just created a Station wallet.
+
+## Send tokens
+
+1. Open the Station browser extension and connect to your wallet.
+
+2. Click **Send**.
+
+3. Select your desired asset and source chain.
+
+<img className="readme-img-sm" src="/img/screens/ext-wallet-menu.png" />
+
+4. Enter the recipient address and the amount you want to send. You can also add a memo to specify what the transaction is for.
+
+5. Verify the recipient address and transaction amount. Remember to always maintain some funds in your wallet for future transactions.
+
+6. Enter your password and click **Submit**.
+
+After a few moments, the tokens will appear in the recipient's wallet.
+
+<Admonition type="caution" icon="☢️" title="Maintain funds for transaction fees">
+
+It is recommended to maintain some funds in your wallet for future transactions. Without available capital for fee payment, you will not be able to carry out further transactions until more tokens are transferred to your wallet.
+
+</Admonition>
+
+## Connect to a dApp
+
+1. Open the Station Chrome extension and connect to your wallet.
+
+2. Navigate to the dApp of your choice.
+
+3. To connect your wallet, click **Connect Wallet** at the top of the page.
+
+4. Select **Station Wallet** to connect your wallet.
+
+After connecting your wallet, you will be able to carry out transactions on the dApp.
+
+## Next steps
+
+For on-the-go transactions, check out the [Station mobile app](station-mobile.mdx). To learn how to use other Station features, visit the [Station guides](../../../learn/station).

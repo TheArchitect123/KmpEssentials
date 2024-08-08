@@ -1,0 +1,37 @@
+# Public and private endpoints
+
+## Private endpoints
+
+- [GetBlock](https://getblock.io/dedicated-nodes/luna/)
+
+## Public endpoints
+
+import Admonition from '@theme/Admonition';
+
+<Admonition type="danger" icon="🔥" title="Public endpoint warning">
+
+Public RPC endpoints should only be used in development. For live dApps, use a private RPC endpoint from the list above or [set up your own endpoint](../full-node/run-a-full-terra-node/system-config.mdx).
+
+</Admonition>
+
+### Public LCD
+
+To learn about setting up Terra's Light Client Daemon (LCD), visit [The LCD guide](./guides/start-lcd.mdx).
+
+Terra's complete Swagger API documentation for **LUNA2** can be found at https://phoenix-lcd.terra.dev/swagger/.
+
+| Endpoint                      | Network             |
+| ----------------------------- | ------------------- |
+| https://phoenix-lcd.terra.dev | `phoenix-1` mainnet |
+| https://pisco-lcd.terra.dev   | `pisco-1` testnet   |
+
+For **Classic Developers** please use the following https://lcd.terra.dev/swagger/
+
+| Endpoint                                 | Network              |
+| ---------------------------------------- | -------------------- |
+| https://terra-classic-lcd.publicnode.com | `columbus-5` mainnet |
+| https://lcd.terrac.dev                   | `rebel-2` testnet    |
+
+### Public RPC
+
+- [Polkachu RPC endpoints](https://terra-rpc.polkachu.com/)

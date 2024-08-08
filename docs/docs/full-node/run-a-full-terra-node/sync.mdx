@@ -1,0 +1,339 @@
+---
+sidebar_position: 6
+---
+
+import Admonition from '@theme/Admonition';
+
+# Sync
+
+This guide will walk you through how to [sync the chain from genesis](#sync-from-genesis) or use a [snapshot](#sync-from-snapshot) for a quicker sync.
+
+<Admonition type="caution" icon="☢️" title="Setup for successful sync">
+
+Before you attempt to sync your node, confirm that you have properly set up your [system configuration](./system-config.mdx#system-configuration) and [built Terra core](./build-terra-core.mdx#get-the-terra-core-source-code).
+
+</Admonition>
+
+## Sync from genesis
+
+The process for syncing your full node from genesis will differ between the Pisco testnet and Phoenix mainnet networks. You may proceed with the instructions corresponding with your [chosen network](./join-a-network.mdx#join-a-public-network) below.
+
+### Pisco testnet
+
+If you would like to sync your node using the Pisco testnet, you will need to utilize version `v2.0.0-rc.0` of terrad up until the block height of 838,500. To sync your node from block 838,500 until block 2,777,777, you will need to utilize version `v2.1.0-beta.1` of terrad. From block 2,777,777 onwards, utilize version `v2.2.0` of terrad.
+
+1. To switch to version `v2.0.0-rc.0` of terrad, [change into your `core` directory](./build-terra-core.mdx#get-the-terra-core-source-code) and execute the following commands in your terminal:
+
+```
+git checkout v2.0.0-rc.0
+make install
+```
+
+After running these commands, make sure that you have switched to the correct version of terrad by running the following command:
+
+```
+terrad version
+```
+
+The result of this command should be `v2.0.0-rc.0`.
+
+2. After you have the correct terrad version, you will need to download the genesis file for Pisco in the terrad config directory:
+
+```
+wget https://raw.githubusercontent.com/terra-money/testnet/master/pisco-1/genesis.json -O ~/.terra/config/genesis.json
+```
+
+3. Next, [update the `persistent_peers` setting](https://polkachu.com/testnets/terra/peers) with a list of stable persistent peers in your `config.toml` file.
+
+4. Now, you can start the syncing process:
+
+```
+terrad start
+```
+
+<Admonition type="caution" icon="☢️" title="Sync start times">
+
+Nodes take at least an hour to start syncing. This wait time is normal. Before troubleshooting a sync, please wait an hour for the sync to start.
+
+</Admonition>
+
+Syncing will halt at block 838,500, at which point you will need to change the version of terrad and then resume the syncing process.
+
+5. To sync your Pisco testnet node from block 838,500 to block 2,777,777, you will need to navigate to the `core` directory and change your terrad version to `v2.1.0-beta.1`.
+
+```
+git checkout v2.1.0-beta.1
+make install
+```
+
+Again, make sure that you have switched to the correct version of terrad by running the following command:
+
+```
+terrad version
+```
+
+The result of this command should be `v2.1.0`.
+
+6. Again, you can resume the syncing process:
+
+```
+terrad start
+```
+
+Syncing will halt at block 2,777,777, at which point you will need to change the version of terrad and then resume the syncing process.
+
+7. To sync your Pisco testnet node from block 2,777,777 to the most recent block, you will need to navigate to the `core` directory and change your terrad version to `v2.2.0`.
+
+```
+git checkout v2.2.0
+make install
+```
+
+Again, make sure that you have switched to the correct version of terrad by running the following command:
+
+```
+terrad version
+```
+
+The result of this command should be `v2.2.0`.
+
+8. Now, you can resume and finalize the syncing process:
+
+```
+terrad start
+```
+
+From here, you can [monitor the sync](#monitor-the-sync). Make sure to check on your node periodically to ensure optimal performance.
+
+### Phoenix mainnet
+
+If you would like to sync your node using the Phoenix mainnet, you will need to utilize version `v2.0.0` of terrad up until the block height of 890,000. To sync your node from block 890,000 to block 2,979,805, you will need to utilize version `v2.1.1` of terrad. From block 2,979,805 onwards, utilize version `v2.2.0` of terrad.
+
+1. To switch to version `v2.0.0` of terrad, [change into your `core` directory](./build-terra-core.mdx#get-the-terra-core-source-code) and execute the following commands in your terminal:
+
+```
+git checkout v2.0.0
+make install
+```
+
+After running these commands, make sure that you have switched to the correct version of terrad by running the following command:
+
+```
+terrad version
+```
+
+The result of this command should be `v2.0.0`.
+
+2. After you have the correct terrad version, you will need to download the genesis file for Phoenix in the terrad config directory:
+
+```
+wget https://phoenix-genesis.s3.us-west-1.amazonaws.com/genesis.json -O ~/.terra/config/genesis.json
+```
+
+3. Next, download the `addrbook.json` file containing a list of stable persistent peers into the `~/.terra/config/` directory:
+
+```
+wget https://snapshots1.polkachu.com/addrbook/terra/addrbook.json -O ~/.terra/config/addrbook.json
+```
+
+4. Now, you can start the syncing process:
+
+```
+terrad start
+```
+
+<Admonition type="caution" icon="☢️" title="Sync start times">
+
+Nodes take at least an hour to start syncing. This wait time is normal. Before troubleshooting a sync, please wait an hour for the sync to start.
+
+</Admonition>
+
+Syncing will halt at block 890,000, at which point you will need to change the version of terrad and then resume the syncing process.
+
+5. To sync your Phoenix mainnet node from block 890,000 to block 2,979,805, you will need to navigate to the `core` directory and change your terrad version to `v2.1.1`.
+
+```
+git checkout v2.1.1
+make install
+```
+
+Again, make sure that you have switched to the correct version of terrad by running the following command:
+
+```
+terrad version
+```
+
+The result of this command should be `v2.1.1`.
+
+6. Again, you can resume the syncing process:
+
+```
+terrad start
+```
+
+Syncing will halt at block 2,979,805, at which point you will need to change the version of terrad and then resume the syncing process.
+
+7. To sync your Phoenix mainnet node from block 2,979,805 to the most recent block, you will need to navigate to the `core` directory and change your terrad version to `v2.2.0`.
+
+```
+git checkout v2.2.0
+make install
+```
+
+Again, make sure that you have switched to the correct version of terrad by running the following command:
+
+```
+terrad version
+```
+
+The result of this command should be `v2.2.0`.
+
+8. Now, you can resume and finalize the syncing process:
+
+```
+terrad start
+```
+
+From here, you can [monitor the sync](#monitor-the-sync). Make sure to check on your node periodically to ensure optimal performance.
+
+<details> 
+<summary> Healthy Node Status Example </summary>
+<p>
+
+```json
+{
+  "NodeInfo": {
+    "protocol_version": {
+      "p2p": "8",
+      "block": "11",
+      "app": "0"
+    },
+    "id": "821dc1401fd0270487b3e615c652181b4d4566dd",
+    "listen_addr": "18.157.84.154:26656",
+    "network": "pisco-1",
+    "version": "v0.34.19-terra.2",
+    "channels": "40202122233038606100",
+    "moniker": "terradocs",
+    "other": {
+      "tx_index": "on",
+      "rpc_address": "tcp://127.0.0.1:26657"
+    }
+  },
+  "SyncInfo": {
+    "latest_block_hash": "ED9F6D0855FD92A5BA2F91082CD49ADB18A07DCE3F747529D357071E5B7C0D4C",
+    "latest_app_hash": "D621068882E7FC5045CDD957ADEABE9BF8E90F2092C9526E22BE4767940D128B",
+    "latest_block_height": "260770",
+    "latest_block_time": "2022-06-09T15:22:48.792283245Z",
+    "earliest_block_hash": "F948EF10AA663D182309790C51E5A7A9125D7CF4D60D9E735994059DB7CAD4D4",
+    "earliest_app_hash": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "earliest_block_height": "1",
+    "earliest_block_time": "2022-05-23T06:00:00Z",
+    "catching_up": false
+  },
+  "ValidatorInfo": {
+    "Address": "04024A7F76485B0D2B99570EC7DA3E9A3B3735CC",
+    "PubKey": {
+      "type": "tendermint/PubKeyEd25519",
+      "value": "KUqIsRD9yzPt7k9et+ClFp6h8wXwEIcb/TVZPrC57+I="
+    },
+    "VotingPower": "0"
+  }
+}
+```
+
+</p>
+</details>
+
+### Fast-sync for testing
+
+Sometimes you may want to sync faster by foregoing checks. You may do so by adding the following flag to the `terrad start` command.
+
+<Admonition type="caution" icon="☢️">
+
+The following command should only be used by advanced users in non-production environments:
+
+```bash
+terrad start --x-crisis-skip-assert-invariants
+```
+
+</Admonition>
+
+## Sync from snapshot
+
+You can significantly accelerate the synchronization process by providing terrad with a recent snapshot of the network state. Snapshots are made publicly available by members of the Terra community one example can be downloaded from [Polkachu - Phoenix Mainnet](https://polkachu.com/state_sync/terra). [Polkachu - Pisco Testnet](https://polkachu.com/testnets/terraInstructions) is provided by Polkachu, and not maintained as part of this documentation.
+
+### Before using snapshots
+
+Certain files will need to be absent or deleted before downloading a snapshot. A quicksync replaces blockchain data with a custom snapshot. For most use cases, a "pruned" version is adequate. Pruned versions will have certain transactions removed from the archive to improve node performance. If you are running a node for archival purposes, you will want an `archive` or `default` download.
+
+After choosing the appropriate download type, examine your node and ensure that `.terra/data` is empty.
+
+**Example**:
+
+```bash
+6:22PM INF Removed all blockchain history dir=/home/ubuntu/.terra/data
+```
+
+<Admonition type="caution" icon="☢️">
+
+If you are a validator, ensure that you do not remove your private key.
+
+Example of a removed private key:
+
+```bash
+6:22PM INF Reset private validator file to genesis state keyFile=/home/ubuntu/.terra/config/priv_validator_key.json stateFile=/home/ubuntu/.terra/data/priv_validator_state.json
+```
+
+</Admonition>
+
+If you have an address book downloaded, you may keep it. Otherwise, you will need to download the [appropriate addressbook](./join-a-network.mdx#join-a-public-network).
+
+With an address book downloaded, run the following:
+
+```bash
+terrad start
+terrad status
+# It will take a few seconds for terrad to start.
+```
+
+## Monitor the sync
+
+Your node is catching up with the network by replaying all the transactions from genesis and recreating the blockchain state locally. You can verify this process by checking the `latest_block_height` in the `SyncInfo` of the `terrad status` response:
+
+```json
+  {
+    "SyncInfo": {
+        "latest_block_height": "42", <-----
+        "catching_up"        : true
+    },
+  ...
+  }
+```
+
+Compare this height to the **Latest Blocks** by checking the API for the latest block heights on [Phoenix](https://phoenix-lcd.terra.dev/blocks/latest), or [Pisco](https://pisco-lcd.terra.dev/blocks/latest) to see your progress.
+
+## Sync complete
+
+You can tell that your node is in sync with the network when `SyncInfo.catching_up` in the `terrad status` response returns `false` and the `latest_block_height` corresponds to the public network blockheight found on the API for either [Phoenix](https://phoenix-lcd.terra.dev/blocks/latest), or [Pisco](https://pisco-lcd.terra.dev/blocks/latest).
+
+```bash
+terrad status
+```
+
+**Example**:
+
+```json
+  {
+    "SyncInfo": {
+        "latest_block_height": "7356350",
+        "catching_up"        : false
+    },
+  ...
+  }
+```
+
+Validators can view the status of the network using [Terra Finder](https://finder.terra.money).
+
+## Congratulations!
+
+You've successfully joined a network as a full node operator. If you are a validator, continue to [manage a Terra validator](../manage-a-terra-validator/README.mdx) for next steps.

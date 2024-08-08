@@ -1,0 +1,49 @@
+# Configure LocalTerra
+
+The majority of LocalTerra is implemented inside of the `docker-compose.yml` file, making it easily customizable. You can use LocalTerra as a starting point for setting up your own local Terra testnet with Docker containers.
+
+Out of the box, LocalTerra comes with several preconfigured settings such as:
+
+- Ports defined for RPC (26657), LCD (1317), and FCD (3060).
+- Standard [accounts](accounts.mdx).
+
+## Modify node configuration
+
+You can modify the node configuration of your validator in the `config/config.toml` and `config/app.toml` files.
+
+## Speed up block time
+
+LocalTerra is often used alongside [feather.js](../feather-js/README.mdx) or [Terra.py](../terra-py/get-started-py.mdx) scripting as it is a convenient environment in which to run integration tests. LocalTerra also allows developers to speed up the block time to improve the development experience.
+
+To increase block time, edit the `[consensus]` parameters in the `config/config.toml` file.
+
+The following example configures all timeouts to `200ms`.
+
+```diff
+##### consensus configuration options #####
+[consensus]
+
+wal_file = "data/cs.wal/wal"
+- timeout_propose = "3s"
+- timeout_propose_delta = "500ms"
+- timeout_prevote = "1s"
+- timeout_prevote_delta = "500ms"
+- timeout_precommit_delta = "500ms"
+- timeout_commit = "5s"
++ timeout_propose = "200ms"
++ timeout_propose_delta = "200ms"
++ timeout_prevote = "200ms"
++ timeout_prevote_delta = "200ms"
++ timeout_precommit_delta = "200ms"
++ timeout_commit = "200ms"
+```
+
+Additionally, you can utilize the following command to achieve the same result.
+
+```sh
+sed -E -i '/timeout_(propose|prevote|precommit|commit)/s/[0-9]+m?s/200ms/' config/config.toml
+```
+
+## Modifying genesis
+
+You can modify the `genesis.json` file by altering `config/genesis.json`. Make sure to restart LocalTerra for your changes to be implemented.

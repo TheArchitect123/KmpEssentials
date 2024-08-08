@@ -1,0 +1,52 @@
+import Admonition from '@theme/Admonition';
+
+# Install LocalTerra
+
+## Prerequisites
+
+- [Docker](https://www.docker.com/)
+- [`docker-compose`](https://docs.docker.com/compose/install/)
+- Supported known architecture: x86_64
+
+<Admonition type="tip" icon="💡" title="Terrain and LocalTerra">
+
+If you are using LocalTerra with Terrain, use the [Terrain with LocalTerra guide](../terrain/using-terrain-localterra.mdx).
+
+</Admonition>
+
+## Installation
+
+1. Run the following command to clone the LocalTerra repository:
+
+   ```sh
+   git clone --depth 1 https://www.github.com/terra-money/LocalTerra
+   ```
+
+2. Make sure your Docker daemon is running in the background and [`docker-compose`](https://github.com/docker/compose) is installed.
+
+## Using LocalTerra
+
+### Start
+
+```sh
+cd LocalTerra
+docker-compose up
+```
+
+Your environment now contains:
+
+- [Terrad](http://github.com/terra-money/core) RPC node running on `tcp://localhost:26657`
+- LCD running on http://localhost:1317
+- [FCD](http://www.github.com/terra-money/fcd) running on http://localhost:3060
+
+### Stop
+
+```sh
+$ docker-compose stop
+```
+
+### Reset
+
+```sh
+$ docker-compose rm
+```

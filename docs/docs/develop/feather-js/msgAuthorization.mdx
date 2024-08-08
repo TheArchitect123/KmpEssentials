@@ -1,0 +1,121 @@
+# MsgAuthorization
+
+The following code snippet requires [LocalTerra](../localterra/README.mdx).
+
+1. `test1` creates MsgGrantAuthorization message to grant MsgSend authorization to grantee `test2`.
+2. `test2` creates MsgExecAuthorized message to send `2000000000000uluna` from the `test1` account to the `test3` account.
+
+```ts
+import {
+  LCDClient,
+  MnemonicKey,
+  Wallet,
+  MsgGrantAuthorization,
+  SendAuthorization,
+  MsgSend,
+  Int,
+  MsgExecAuthorized,
+  Coins,
+} from '@terra-money/feather.js';
+
+function grant(
+  granter: Wallet,
+  grantee: string,
+  spendLimit: Coins.Input,
+  duration: Int,
+) {
+  const msgs = [
+    new MsgGrantAuthorization(
+      granter.key.accAddress('terra'),
+      grantee,
+      new SendAuthorization(spendLimit),
+      duration,
+    ),
+  ];
+
+  return granter.createAndSignTx({ msgs, chainID: 'pisco-1' });
+}
+
+function sendAuthorized(
+  granter: Wallet,
+  grantee: Wallet,
+  to: string,
+  amount: Coins.Input,
+) {
+  const msgs = [
+    new MsgExecAuthorized(grantee.key.accAddress, [
+      new MsgSend(
+        granter.key.accAddress('terra'), // From test1
+        to,
+        amount,
+      ),
+    ]),
+  ];
+
+  return grantee.createAndSignTx({ msgs, chainID: 'pisco-1' });
+}
+
+async function main() {
+  const client = new LCDClient(...);
+
+  // Granter (terra1x46rqay4d3cssq8gxxvqz8xt6nwlz4td20k38v)
+  const granter = client.wallet(
+    new MnemonicKey({
+      mnemonic:
+        'notice oak worry limit wrap speak medal online prefer cluster roof addict wrist behave treat actual wasp year salad speed social layer crew genius',
+    }),
+  );
+
+  // Grantee (terra17lmam6zguazs5q5u6z5mmx76uj63gldnse2pdp)
+  const grantee = client.wallet(
+    new MnemonicKey({
+      mnemonic:
+        'quality vacuum heart guard buzz spike sight swarm shove special gym robust assume sudden deposit grid alcohol choice devote leader tilt noodle tide penalty',
+    }),
+  );
+
+  // MsgGrantAuthorization
+  await grant(
+    granter,
+    grantee.key.accAddress('terra'),
+    // Set enough spend limit since it will be decreased upon every MsgSend transactions
+    '1000000000000uluna',
+    // expire after 100 years
+    new Int(86400 * 365 * 100 * 1000000000),
+  )
+    .then((tx) => client.tx.broadcast(tx, 'pisco-1'))
+    .then(console.info)
+    .catch((err) => {
+      if (err.response) {
+        console.error(err.response.data);
+      } else {
+        console.error(err.message);
+      }
+    });
+
+  // MsgExecAuthorized of MsgSend
+  await sendAuthorized(
+    granter,
+    grantee,
+    // Test3
+    'terra1757tkx08n0cqrw7p86ny9lnxsqeth0wgp0em95',
+    '2000000000000uluna',
+  )
+    .then((tx) => client.tx.broadcast(tx, 'piscp-1'))
+    .then(console.info)
+    .catch((err) => {
+      if (err.response) {
+        // unauthorized: authorization not found: failed to execute message; message index: 0: failed to simulate tx
+        // happens when the granted amount of tokens is exceeded.
+
+        // insufficient funds: insufficient account funds; ...
+        // happens when granter does not have enough tokens
+        console.error(err.response.data);
+      } else {
+        console.error(err.message);
+      }
+    });
+}
+
+main().catch(console.error);
+```

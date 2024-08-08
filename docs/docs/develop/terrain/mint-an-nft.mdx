@@ -1,0 +1,358 @@
+import Admonition from '@theme/Admonition';
+
+# Mint an NFT using Terrain
+
+NFTs, or non-fungible tokens, are unique digital assets that can be showcased, bought, and sold on the blockchain. Purchasing an NFT gives you ownership over the unique digital creation, similar to buying a distinct painting or art piece.
+
+In this tutorial, you will learn how to mint your own NFT using the [NFT minting application](https://github.com/terran6/nft-on-terra.git) and LocalTerra.
+
+## Prerequisites
+
+- [Download Google Chrome](https://www.google.com/chrome/downloads/)
+- [Station Chrome extension](../../learn/station/download/station-extension.mdx)
+- [Create a Station wallet](../../learn/station/download/station-extension.mdx#create-a-wallet)
+- [Install npm](https://kinsta.com/blog/how-to-install-node-js/)
+- [Install git](https://git-scm.com/downloads)
+- [Install Terrain](./initial-setup.mdx)
+- [Install LocalTerra](./using-terrain-localterra.mdx)
+
+<Admonition type="note" icon="📝" title="LocalTerra requirements">
+
+This tutorial utilizes LocalTerra which requires at least 16GB of RAM to run optimally.
+
+</Admonition>
+
+## 1. Create your project
+
+After installing all of the [prerequisites](#prerequisites) listed above, use the following steps to set up your environment and clone the [NFT minting repository](https://github.com/terran6/nft-on-terra.git), which contains the NFT minting smart contract and corresponding front end.
+
+<CH.Scrollycoding>
+
+1. Create and enter a new directory for your project.
+
+```sh terminal focus=1:2
+mkdir my-nft-project
+cd my-nft-project
+
+
+git clone --depth 1 https://github.com/terran6/nft-on-terra.git
+
+
+cd nft-on-terra
+npm install
+
+```
+
+---
+
+2. Clone the `NFT on Terra` repository to your project directory.
+
+```sh terminal focus=5
+
+```
+
+---
+
+3. Enter the cloned repository and run `npm install` to install all relevant Node dependencies.
+
+```sh terminal focus=8:9
+
+```
+
+</CH.Scrollycoding>
+
+After all the dependencies have been installed, you can close the terminal window.
+
+## 2. Start LocalTerra
+
+LocalTerra is a complete Terra testnet and ecosystem containerized with Docker. In this tutorial, you will use LocalTerra to simulate transactions in a local testing environment.
+
+After [installing LocalTerra](../localterra/install-localterra.mdx) and all of its dependencies, open a new terminal window and run the following commands.
+
+```sh
+cd localterra
+docker-compose up
+```
+
+After starting LocalTerra successfully, you should start seeing simulated blockchain transactions.
+
+## 3. Set up your wallet
+
+In order to use your Station wallet with LocalTerra, you will need to configure your wallet to run on your LocalTerra network. The following steps walk you through importing one of [LocalTerra's preconfigured wallets](../localterra/accounts.mdx). 
+
+1. Open the Station extension in your Google Chrome web browser. Click the gear icon in the upper right-hand corner and change the network from **mainnet** to **localterra**.
+
+   <img
+     className="readme-img-sm"
+     src="/img/nft/extension_localterra.png"
+     alt="Switch to LocalTerra"
+   />
+
+2. Click on your wallet name in the upper left corner of the extension to enter the wallet manager. 
+
+   <img
+     className="readme-img-sm"
+     src="/img/nft/wallet-manager.png"
+     alt="Manage wallets"
+   />
+
+3. Click **Add a wallet**.
+
+4. Click **Recover wallet**.
+
+   <img
+     className="readme-img-sm"
+     src="/img/nft/recover_wallet.png"
+     alt="Recover Wallet"
+   />
+
+5. Input the following LocalTerra seed phrase and wallet information into the form and click **Submit**. 
+
+<CH.Code>
+```js Test-wallet-info
+Name: test1
+Password: testwallet
+```
+---
+```js Mnemonic
+notice oak worry limit wrap speak medal online prefer cluster roof addict wrist behave treat actual wasp year salad speed social layer crew genius
+```
+</CH.Code>
+
+   <img
+     className="readme-img-md"
+     src="/img/nft/input_wallet.png"
+     alt="Input Wallet"
+   />
+
+
+
+
+
+
+Now that you have successfully switched to the testing wallet on LocalTerra, you will be able to deploy your smart contract.
+
+## 4. Update the instantiate message
+
+Before you can deploy your contract and begin minting your NFT, you will need to change the `config.terrain.json` file in your cloned repository.
+
+1. In your Station extension, click on your **test1** in the upper left corner. Click the copy symbol to copy the address. 
+
+   <img
+     className="readme-img-sm"
+     src="/img/nft/address.png"
+     alt="Switch Wallet"
+   />
+
+ <CH.Scrollycoding>
+
+2. Open the _`config.terrain.json`_ file in a code editor and locate the instantiate message section.
+
+```json config.terrain.json focus=9:13
+      "instantiation": {
+        "fee": {
+          "gasLimit": 2000000,
+          "amount": {
+            "uluna": 1000000
+          }
+        },
+
+        "instantiateMsg": {
+          "name":"NFT Collection Name",
+          "symbol":"NFTSYMBOL",
+          "minter":"terraxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        }
+
+      }
+    }
+  },
+  "mainnet": {
+    "_connection": {
+      "chainID": "phoenix-1",
+      "URL": "https://lcd.terra.dev"
+    }
+  },
+  "testnet": {
+    "_connection": {
+      "chainID": "pisco-1",
+      "URL": "https://pisco-lcd.terra.dev"
+    }
+
+```
+
+---
+
+3. Update the _`"name"`_ and _`"symbol"`_ fields with the desired name and symbol which will correspond to your NFT collection. The _`"minter"`_ field should be updated with the wallet address of the collection owner, in this case it will be your _`test1`_ wallet address.
+
+```json config.terrain.json focus=9:13
+      "instantiation": {
+        "fee": {
+          "gasLimit": 2000000,
+          "amount": {
+            "uluna": 1000000
+          }
+        },
+
+        "instantiateMsg": {
+          "name":"Cryptocurrency Token NFTs",
+          "symbol":"TOKENS",
+          "minter":"Paste your test1 wallet address here"
+        }
+
+      }
+    }
+  },
+  "mainnet": {
+    "_connection": {
+      "chainID": "phoenix-1",
+      "URL": "https://lcd.terra.dev"
+    }
+  },
+  "testnet": {
+    "_connection": {
+      "chainID": "pisco-1",
+      "URL": "https://pisco-lcd.terra.dev"
+    }
+
+
+```
+
+</CH.Scrollycoding>
+
+<Admonition type="tip" icon="💡">
+
+Be sure to double-check the parameter values in your instantiate message and save the changes to your _`config.terrain.json`_ file before exiting.
+
+</Admonition>
+ 
+## 5. Deploy your contract to LocalTerra
+ 
+You are finally ready to deploy your contract and run the NFT minting application. Make sure you have installed Terrain before proceeding.
+ 
+1. Ensure you are still [running LocalTerra](#2-start-localterra) in a separate terminal window.
+ 
+2. Open a new terminal window and run the following commands to navigate to your cloned repo and deploy your contract using Terrain.
+ 
+   ```
+   cd my-nft-project/nft-on-terra
+   terrain deploy cw721-metadata-onchain --signer test1
+   ```
+ 
+## 6. Launch the app front end
+ 
+Once the contract deployment has successfully completed, you can run the front end application to start minting your NFT.
+ 
+1. Change into the `frontend` directory and install the node dependencies.
+ 
+   ```sh
+   cd frontend
+   npm install
+   ```
+ 
+2. Start the front-end application:
+ 
+   ```sh
+   npm start
+   ```
+ 
+Your Chrome browser should open a new window and you should be viewing the front-end application at http://localhost:3000/.
+
+3. Station will ask you to Connect to the application. Click **Connect**. 
+
+    <img className="readme-img-sm" src="/img/nft/connect_app.png" alt="Connect to the NFT Minting Application" />
+ 
+4. Fill out all of the information on the form to mint your first NFT.
+ 
+- **ID** may be any value that you would like to correspond to the ID of the new NFT.
+ 
+- Enter the **Name** for your NFT.
+ 
+- The **Owner Address** is the wallet address which will be the owner of the newly minted NFT. In this tutorial, this will be your `test1` wallet address.
+ 
+- Use the following **URL** for the NFT image of Luna used in this tutorial.
+ 
+   ```
+   https://assets.terra.money/icon/svg/LUNA.png
+   ```
+ 
+    <img className="readme-img-md" src="/img/nft/app.png" alt="NFT Minting Application" />
+
+<Admonition type="note" icon="📝" title="NFT hosting">
+
+Most NFT creators host their NFTs using IPFS (Interplanetary File System). There are a variety of resources available to post an NFT on IPFS, such as [Pinata](https://www.pinata.cloud/). In this example, the image used is available at https://assets.terra.money/icon/svg/LUNA.png.
+
+</Admonition>
+
+## 7. Mint your NFT
+
+Your NFT is ready to mint!
+
+1. Click **Mint NFT**. Your Station extension will pop up to request confirmation of the transaction.
+
+2. Click the **Post** Button.
+
+After a few seconds, the front-end webpage will display your NFT.
+
+    <img className="readme-img-md" src="/img/nft/minted_nft.png" alt="Minted NFT" />
+
+{/*
+
+Congratulations, you have just minted your first NFT!
+
+
+
+## View Your New NFT
+
+1. Before you can view your NFT, you'll need to locate your contract address. Open the `refs.terrain.json` file located in your cloned repository and copy the contract address listed after `"default"`.
+
+   ```json
+   {
+     "localterra": {
+       "cw721-metadata-onchain": {
+         "codeId": "1",
+         "contractAddresses": {
+           "default": "Copy this address"
+         }
+       }
+     }
+   }
+   ```
+
+2. You can view your NFT utilizing the [Station NFT page](https://station.terra.money/nft). Connect your wallet using the **Connect** button located in the upper right-hand corner of the screen.
+
+   <img
+     className="readme-img-md"
+     src="/img/nft/connect_wallet.png"
+     alt="Connect Wallet"
+   />
+
+3. Click **Add tokens >** located in the middle of the page to open the contract search window. Paste your contract address in the search bar. Click the **+** button located next to the address of your NFT collection.
+
+   <img
+     className="readme-img-md"
+     src="/img/nft/nft_search.png"
+     alt="Search NFT Collection"
+   />
+
+4. Close the search window and you will be presented with information on your NFT collection.
+
+   <img
+     className="readme-img-md"
+     src="/img/nft/nft_station.png"
+     alt="NFT Collection"
+   />
+
+From here, you can **View** relevant information about your NFT or **Send** your NFT to any specified wallet address.
+
+*/}
+
+## Congratulations!
+
+You've just minted your first NFT on the Terra blockchain! If you have your own unique digital creation that you would like to share with the world, you can follow these instructions using the mainnet network and your personal Station wallet.
+
+<Admonition type="tip" icon="💡" title="Mint NFTs on the mainnet">
+
+LocalTerra is not needed for deployments on the mainnet and is primarily used for local testing and development purposes.
+
+</Admonition>
+

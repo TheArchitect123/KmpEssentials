@@ -1,0 +1,119 @@
+$font-family_1: 'Gotham';
+
+.cards {
+  display: grid;
+  grid-gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-auto-rows: 1fr;
+
+  img {
+    width: 39.1px;
+  }
+
+  .text-container {
+    max-width: 200px;
+  }
+
+  h2 {
+    font-size: 16px;
+    font-weight: 500;
+    font-family: $font-family_1;
+    color: $light-primary;
+    line-height: 24px;
+    margin-bottom: 5px;
+    max-width: 200px;
+  }
+
+  p {
+    font-size: 14px;
+    font-family: $font-family_1;
+    color: $light-secondary;
+    line-height: 21px;
+    margin-bottom: 0px;
+    max-width: 200px;
+  }
+
+  @media (min-width: 500px) and (max-width: 745px) {
+    .text-container,
+    h2,
+    p {
+      max-width: none;
+    }
+  }
+
+  @media (min-width: 997px) and (max-width: 1312px) {
+    .text-container,
+    h2,
+    p {
+      max-width: 300px;
+    }
+  }
+
+  @media (min-width: 1010px) and (max-width: 1312px) {
+    .text-container,
+    h2,
+    p {
+      max-width: none;
+      width: 400px;
+    }
+  }
+
+  @media (min-width: 1298px) and (max-width: 1312px) {
+    .text-container,
+    h2,
+    p {
+      max-width: none;
+      width: 200px;
+    }
+  }
+
+  @media (min-width: 1640px) {
+    .text-container,
+    h2,
+    p {
+      max-width: 350px;
+    }
+  }
+
+  a {
+    border: 1px solid $border;
+    background-color: $light-bg;
+    text-decoration: none;
+    padding: 22px 40px;
+    display: grid;
+    grid-gap: 1px;
+    grid-template-columns: 70px 300px;
+    border-radius: 0.5em;
+    align-items: center;
+    transition: border 0.5s, box-shadow 0.7s;
+
+    &:hover {
+      box-shadow: 3px 3px 6px $hover-shadow;
+      transform: scale(1.015);
+      border-color: $dark-border-hover;
+    }
+  }
+}
+
+[data-theme='dark'] {
+  .cards {
+    h2 {
+      color: $dark-primary;
+    }
+
+    p {
+      color: $dark-secondary;
+    }
+
+    a {
+      border: 1px solid $dark-border;
+      background-color: $menu-cards-bg;
+
+      &:hover {
+        box-shadow: 3px 3px 6px $dark-hover-shadow;
+        transform: scale(1.015);
+        border-color: $dark-hyperlink-color;
+      }
+    }
+  }
+}

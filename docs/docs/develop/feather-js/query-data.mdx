@@ -1,0 +1,18 @@
+# Query data
+
+After you're connected to the blockchain via an `LCDClient` instance, you can query data from it. Data access is organized into various module APIs, which are accessible from within the `LCDClient` instance. Because they make HTTP requests in the background, they are Promises that can be awaited in order to not block during network IO.
+
+Each module has its own set of querying functions. To get a comprehensive list, explore the module documentation:
+
+- [`auth`](https://terra-money.github.io/feather.js/classes/AuthAPI.html)
+- [`bank`](https://terra-money.github.io/feather.js/classes/BankAPI.html)
+- [`distribution`](https://terra-money.github.io/feather.js/classes/DistributionAPI.html)
+- [`gov`](https://terra-money.github.io/feather.js/classes/GovAPI.html)
+- [`mint`](https://terra-money.github.io/feather.js/classes/MintAPI.html)
+- [`msgauth`](https://terra-money.github.io/feather.js/classes/MsgAuthAPI.html)
+- [`slashing`](https://terra-money.github.io/feather.js/classes/SlashingAPI.html)
+- [`staking`](https://terra-money.github.io/feather.js/classes/StakingAPI.html)
+- [`supply`](https://terra-money.github.io/feather.js/classes/SupplyAPI.html)
+- [`tendermint`](https://terra-money.github.io/feather.js/classes/TendermintAPI.html)
+- [`tx`](https://terra-money.github.io/feather.js/classes/TxAPI.html)
+- [`wasm`](https://terra-money.github.io/feather.js/classes/WasmAPI.html)

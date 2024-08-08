@@ -1,0 +1,88 @@
+# MsgMultiSend
+
+```js
+import {
+  LCDClient,
+  MnemonicKey,
+  MsgMultiSend,
+  StdTx,
+  Account,
+} from '@terra-money/feather.js';
+
+const {
+  TESTNET_LCD_URL = 'http://localhost:1317',
+  TESTNET_CHAIN_ID = 'localterra',
+} = process.env;
+
+async function main() {
+const lcd = new LCDClient({
+  'pisco-1': {  // key must be the chainID
+    lcd: 'https://pisco-lcd.terra.dev',
+    chainID: 'pisco-1',
+    gasAdjustment: 1.75,
+    gasPrices: { uluna: 0.015 },
+    prefix: 'terra',  // bech32 prefix, used by the LCD to understand which is the right chain to query
+  },
+});
+
+  const keys = {
+    test1: new MnemonicKey({
+      mnemonic:
+        'notice oak worry limit wrap speak medal online prefer cluster roof addict wrist behave treat actual wasp year salad speed social layer crew genius',
+    }),
+    test2: new MnemonicKey({
+      mnemonic:
+        'quality vacuum heart guard buzz spike sight swarm shove special gym robust assume sudden deposit grid alcohol choice devote leader tilt noodle tide penalty',
+    }),
+    test3: new MnemonicKey({
+      mnemonic:
+        'symbol force gallery make bulk round subway violin worry mixture penalty kingdom boring survey tool fringe patrol sausage hard admit remember broken alien absorb',
+    }),
+  };
+
+  const wallet = lcd.wallet(keys.test1);
+  const output = new MsgMultiSend.Output(
+    'terra199vw7724lzkwz6lf2hsx04lrxfkz09tg8dlp6r',
+    '1000000uluna'
+  );
+
+  const tx = await wallet.createTx({
+    msgs: [
+      new MsgMultiSend(
+        [
+          new MsgMultiSend.Input(keys.test1.accAddress('terra'), '1000000uluna'),
+          new MsgMultiSend.Input(keys.test2.accAddress('terra'), '1000000uluna'),
+          new MsgMultiSend.Input(keys.test3.accAddress('terra'), '1000000uluna'),
+        ],
+        [output, output, output]
+      ),
+    ],
+    chainID: 'pisco-1',
+  });
+
+  const signatures = await Promise.all(
+    ['test1', 'test2', 'test3'].map(async (keyName) => {
+      const key = keys[keyName] as MnemonicKey;
+      const acc = (await lcd.auth.accountInfo(key.accAddress('terra'))) as Account;
+
+      tx.account_number = acc.account_number;
+      tx.sequence = acc.sequence;
+
+      return key.createSignature(tx);
+    })
+  );
+
+  const stdTx = new StdTx(tx.msgs, tx.fee, signatures, tx.memo, chainId);
+
+  await lcd.tx
+    .broadcastSync(stdTx, 'pisco-1')
+    .then((result) => {
+      console.log(result);
+    })
+    .catch((err) => {
+      console.error(err.message);
+    });
+}
+
+main().catch(console.error);
+```

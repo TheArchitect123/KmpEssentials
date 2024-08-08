@@ -1,0 +1,68 @@
+---
+sidebar_position: 2
+---
+
+import Admonition from '@theme/Admonition';
+
+# Build Terra Core
+
+Terra Core is the official Golang reference implementation of the Terra node software. Use this guide to install Terra Core and Terrad, the command-line interface and daemon that connects to Terra and enables you to interact with the Terra blockchain.
+
+## Get the Terra Core source code
+
+<Admonition type="caution" icon="☢️" title="Syncing from genesis">
+
+If you are syncing a node from genesis, you will need to use the appropriate core version for the block height of the respective chain you are syncing. Follow the [sync from genesis](./sync.mdx#sync-from-genesis) guide for step-by-step instructions.
+
+| Network Name | Network Type | Block Height Range  | Core Version |
+| :----------: | :----------: | :-----------------: | :----------: |
+| `phoenix-1`  |   Mainnet    | `genesis` - 890000  |    v2.0.0    |
+|              |              |  890000 - 2979805   |    v2.1.1    |
+|              |              | 2979805 - `present` |    v2.2.0    |
+|  `pisco-1`   |   Testnet    | `genesis` - 838500  | v2.0.0-rc.0  |
+|              |              |  838500 - 2777777   | 2.1.0-beta.1 |
+|              |              | 2777777 - `present` |    v2.2.0    |
+
+</Admonition>
+
+1. Use `git` to retrieve [Terra Core](https://github.com/terra-money/core/), and check out the `main` branch, which contains the latest stable release. You can find the latest tag on the [tags page](https://github.com/terra-money/core/tags) or via autocomplete in your terminal: type `git checkout v` and press `<TAB>`.
+
+   ```
+   git clone https://github.com/terra-money/core
+   cd core
+   git checkout [latest version]
+   ```
+
+2. Build Terra Core. This will install the Terrad executable to your [ `GOPATH` ](https://go.dev/doc/gopath_code) environment variable.
+
+   ```bash
+   make install
+   ```
+
+3. Verify that Terra Core is installed correctly.
+
+   ```bash
+   terrad version --long
+   ```
+
+   **Example**:
+
+   ```bash
+   name: terra
+   server_name: terrad
+   version: v2.0.0
+   commit: ea682c41e7e71ba0b182c9e7f989855fb9595885
+   build_tags: netgo,ledger
+   go: go version go1.18.2 darwin/amd64
+   # ...followed by a lot of dependencies
+   ```
+
+<Admonition type="tip" icon="💡">
+
+If the `terrad: command not found` error message is returned, confirm that the Go binary path is correctly configured by running the following command:
+
+```bash
+export PATH=$PATH:$(go env GOPATH)/bin
+```
+
+</Admonition>

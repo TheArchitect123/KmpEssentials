@@ -1,0 +1,244 @@
+# Validator migration guide
+
+Follow this guide to become a validator on the new Terra chain. This guide walks you through making a `gentx` file that will be added to the validator chain. A `gentx` is a special transaction included in the genesis file that accomplishes three things:
+
+1. Registers your validator account as a validator operator account.
+2. Self-delegates the specified amount of LUNA tokens for staking.
+3. Links the validator operator account with a Tendermint node pubkey used to sign blocks.
+
+All validators that want to be included in the new Terra chain must follow the steps below.
+
+## Networks
+
+- New Terra testnet: `pisco-1`
+- New Terra mainnet: `phoenix-1`
+
+## Prerequisites
+
+- [Terra Core https://github.com/terra-money/core](https://github.com/terra-money/core)
+- [Go 1.18+](https://go.dev/dl/)
+- [Full node tutorial](../full-node/run-a-full-terra-node/README.mdx)
+
+## Supplemental Resources
+
+- [Official Terra Validator Genesis Guide](https://github.com/terra-money/genesis-tools/blob/main/LAUNCH.md)
+- [Cosmos SDK: How to run a node](https://docs.cosmos.network/master/run-node/run-node.html)
+- [What is GenTX](https://docs.cosmos.network/master/run-node/run-node.html#adding-genesis-accounts)
+- [Validator tutorial](../full-node/manage-a-terra-validator/README.mdx)
+    
+## Timeline (Expected)
+
+- Fri May 27 2022 18:00:00 GMT+0900 (KST)
+- Thu May 27 2022 09:00:00 GMT+0000 (UTC)
+
+    Share `preultimate-genesis.json` and start to collect gen_txs from the validators.
+
+- Sat May 28 2022 12:00:00 GMT+0900 (KST)
+- Sat May 28 2022 03:00:00 GMT+0000 (UTC)
+
+    Finish collecting gen_txs and build & share `genesis.json`.
+
+- Sat May 28 2022 15:00:00 GMT+0900 (KST)
+- Sat May 28 2022 06:00:00 GMT+0000 (UTC)
+
+    Launch network.
+
+
+
+## Snapshot
+
+This section covers how to take the pre- and post-attack snapshots. The following steps need to be run on your existing validator's machine. 
+
+1. Stop your `columbus-5` node:
+
+```sh
+sudo systemctl stop terrad
+```
+
+2. Clone, checkout, and install the Terra Core Genesis state exporter:
+
+```sh
+git clone https://github.com/terra-money/core-genesis-exporter
+cd core-genesis-exporter
+make install
+```
+
+3. Verify the exporter binary version:
+
+```sh
+terrad version --long
+```
+
+> The above command should result in the following:
+
+>```sh
+>terrad version --long
+>name: terra
+>server_name: terrad
+>version: ""
+>commit: 2565577ccf47d1b11a82d77500a0cb880080a70c
+>build_tags: netgo,ledger
+>go: go version go1.18 darwin/arm64
+>```
+
+4. Take the pre-attack snapshot:
+
+```sh
+terrad export --height 7544910 > pre-attack-snapshot.json
+```
+
+5. Take the post-attack snapshot:
+
+```sh
+terrad export --height 7790000 > post-attack-snapshot.json
+```
+
+6. Verify the SHA256 hash of the sorted pre-attack & post-attack export snapshots:
+
+```sh
+# pre-attack
+jq -S -c -M '' pre-attack-snapshot.json | shasum -a 256
+0ac0d5b8f7ea49e500d9033687a6720a99818e99280aba8f12f00b39832a0d5c
+
+# post-attack
+jq -S -c -M '' post-attack-snapshot.json | shasum -a 256
+9d294b300eb3d936d9567eb128bc66651d196b07c37583e2e051b3bced965766
+```
+
+## Penultimate Genesis
+
+The following steps need to be run on the same machine as your [snapshot](#snapshot).
+
+1. Clone and checkout genesis builder:
+
+```sh
+git clone https://github.com/terra-money/genesis-tools
+```
+
+2. Move pre-attack and post-attack snapshots into `genesis-tools`:
+
+```sh
+mv ./pre-attack-snapshot.json ./post-attack-snapshot.json ./genesis-tools
+```
+
+3. Run genesis builder script:
+
+```sh
+
+# install dependency
+pip3 install bech32
+pip3 install python-dateutil
+
+python3 ./src/genesis_builder.py \
+    ./genesis-template.json \
+    ./pre-attack-snapshot.json \
+    ./post-attack-snapshot.json \
+    ./genesis-validators.json \
+    --genesis-time=2022-05-28T06:00:00.000000Z \
+    --chain-id=phoenix-1 \
+    > penultimate-genesis.json
+```
+
+4. Verify the SHA256 of the sorted penultimate-genesis.json:
+
+```sh
+jq -S -c -M '' penultimate-genesis.json | shasum -a 256
+def346f3ef21e5f484c4e8634918d527382115b871786bd794fac5dacdf46c63
+```
+
+## Set up a new validator
+
+Set up a new validator on a new machine by following the steps outlined in the [full node tutorial](../full-node/run-a-full-terra-node/README.mdx). 
+
+After [configuring your general settings](../full-node/run-a-full-terra-node/configure-general-settings.mdx), continue to the next section. 
+
+## GenTx
+
+Complete the following steps on your new validator's machine. 
+
+1. Checkout and install the new Terra core:
+
+```sh
+# checkout and install
+git clone https://github.com/terra-money/core
+cd core
+git checkout v2.0.0
+make install
+```
+
+2. Verify the binary version:
+
+```sh
+terrad version --long
+core: v2.0.0
+git commit: [placeholder]
+go.sum hash: [placeholder]
+build tags: netgo ledger
+```
+
+3. Prepare your environment:
+
+```sh
+# install or move penultimate-genesis.json to server
+wget https://phoenix-genesis.s3.us-west-1.amazonaws.com/penultimate-genesis.json
+
+# move genesis to config location
+mv ./penultimate-genesis.json ~/.terra/config/genesis.json
+```
+
+4. Execute GenTx:
+
+```sh
+terrad gentx validator 1000000uluna \
+    --chain-id="phoenix-1" \
+    --pubkey=$(terrad tendermint show-validator) \
+    --min-self-delegation="1"\
+    --security-contact="contact@aaa.services" \
+    --moniker=AAA \
+    --details="Trusted security provider for Terra Network and projects building on Terra." \
+    --identity="AAAAAAAAAAAA" \
+    --commission-rate="0.1" \
+    --commission-max-rate="0.2" \
+    --commission-max-change-rate="0.01" \ 
+    --node-id="validator-moniker" \
+    --ip="0.0.0.0"
+```
+
+5. Upload the generated GenTx file to this repository's gentx folder via PR:
+
+```sh
+ls ~/.terra/config/gentx/*
+```
+
+## Collect GenTxs
+
+The following steps need to be run on the same machine as your [GenTx](#gentx).
+
+1. Download gentx files and change into the terra home config:
+
+```sh
+git clone https://github.com/terra-money/genesis-tools
+cd genesis-tools
+mv ./gentx/* ~/.terra/config/gentx/
+```
+
+2. Execute `collect-gentxs`:
+
+```sh
+terrad collect-gentxs
+```
+
+3. Verify the SHA256 hash of the sorted final genesis:
+
+```sh
+jq -S -c -M '' ~/.terra/config/genesis.json | shasum -a 256
+[placeholder]
+```
+
+## Launch Network
+
+Execute the Terrad binary on your new validator's machine and wait until network launch:
+
+```sh
+sudo systemctl start terrad
+```

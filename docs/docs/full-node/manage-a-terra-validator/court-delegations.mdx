@@ -1,0 +1,31 @@
+---
+sidebar_position: 2
+---
+
+# Court delegations
+
+Consider the following options to help improve your visibility and make yourself known to potential delegators.
+
+## Set up a website
+
+Set up a website so that current or potential delegators can look up information about your validator. It is recommended that you include a section in which you can instruct Terra delegators on how they can delegate Luna tokens.
+
+## Introduce yourself on Discord
+
+Join the [Terra Validators Discord](https://terra.sc/validatordiscord) channel, and introduce yourself.
+
+## Submit a validator profile
+
+Submit a [Validator Profile](https://github.com/terra-money/validator-profiles) to make it official.
+
+## Put a thumbnail on Station
+
+Create a [Keybase Account](https://keybase.io/) follow the Keybase instructions to set up a PGP key, and upload a profile picture.
+For the sake of consistency, it is recommended to use the same GitHub account to verify both your Keybase and validator profiles.
+
+Now, link your Keybase profile to your validator. Open your validator terminal and execute the following command:
+
+```bash
+terrad tx staking edit-validator \
+    --identity="keybase identity"
+```

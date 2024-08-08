@@ -1,0 +1,24 @@
+# Make a connection
+
+Users can interact with the blockchain by using the following modes:
+
+- Querying data
+- Broadcasting a transaction
+
+## Connect to a chain
+
+To perform these actions, connect to the blockchain by using an `LCDClient` object, which represents a connection to a node running the light client daemon (LCD). The LCD serves as a RESTful API over HTTP. feather.js abstracts away the details of making raw API calls and provide an interface with which you can work.
+
+```ts
+import { LCDClient } from '@terra-money/feather.js';
+
+const lcd = new LCDClient({
+  'pisco-1': {
+    lcd: 'https://pisco-lcd.terra.dev',
+    chainID: 'pisco-1',
+    gasAdjustment: 1.75,
+    gasPrices: { uluna: 0.015 },
+    prefix: 'terra', // bech32 prefix, used by the LCD to understand which is the right chain to query
+  },
+});
+```

@@ -1,0 +1,375 @@
+.navbar__items--right {
+  [class*='colorModeToggle'] {
+    button {
+      width: 30px;
+      height: 30px;
+      background: $navbar-button;
+      border: 1px solid $border;
+      margin-top: 1px;
+      transition: all var(--ifm-transition-fast)
+        var(--ifm-transition-timing-default);
+
+      svg {
+        width: 20px;
+      }
+
+      &:hover {
+        background: $navbar-button-hover;
+        box-shadow: inset 0 0 0 1.75px $light-primary;
+      }
+    }
+  }
+}
+
+[data-theme='light'] {
+  .navbar__items--right {
+    [class*='colorModeToggle'] {
+      button {
+        color: $light-primary;
+      }
+    }
+  }
+}
+
+.header-github-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: $navbar-button;
+  border: 1px solid $border;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  margin-right: 4px;
+  transition: all var(--ifm-transition-fast)
+    var(--ifm-transition-timing-default);
+
+  &:hover {
+    box-shadow: inset 0 0 0 1.75px $light-primary;
+    background: $navbar-button-hover;
+  }
+
+  &::before {
+    padding-top: 9px;
+    padding-left: 4px;
+    content: url($blue-github);
+  }
+}
+
+.header-twitter-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: $navbar-button;
+  border: 1px solid $border;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  margin-right: 4px;
+  transition: all var(--ifm-transition-fast)
+    var(--ifm-transition-timing-default);
+
+  &:hover {
+    box-shadow: inset 0 0 0 1.75px $light-primary;
+    background: $navbar-button-hover;
+  }
+
+  &::before {
+    padding-top: 0px;
+    padding-left: 0px;
+    content: url($twitter-github);
+  }
+}
+
+.header-terra-link {
+  font-family: 'Gotham';
+  display: flex;
+  align-items: center;
+  background-color: $hyperlink-color;
+  color: $navbar-button-hover;
+  border-radius: 60px;
+  font-size: 12px;
+  margin-right: 4px;
+  padding: 5px 12px;
+  transition: all var(--ifm-transition-fast)
+    var(--ifm-transition-timing-default);
+
+  &::before {
+    content: '';
+    background-image: url($white-terra);
+    background-position: center center;
+    background-size: cover;
+    height: 18px;
+    width: 21px;
+    margin-top: -2px;
+    margin-right: 5px;
+  }
+
+  &::after {
+    content: '';
+    background-image: url($white-arrow);
+    background-repeat: no-repeat no-repeat;
+    width: 12px;
+    height: 12px;
+    margin-left: 4px;
+  }
+
+  &:hover {
+    background: $navbar-button;
+    color: $light-primary;
+    box-shadow: inset 0 0 0 1.75px $light-primary;
+  }
+
+  &:hover::before {
+    background-image: url($colorful-terra);
+  }
+
+  &:hover::after {
+    background-image: url($blue-arrow);
+    animation: bounce 0.75s infinite;
+  }
+
+  @keyframes bounce {
+    50% {
+      transform: translateX(1px);
+    }
+  }
+
+  svg {
+    display: none !important;
+  }
+
+  @media (max-width: 997px) {
+    padding: 0px;
+    font-size: 0px;
+    display: flex;
+    background: $navbar-button;
+    border: 1px solid $border;
+    width: 30px;
+    height: 30px;
+    transition: all var(--ifm-transition-fast)
+      var(--ifm-transition-timing-default);
+
+    &::before {
+      content: '';
+      background: url($small-colorful-terra);
+      background-repeat: no-repeat no-repeat;
+      background-position: center center;
+      background-size: unset;
+      width: 25px;
+      height: 25px;
+      margin: 0 auto;
+    }
+
+    &:hover::before {
+      background-image: url($small-colorful-terra);
+    }
+
+    &::after {
+      display: none;
+    }
+
+    &:hover {
+      box-shadow: inset 0 0 0 1.75px $light-primary;
+      background: $navbar-button-hover;
+    }
+  }
+}
+
+.DocSearch {
+  &.DocSearch-Button {
+    background: $navbar-button;
+    border: 1px solid $border;
+    height: 40px;
+    width: 40px;
+    padding: 0 9px;
+    margin-left: 8px;
+
+    &:hover {
+      box-shadow: inset 0 0 0 2px $light-primary;
+      color: var(--docsearch-muted-color);
+    }
+
+    .DocSearch-Search-Icon {
+      color: $light-primary;
+    }
+
+    @media (min-width: 769px) {
+      background: $navbar-button !important;
+      border: 1px solid $doc-search-border !important;
+      border-radius: 8px !important;
+      width: 200px !important;
+
+      .DocSearch-Button-Placeholder {
+        font-size: 14px;
+      }
+      .DocSearch-Search-Icon {
+        color: $light-primary !important;
+        height: 15px;
+      }
+
+      width: unset;
+    }
+  }
+}
+
+[data-theme='dark'] {
+  .DocSearch {
+    &.DocSearch-Button {
+      background: $dark-navbar-button;
+      border: 1px solid $dark-border;
+
+      &:hover {
+        box-shadow: inset 0 0 0 2px $navbar-white;
+      }
+
+      .DocSearch-Search-Icon {
+        color: $navbar-white;
+      }
+
+      @media (min-width: 769px) {
+        background: $dark-navbar-button !important;
+        border: 1px solid $dark-doc-search !important;
+
+        .DocSearch-Button-Placeholder {
+          color: $dark-doc-search;
+        }
+        .DocSearch-Search-Icon {
+          color: $dark-primary !important;
+        }
+      }
+    }
+  }
+}
+
+[data-theme='dark'] {
+  .navbar__items--right {
+    [class*='colorModeToggle'] {
+      button {
+        background: $dark-navbar-button;
+        border: 1px solid $dark-border;
+
+        &:hover {
+          box-shadow: inset 0 0 0 1.75px $navbar-white;
+          background: $dark-navbar-button-hover;
+        }
+      }
+    }
+  }
+
+  .header-github-link {
+    background: $dark-navbar-button;
+    border: 1px solid $dark-border;
+
+    &:hover {
+      box-shadow: inset 0 0 0 1.75px $navbar-white;
+      background: $dark-navbar-button-hover;
+    }
+
+    &::before {
+      content: url($white-github);
+    }
+  }
+
+  .header-twitter-link {
+    background: $dark-navbar-button;
+    border: 2px solid $dark-border;
+
+    &:hover {
+      box-shadow: inset 0 0 0 1.75px $navbar-white;
+      background: $dark-navbar-button-hover;
+    }
+
+    &::before {
+      content: url($twitter-github);
+    }
+  }
+
+  .header-terra-link {
+    background-color: $dark-hyperlink-color;
+
+    &::before {
+      background-image: url($white-luna);
+      background-repeat: no-repeat no-repeat;
+    }
+
+    &:hover::before {
+      background-image: url($colorful-luna);
+    }
+
+    &:hover::after {
+      background-image: url($light-blue-arrow) !important;
+    }
+
+    &:hover {
+      background-color: $dark-navbar-button-hover;
+      box-shadow: inset 0 0 0 1.75px $dark-hyperlink-color;
+      color: $dark-hyperlink-color !important;
+    }
+
+    @media (max-width: 550px) {
+      background: $dark-navbar-button;
+      border: 1px solid $dark-border;
+
+      &:hover {
+        box-shadow: inset 0 0 0 1.75px $navbar-white;
+        background: $dark-navbar-button-hover;
+        transform: none;
+      }
+    }
+
+    @media (max-width: 997px) {
+      background: $dark-navbar-button;
+      border: 1px solid $dark-border;
+
+      &::before {
+        background-image: url($small-colorful-luna);
+      }
+
+      &:hover::before {
+        background-image: url($small-colorful-luna);
+      }
+
+      &:hover {
+        box-shadow: inset 0 0 0 1.75px $navbar-white;
+        background: $dark-navbar-button-hover;
+      }
+    }
+  }
+}
+
+@media (max-width: 996px) {
+  // This is a fix for Prod only
+  .navbar__item {
+    display: flex;
+  }
+
+  .navbar {
+    [class^='searchBox'] {
+      position: relative;
+      right: 0;
+    }
+    [class*='colorModeToggle'] {
+      display: unset;
+    }
+  }
+
+  .navbar-sidebar__brand {
+    .margin-right--md {
+      [class*='toggleButton'] {
+        display: none;
+      }
+    }
+  }
+}
+
+@media (max-width: 374px) {
+  .navbar__logo {
+    &::before {
+      content: url('/img/logo_dark_small.svg');
+    }
+    img {
+      display: none !important;
+    }
+  }
+}
