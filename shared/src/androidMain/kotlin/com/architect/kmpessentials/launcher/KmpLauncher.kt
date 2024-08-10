@@ -9,7 +9,7 @@ import com.architect.kmpessentials.launcher.constants.UriPrefixes
 
 actual class KmpLauncher {
     actual companion object {
-        private fun addIntentFlags(intent: Intent){
+        private fun addIntentFlags(intent: Intent) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
             intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
@@ -77,6 +77,10 @@ actual class KmpLauncher {
         ) {
             val addressPath = Uri.parse(UriPrefixes.coordPrefix.plus("$latitude,$longitude"))
             openMapsUrl(addressPath)
+        }
+
+        actual fun launchAppStoreViaIdentifier(appStoreLink: String) {
+            launchExternalUrlViaAnyApp(appStoreLink)
         }
     }
 }

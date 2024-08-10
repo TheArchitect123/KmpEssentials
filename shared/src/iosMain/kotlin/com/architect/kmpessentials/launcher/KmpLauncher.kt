@@ -10,6 +10,8 @@ import platform.MapKit.MKLaunchOptionsDirectionsModeDriving
 import platform.MapKit.MKLaunchOptionsDirectionsModeKey
 import platform.MapKit.MKMapItem
 import platform.MapKit.MKPlacemark
+import platform.StoreKit.SKStoreProductParameterITunesItemIdentifier
+import platform.StoreKit.SKStoreProductViewController
 import platform.UIKit.UIApplication
 import platform.UIKit.UIApplicationOpenSettingsURLString
 import platform.darwin.dispatch_async
@@ -72,6 +74,18 @@ actual class KmpLauncher {
                     UIApplicationOpenSettingsURLString
                 )!!
             )
+        }
+
+        actual fun launchAppStoreViaIdentifier(appStoreLink: String) {
+            dispatch_async(dispatch_get_main_queue()) {
+                val viewController = UIApplication.sharedApplication.keyWindow?.rootViewController
+                val store = SKStoreProductViewController()
+                store.loadProductWithParameters(
+                    mapOf(SKStoreProductParameterITunesItemIdentifier to appStoreLink),
+                    null
+                )
+                viewController?.presentViewController(store, true, null)
+            }
         }
     }
 }

@@ -1,4 +1,7 @@
 package com.architect.kmpessentials.localNotifications
 
-class KmpLocalNotifications {
+expect class KmpLocalNotifications {
+    companion object{
+        fun sendNotification(title: String, message: String)
+    }
 }

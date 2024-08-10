@@ -17,5 +17,6 @@ expect class KmpLauncher {
         fun launchExternalUrlViaBrowser(linkPath: String)
         fun launchExternalUrlViaAnyApp(linkPath: String)
         fun launchAppInternalSettings()
+        fun launchAppStoreViaIdentifier(appStoreLink: String)
     }
 }
