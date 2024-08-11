@@ -23,6 +23,7 @@ actual class KmpBackgrounding {
                 constraints.setRequiresBatteryNotLow(true)
             }
 
+            LongRunnerJob.mutableTypes.add(action)
             WorkManager.getInstance(KmpAndroid.clientAppContext).enqueue(
                 OneTimeWorkRequest.Builder(
                     LongRunnerJob::class.java
