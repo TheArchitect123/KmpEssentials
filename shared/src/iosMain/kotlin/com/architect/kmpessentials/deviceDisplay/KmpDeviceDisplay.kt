@@ -1,5 +1,6 @@
 package com.architect.kmpessentials.deviceDisplay
 
+import com.architect.kmpessentials.mainThread.KmpMainThread
 import platform.UIKit.UIApplication
 import platform.UIKit.UIScreen
 import platform.darwin.dispatch_async
@@ -8,7 +9,7 @@ import platform.darwin.dispatch_get_main_queue
 actual class KmpDeviceDisplay {
     actual companion object {
         actual fun keepScreenOnActive() {
-            dispatch_async(dispatch_get_main_queue()) {
+            KmpMainThread.runViaMainThread {
                 UIApplication.sharedApplication.setIdleTimerDisabled(true)
             }
         }
@@ -18,7 +19,7 @@ actual class KmpDeviceDisplay {
         }
 
         actual fun adjustScreenBrightness(brightness: Double) {
-            dispatch_async(dispatch_get_main_queue()) {
+            KmpMainThread.runViaMainThread {
                 UIScreen.mainScreen.setBrightness(brightness)
             }
         }

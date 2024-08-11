@@ -1,5 +1,6 @@
 package com.architect.kmpessentials.launcher
 
+import com.architect.kmpessentials.mainThread.KmpMainThread
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.useContents
 import platform.CoreLocation.CLGeocoder
@@ -25,7 +26,7 @@ actual class KmpLauncher {
             address: String,
             markerTitle: String
         ) {
-            dispatch_async(dispatch_get_main_queue()) {
+            KmpMainThread.runViaMainThread {
                 val geocoder = CLGeocoder()
                 geocoder.geocodeAddressString(address) { result, error ->
                     val coordinates = result?.firstOrNull()
@@ -43,7 +44,7 @@ actual class KmpLauncher {
             longitude: Double,
             markerTitle: String
         ) {
-            dispatch_async(dispatch_get_main_queue()) {
+            KmpMainThread.runViaMainThread {
                 val placemark =
                     MKPlacemark(coordinate = CLLocationCoordinate2DMake(latitude, longitude))
                 val mapItem = MKMapItem(placemark = placemark)
@@ -77,7 +78,7 @@ actual class KmpLauncher {
         }
 
         actual fun launchAppStoreViaIdentifier(appStoreLink: String) {
-            dispatch_async(dispatch_get_main_queue()) {
+            KmpMainThread.runViaMainThread {
                 val viewController = UIApplication.sharedApplication.keyWindow?.rootViewController
                 val store = SKStoreProductViewController()
                 store.loadProductWithParameters(

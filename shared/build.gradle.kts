@@ -56,6 +56,7 @@ kotlin {
             dependencies {
                 implementation("androidx.startup:startup-runtime:1.1.1")
                 implementation("androidx.core:core-ktx:1.13.1")
+                implementation("androidx.work:work-runtime-ktx:2.9.1")
             }
         }
 
@@ -81,7 +82,7 @@ afterEvaluate {
         coordinates(
             groupId = "io.github.thearchitect123",
             artifactId = "kmpEssentials",
-            version = "0.1.8"
+            version = "0.2.0"
         )
 
         // Configure POM metadata for the published artifact

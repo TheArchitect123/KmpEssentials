@@ -13,6 +13,10 @@ actual class KmpLocalNotifications {
         private val standardChannel = "default"
         private val notificationChannelName = "Default"
         actual fun sendNotification(title: String, message: String) {
+            if(notificationIcon == 0){
+                throw Exception("Notification Icon must be set. Please set via your Activities OnCreate method")
+            }
+
             val notifManager =
                 KmpAndroid.clientAppContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 

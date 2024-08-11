@@ -2,10 +2,7 @@ package com.architect.kmpessentials.vibration
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.Context
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Vibrator
 import com.architect.kmpessentials.KmpAndroid
 import com.architect.kmpessentials.permissions.PermissionStatus
