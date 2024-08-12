@@ -1,4 +1,9 @@
 package com.architect.kmpessentials.geolocation
 
-class KmpGeolocation {
+import com.architect.kmpessentials.geolocation.models.Location
+
+expect class KmpGeolocation {
+    companion object {
+        fun getCurrentLocation(locationCoord: (Location) -> Unit)
+    }
 }
