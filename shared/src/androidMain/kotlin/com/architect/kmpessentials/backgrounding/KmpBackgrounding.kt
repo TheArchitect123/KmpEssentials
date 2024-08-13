@@ -5,12 +5,13 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.architect.kmpessentials.KmpAndroid
+import com.architect.kmpessentials.aliases.DefaultAction
 import com.architect.kmpessentials.aliases.DefaultActionAsync
 import com.architect.kmpessentials.backgrounding.requests.LongRunnerJob
 
 actual class KmpBackgrounding {
     actual companion object {
-        actual fun createAndStartWorker(options: BackgroundOptions, action: DefaultActionAsync) {
+        actual fun createAndStartWorker(options: BackgroundOptions, action: DefaultAction) {
             val constraints =
                 Constraints.Builder()
             if (options.requiresInternet) {

@@ -1,7 +1,6 @@
 package com.architect.kmpessentials.battery
 
 import android.content.Context
-import android.hardware.BatteryState
 import android.os.BatteryManager
 import com.architect.kmpessentials.KmpAndroid
 

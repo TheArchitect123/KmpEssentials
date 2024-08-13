@@ -19,7 +19,7 @@ actual class KmpAppInfo {
         }
 
         actual fun getPackageMinOS(): Int {
-            return 0
+            return 13
         }
 
         actual fun getSystemThemeMode(): AppDeviceTheme {

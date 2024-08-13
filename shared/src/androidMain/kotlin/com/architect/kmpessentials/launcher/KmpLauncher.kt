@@ -2,13 +2,37 @@ package com.architect.kmpessentials.launcher
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import com.architect.kmpessentials.KmpAndroid
+import com.architect.kmpessentials.aliases.DefaultActionWithBooleanReturn
 import com.architect.kmpessentials.launcher.constants.MapAppPackageIdentifiers
 import com.architect.kmpessentials.launcher.constants.UriPrefixes
+import com.architect.kmpessentials.mainThread.KmpMainThread
 
 actual class KmpLauncher {
     actual companion object {
+        actual fun startTimer(seconds: Double, action: DefaultActionWithBooleanReturn) {
+            KmpMainThread.runViaMainThread {
+                val handler = Handler(Looper.getMainLooper());
+                handler.postDelayed({
+                    if (action())
+                        startTimer(seconds, action);
+                }, seconds.toLong() * 1000);
+            }
+        }
+
+        actual fun startTimerRepeating(seconds: Double, action: DefaultActionWithBooleanReturn) {
+            KmpMainThread.runViaMainThread {
+                val handler = Handler(Looper.getMainLooper());
+                handler.postDelayed({
+                    if (action())
+                        startTimer(seconds, action);
+                }, seconds.toLong() * 1000);
+            }
+        }
+
         private fun addIntentFlags(intent: Intent) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)

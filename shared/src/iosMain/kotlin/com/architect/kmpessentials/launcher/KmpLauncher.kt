@@ -1,11 +1,17 @@
 package com.architect.kmpessentials.launcher
 
+import com.architect.kmpessentials.aliases.DefaultActionWithBooleanReturn
 import com.architect.kmpessentials.mainThread.KmpMainThread
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.useContents
 import platform.CoreLocation.CLGeocoder
 import platform.CoreLocation.CLLocationCoordinate2DMake
 import platform.CoreLocation.CLPlacemark
+import platform.Foundation.NSRunLoop
+import platform.Foundation.NSRunLoopCommonModes
+import platform.Foundation.NSRunLoopMode
+import platform.Foundation.NSTimeInterval
+import platform.Foundation.NSTimer
 import platform.Foundation.NSURL
 import platform.MapKit.MKLaunchOptionsDirectionsModeDriving
 import platform.MapKit.MKLaunchOptionsDirectionsModeKey
@@ -15,12 +21,33 @@ import platform.StoreKit.SKStoreProductParameterITunesItemIdentifier
 import platform.StoreKit.SKStoreProductViewController
 import platform.UIKit.UIApplication
 import platform.UIKit.UIApplicationOpenSettingsURLString
-import platform.darwin.dispatch_async
-import platform.darwin.dispatch_get_main_queue
 
 @OptIn(ExperimentalForeignApi::class)
 actual class KmpLauncher {
     actual companion object {
+        actual fun startTimer(seconds: Double, action: DefaultActionWithBooleanReturn) {
+            KmpMainThread.runViaMainThread {
+                val timer = NSTimer.scheduledTimerWithTimeInterval(seconds, false, { timer ->
+                    if (!action()) {
+                        timer?.invalidate()
+                    }
+                });
+
+                NSRunLoop.mainRunLoop.addTimer(timer, NSRunLoopCommonModes);
+            }
+        }
+
+        actual fun startTimerRepeating(seconds: Double, action: DefaultActionWithBooleanReturn) {
+            KmpMainThread.runViaMainThread {
+                val timer = NSTimer.scheduledTimerWithTimeInterval(seconds, true, { timer ->
+                    if (!action()) {
+                        timer?.invalidate()
+                    }
+                });
+
+                NSRunLoop.mainRunLoop.addTimer(timer, NSRunLoopCommonModes);
+            }
+        }
 
         actual fun launchExternalMapsAppWithAddress(
             address: String,

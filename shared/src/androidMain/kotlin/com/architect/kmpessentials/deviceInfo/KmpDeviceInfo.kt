@@ -1,9 +1,7 @@
 package com.architect.kmpessentials.deviceInfo
 
 import android.os.Build
-import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 
 actual class KmpDeviceInfo {
     actual companion object {

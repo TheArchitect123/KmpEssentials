@@ -1,10 +1,11 @@
 package com.architect.kmpessentials.backgrounding
 
+import com.architect.kmpessentials.aliases.DefaultAction
 import com.architect.kmpessentials.aliases.DefaultActionAsync
 
 expect class KmpBackgrounding {
     companion object {
-        fun createAndStartWorker(options: BackgroundOptions, action: DefaultActionAsync)
+        fun createAndStartWorker(options: BackgroundOptions, action: DefaultAction)
     }
 }
 
