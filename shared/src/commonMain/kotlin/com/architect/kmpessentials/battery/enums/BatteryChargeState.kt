@@ -1,4 +1,4 @@
-package com.architect.kmpessentials.battery
+package com.architect.kmpessentials.battery.enums
 
 enum class BatteryChargeState
 {
@@ -9,3 +9,4 @@ enum class BatteryChargeState
     NotCharging,
     NotPresent
 }
+

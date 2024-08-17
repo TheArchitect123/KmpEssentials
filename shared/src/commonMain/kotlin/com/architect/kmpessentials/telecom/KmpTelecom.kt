@@ -1,4 +1,7 @@
 package com.architect.kmpessentials.telecom
 
-class KmpTelecom {
+expect class KmpTelecom {
+    companion object{
+        fun launchPhoneCallWithNumber(mobileNumber: String)
+    }
 }

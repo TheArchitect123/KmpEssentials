@@ -2,24 +2,25 @@ package com.architect.kmpessentials.deviceDisplay
 
 import android.view.WindowManager
 import com.architect.kmpessentials.KmpAndroid
+import com.architect.kmpessentials.mainThread.KmpMainThread
 
 actual class KmpDeviceDisplay {
     actual companion object {
         actual fun keepScreenOnActive() {
-            KmpAndroid.clientAppContext.runOnUiThread {
+            KmpMainThread.runViaMainThread {
                 KmpAndroid.clientAppContext.window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             }
         }
 
         actual fun disableScreenOnActive() {
-            KmpAndroid.clientAppContext.runOnUiThread {
+            KmpMainThread.runViaMainThread {
                 KmpAndroid.clientAppContext.window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             }
         }
 
         actual fun adjustScreenBrightness(brightness: Double) {
             if(brightness in 0.0..1.0) {
-                KmpAndroid.clientAppContext.runOnUiThread {
+                KmpMainThread.runViaMainThread {
                     KmpAndroid.clientAppContext.window.attributes.screenBrightness =
                         brightness.toFloat()
                 }

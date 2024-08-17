@@ -1,4 +1,7 @@
 package com.architect.kmpessentials.sms
 
-class KmpSms {
+expect class KmpSms {
+    companion object{
+        fun sendSmsToNumber(message: String, mobileNumber: String)
+    }
 }

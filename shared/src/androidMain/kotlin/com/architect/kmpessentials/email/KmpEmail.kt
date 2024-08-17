@@ -3,11 +3,12 @@ package com.architect.kmpessentials.email
 import android.content.Intent
 import android.net.Uri
 import com.architect.kmpessentials.KmpAndroid
+import com.architect.kmpessentials.mainThread.KmpMainThread
 
 actual class KmpEmail {
     actual companion object {
         actual fun sendEmailToAddress(address: String) {
-            KmpAndroid.clientAppContext.runOnUiThread {
+            KmpMainThread.runViaMainThread {
                 val emailIntent = Intent(Intent.ACTION_VIEW)
                 emailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 emailIntent.setData(Uri.parse(address))
@@ -16,7 +17,7 @@ actual class KmpEmail {
         }
 
         actual fun sendEmailsToCCAddress(address: String, ccAddresses: Array<String>?) {
-            KmpAndroid.clientAppContext.runOnUiThread {
+            KmpMainThread.runViaMainThread {
                 val emailIntent = Intent(Intent.ACTION_VIEW)
                 emailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 emailIntent.setData(Uri.parse(address))
