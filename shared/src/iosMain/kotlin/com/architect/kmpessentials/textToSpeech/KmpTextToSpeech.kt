@@ -51,7 +51,7 @@ actual class KmpTextToSpeech {
         actual fun convertTextToSpeech(message: String) {
             KmpMainThread.runViaMainThread {
                 val speechSynth = AVSpeechSynthesizer()
-                val textToSpeak = AVSpeechUtterance(message)
+                val textToSpeak = AVSpeechUtterance(string = message)
                 speechSynth.speakUtterance(textToSpeak)
             }
         }

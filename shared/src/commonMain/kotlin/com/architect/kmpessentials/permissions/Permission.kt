@@ -4,8 +4,7 @@ enum class Permission {
     Camera,
     Flashlight,
     ExternalStorage,
-    FineLocation,
-    CoarseLocation,
+    Location,
     Sms,
     Microphone,
 }

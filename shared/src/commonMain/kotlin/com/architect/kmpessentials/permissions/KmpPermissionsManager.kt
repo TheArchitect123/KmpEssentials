@@ -4,9 +4,10 @@ import com.architect.kmpessentials.internal.ActionNoParams
 
 expect class KmpPermissionsManager {
     companion object {
-        fun requestPermissions(permissions: List<Permission>, successfulResponse: ActionNoParams)
-        fun requestPermission(permission: Permission, successfulResponse: ActionNoParams)
-        fun openAppPermissionsSettings()
+        fun requestPermission(
+            permission: Permission,
+            runAction: ActionNoParams
+        )
+        fun isPermissionGranted(permission: Permission): Boolean
     }
 }
-

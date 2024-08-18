@@ -16,6 +16,6 @@ internal object PermissionsHelper {
     }
 
     fun hasHardwareFeature(feature: String) : Boolean{
-        return KmpAndroid.clientAppContext.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)
+        return KmpAndroid.clientAppContext.packageManager.hasSystemFeature(feature)
     }
 }

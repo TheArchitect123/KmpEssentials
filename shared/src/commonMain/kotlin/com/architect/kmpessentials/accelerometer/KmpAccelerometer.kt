@@ -1,11 +1,13 @@
 package com.architect.kmpessentials.accelerometer
 
-import com.architect.kmpessentials.internal.ActionDoubleParams
-import com.architect.kmpessentials.internal.ActionStringParams
+import com.architect.kmpessentials.internal.ActionTripleFloatParams
 
 expect class KmpAccelerometer {
-    companion object{
-        fun startListening(accelerometerEvent: ActionStringParams, accScopeVal: ActionDoubleParams)
+    companion object {
+        fun startListening(
+            accScopeVal: ActionTripleFloatParams
+        )
+
         fun stopListening()
     }
 }

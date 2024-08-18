@@ -1,28 +1,29 @@
-package com.architect.kmpessentials.accelerometer
+package com.architect.kmpessentials.proximity
 
 import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorManager
 import com.architect.kmpessentials.KmpAndroid
-import com.architect.kmpessentials.internal.ActionTripleFloatParams
+import com.architect.kmpessentials.internal.ActionBoolParams
 
-actual class KmpAccelerometer {
+
+actual class KmpProximity {
     actual companion object {
-        internal lateinit var accScope: ActionTripleFloatParams
+        internal lateinit var proxScope: ActionBoolParams
         private val sensorManager by lazy {
             KmpAndroid.applicationContext.getSystemService(Context.SENSOR_SERVICE) as SensorManager
         }
-        private val accManager by lazy {
-            sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        private val proxManager by lazy {
+            sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY)
         }
 
         actual fun startListening(
-            accScopeVal: ActionTripleFloatParams
+            proximityScopeVal: ActionBoolParams
         ) {
-            accScope = accScopeVal
+            proxScope = proximityScopeVal
             sensorManager.registerListener(
                 KmpAndroid.sensorManagerObserver,
-                accManager!!,
+                proxManager!!,
                 SensorManager.SENSOR_DELAY_NORMAL
             )
         }

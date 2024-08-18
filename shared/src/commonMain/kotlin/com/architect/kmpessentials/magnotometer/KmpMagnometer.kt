@@ -1,11 +1,13 @@
 package com.architect.kmpessentials.magnotometer
 
-import com.architect.kmpessentials.internal.ActionDoubleParams
-import com.architect.kmpessentials.internal.ActionStringParams
+import com.architect.kmpessentials.internal.ActionTripleFloatParams
 
 expect class KmpMagnometer {
-    companion object{
-        fun startListening(magnetometerEvent: ActionStringParams, magScopeVal: ActionDoubleParams)
+    companion object {
+        fun startListening(
+            magScopeVal: ActionTripleFloatParams
+        )
+
         fun stopListening()
     }
 }

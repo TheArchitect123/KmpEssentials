@@ -4,7 +4,7 @@ import android.annotation.TargetApi
 import android.content.pm.PackageManager
 import android.os.Build
 import com.architect.kmpessentials.flashlight.components.FlashlightHardware
-import com.architect.kmpessentials.permissions.KmpPermissions
+import com.architect.kmpessentials.permissions.services.KmpPermissions
 import com.architect.kmpessentials.permissions.PermissionStatus
 import com.architect.kmpessentials.permissions.PermissionsHelper
 

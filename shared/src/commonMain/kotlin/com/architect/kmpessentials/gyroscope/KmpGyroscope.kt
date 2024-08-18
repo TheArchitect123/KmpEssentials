@@ -1,11 +1,13 @@
 package com.architect.kmpessentials.gyroscope
 
-import com.architect.kmpessentials.internal.ActionDoubleParams
-import com.architect.kmpessentials.internal.ActionStringParams
+import com.architect.kmpessentials.internal.ActionTripleFloatParams
 
 expect class KmpGyroscope {
-    companion object{
-        fun startListening(gyroscopeEvent: ActionStringParams, gyroScopeVal: ActionDoubleParams)
+    companion object {
+        fun startListening(
+            gyroScopeVal: ActionTripleFloatParams
+        )
+
         fun stopListening()
     }
 }

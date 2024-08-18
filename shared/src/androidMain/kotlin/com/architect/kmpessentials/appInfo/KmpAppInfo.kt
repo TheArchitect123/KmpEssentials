@@ -5,15 +5,16 @@ import com.architect.kmpessentials.KmpAndroid
 
 actual class KmpAppInfo {
     actual companion object {
+        val packageInfo = KmpAndroid.clientAppContext.packageManager.getPackageInfo(
+            getPackageName(),
+            0
+        )
         actual fun getPackageName(): String {
             return KmpAndroid.clientAppContext.packageName
         }
 
         actual fun getPackageVersion(): String {
-            return KmpAndroid.clientAppContext.packageManager.getPackageInfo(
-                getPackageName(),
-                0
-            ).versionName
+            return packageInfo.versionName
         }
 
         actual fun getSystemThemeMode(): AppDeviceTheme {
@@ -28,8 +29,7 @@ actual class KmpAppInfo {
         }
 
         actual fun getPackageMinOS(): Int {
-            val packageManager = KmpAndroid.clientAppContext.packageManager.getPackageInfo(getPackageName(), 0)
-            return packageManager.applicationInfo.targetSdkVersion
+            return packageInfo.applicationInfo.targetSdkVersion
         }
     }
 }
