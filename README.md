@@ -32,9 +32,7 @@ implementation("io.github.thearchitect123:kmpEssentials:0.3.3")
 ## Setup for Android
 ```sh
  override onCreate(savedInstanceBundle: Bundle?) {
-     KmpAndroid.initializeApp(
-            this
-        ){
+     KmpAndroid.initializeApp(this) {
          // optional action to invoke for any permissions disabled by the user. 
          // Used only by the internal permissions module. 
          // You can present a toast message or any error popup of some kind.
