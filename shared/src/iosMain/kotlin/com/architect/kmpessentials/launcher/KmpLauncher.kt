@@ -9,8 +9,6 @@ import platform.CoreLocation.CLLocationCoordinate2DMake
 import platform.CoreLocation.CLPlacemark
 import platform.Foundation.NSRunLoop
 import platform.Foundation.NSRunLoopCommonModes
-import platform.Foundation.NSRunLoopMode
-import platform.Foundation.NSTimeInterval
 import platform.Foundation.NSTimer
 import platform.Foundation.NSURL
 import platform.MapKit.MKLaunchOptionsDirectionsModeDriving

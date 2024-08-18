@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import com.architect.kmpessentials.KmpAndroid
 import com.architect.kmpessentials.orientation.internal.OrientationListener
 
+
 actual class KmpOrientationManager {
     actual companion object {
         actual fun getCurrentOrientation(): OrientationState {

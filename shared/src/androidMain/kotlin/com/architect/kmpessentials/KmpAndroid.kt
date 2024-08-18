@@ -1,9 +1,13 @@
 package com.architect.kmpessentials
 
+import android.R.attr.data
 import android.app.Activity
 import android.app.Application
+import android.graphics.Bitmap
 import android.os.Build
 import android.os.Build.VERSION_CODES
+import android.os.Bundle
+import android.provider.MediaStore
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.architect.kmpessentials.aliases.DefaultAction
@@ -13,6 +17,7 @@ import com.architect.kmpessentials.filePicker.File
 import com.architect.kmpessentials.filePicker.KmpFilePicker
 import com.architect.kmpessentials.permissions.KmpPermissionsManager
 import com.nareshchocha.filepickerlibrary.utilities.appConst.Const
+
 
 class KmpAndroid {
     companion object {
@@ -62,37 +67,52 @@ class KmpAndroid {
             clientAppContext.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode == Activity.RESULT_OK) {
                     // check if intent is a photo
-
-                    // Use the uri to load the image
-                    val singlePath = it.data!!.getStringExtra(Const.BundleExtras.FILE_PATH)
-                    if (singlePath != null) {
-                        val singleFile =
-                            java.io.File(singlePath)
-                        KmpFilePicker.actionResultSingleFile(
-                            File(
-                                name = singleFile.name,
-                                absolutePath = singleFile.absolutePath,
-                                createdISO = "",
-                                isProtected = singleFile.isHidden,
-                                modifiedISO = ""
+                    if (it.data?.action == MediaStore.ACTION_IMAGE_CAPTURE) {
+                        // Handle the image taken from the camera
+                        val extras = it.data?.extras
+                        if (extras != null) {
+                            val imageBitmap = extras["data"] as? Bitmap?
+                            val mediaStore = MediaStore.Images.Media.insertImage( // adds the image from the camera to the store, then returns result
+                                KmpAndroid.clientAppContext.contentResolver,
+                                imageBitmap,
+                                "",
+                                ""
                             )
-                        )
-                    } else {
-                        val filePaths =
-                            it.data?.getStringArrayListExtra(Const.BundleExtras.FILE_PATH_LIST)
-                                ?.map { file ->
-                                    val singleFile =
-                                        java.io.File(file)
-                                    File(
-                                        name = singleFile.name,
-                                        absolutePath = singleFile.absolutePath,
-                                        createdISO = "",
-                                        isProtected = singleFile.isHidden,
-                                        modifiedISO = ""
-                                    )
-                                }
 
-                        KmpFilePicker.actionResultManyFiles(filePaths)
+                            KmpCamera.actionResult(mediaStore)
+                        }
+                    } else {
+                        // Use the uri to load the image
+                        val singlePath = it.data!!.getStringExtra(Const.BundleExtras.FILE_PATH)
+                        if (singlePath != null) {
+                            val singleFile =
+                                java.io.File(singlePath)
+                            KmpFilePicker.actionResultSingleFile(
+                                File(
+                                    name = singleFile.name,
+                                    absolutePath = singleFile.absolutePath,
+                                    createdISO = "",
+                                    isProtected = singleFile.isHidden,
+                                    modifiedISO = ""
+                                )
+                            )
+                        } else {
+                            val filePaths =
+                                it.data?.getStringArrayListExtra(Const.BundleExtras.FILE_PATH_LIST)
+                                    ?.map { file ->
+                                        val singleFile =
+                                            java.io.File(file)
+                                        File(
+                                            name = singleFile.name,
+                                            absolutePath = singleFile.absolutePath,
+                                            createdISO = "",
+                                            isProtected = singleFile.isHidden,
+                                            modifiedISO = ""
+                                        )
+                                    }
+
+                            KmpFilePicker.actionResultManyFiles(filePaths)
+                        }
                     }
                 }
             }

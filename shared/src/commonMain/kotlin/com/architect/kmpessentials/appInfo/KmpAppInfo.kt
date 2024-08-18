@@ -1,7 +1,6 @@
 package com.architect.kmpessentials.appInfo
 
 expect class KmpAppInfo {
-
     companion object{
         fun getPackageName(): String
         fun getPackageVersion(): String
@@ -9,6 +8,5 @@ expect class KmpAppInfo {
         fun getPackageMinOS(): Int
         fun getSystemThemeMode(): AppDeviceTheme
     }
-
 }
 
