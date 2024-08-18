@@ -27,12 +27,16 @@ KmpEssentials is a library that contains apis to accelerate your development. Ev
 To get started, import the library into your project:
 
 ```sh
-implementation("io.github.thearchitect123:kmpEssentials:0.1.5")
+implementation("io.github.thearchitect123:kmpEssentials:0.3.3")
 ```
 ## Setup for Android
 ```sh
  override onCreate(savedInstanceBundle: Bundle?) {
-     KmpAndroid.clientAppContext = this
+     KmpAndroid.initializeApp(this) {
+         // optional action to invoke for any permissions disabled by the user. 
+         // Used only by the internal permissions module. 
+         // You can present a toast message or any error popup of some kind.
+    }
  }
 ```
 
