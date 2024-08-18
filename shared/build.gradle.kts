@@ -48,6 +48,7 @@ kotlin {
 
         val androidMain by getting {
             dependencies {
+                implementation("androidx.biometric:biometric:1.1.0")
                 implementation("androidx.activity:activity-ktx:1.9.1")
                 implementation("io.github.chochanaresh:filepicker:0.2.5")
                 implementation("androidx.appcompat:appcompat:1.7.0")

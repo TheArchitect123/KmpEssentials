@@ -6,7 +6,6 @@ import com.architect.kmpessentials.internal.ActionStringParams
 import java.io.File
 
 actual class KmpFileSystem {
-
     actual companion object {
         actual fun getAppDirectory(): String {
             return KmpAppInfo.packageInfo.applicationInfo.dataDir

@@ -10,7 +10,11 @@ actual class KmpProximity {
     actual companion object {
         private var proximityScope: ActionBoolParams? = null
 
-        init {
+        actual fun startListening(
+            proximityScopeVal: ActionBoolParams
+        ) {
+            proximityScope = proximityScopeVal
+            UIDevice.currentDevice.proximityMonitoringEnabled = true
             NSNotificationCenter.defaultCenter.addObserverForName(
                 name = UIDeviceProximityStateDidChangeNotification,
                 `object` = KmpiOS.getTopViewController(),
@@ -20,15 +24,13 @@ actual class KmpProximity {
             }
         }
 
-        actual fun startListening(
-            proximityScopeVal: ActionBoolParams
-        ) {
-            proximityScope = proximityScopeVal
-            UIDevice.currentDevice.proximityMonitoringEnabled = true
-        }
-
         actual fun stopListening() {
             UIDevice.currentDevice.proximityMonitoringEnabled = false
+            NSNotificationCenter.defaultCenter.removeObserver(
+                KmpiOS.getTopViewController()!!,
+                UIDeviceProximityStateDidChangeNotification,
+                null
+            )
         }
     }
 }

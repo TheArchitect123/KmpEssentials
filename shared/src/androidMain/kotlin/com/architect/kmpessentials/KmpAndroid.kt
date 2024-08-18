@@ -8,6 +8,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.architect.kmpessentials.aliases.DefaultAction
 import com.architect.kmpessentials.battery.KmpBattery
+import com.architect.kmpessentials.camera.KmpCamera
 import com.architect.kmpessentials.filePicker.File
 import com.architect.kmpessentials.filePicker.KmpFilePicker
 import com.architect.kmpessentials.permissions.KmpPermissionsManager
@@ -37,6 +38,7 @@ class KmpAndroid {
                 hasRegistered = true
             }
 
+            // permission manager
             KmpPermissionsManager.resultLauncher =
                 clientAppContext.registerForActivityResult(ActivityResultContracts.RequestPermission()) { result ->
                     if (result) {
@@ -59,6 +61,8 @@ class KmpAndroid {
             // file picker
             clientAppContext.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode == Activity.RESULT_OK) {
+                    // check if intent is a photo
+
                     // Use the uri to load the image
                     val singlePath = it.data!!.getStringExtra(Const.BundleExtras.FILE_PATH)
                     if (singlePath != null) {
