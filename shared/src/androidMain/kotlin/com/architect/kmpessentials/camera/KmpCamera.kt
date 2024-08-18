@@ -13,9 +13,18 @@ actual class KmpCamera {
     actual companion object {
         lateinit var resultLauncher: ActivityResultLauncher<Intent>
         lateinit var actionResult: ActionStringParams
+        lateinit var imagePickerResult: ActionStringParams
+        lateinit var galleryLauncher: ActivityResultLauncher<String>
 
         actual fun isSupported(): Boolean {
             return PermissionsHelper.hasHardwareFeature(PackageManager.FEATURE_CAMERA)
+        }
+
+        actual fun pickPhotoFromGallery(actionResult: ActionStringParams) {
+            KmpMainThread.runViaMainThread {
+                this.imagePickerResult = actionResult
+                galleryLauncher.launch("image/*")
+            }
         }
 
         actual fun capturePhoto(actionResult: ActionStringParams) {

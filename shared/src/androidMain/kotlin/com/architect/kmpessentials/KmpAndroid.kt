@@ -43,6 +43,12 @@ class KmpAndroid {
                 hasRegistered = true
             }
 
+            // image picker
+            KmpCamera.galleryLauncher =
+                clientAppContext.registerForActivityResult(ActivityResultContracts.GetContent()) {
+                    KmpCamera.imagePickerResult.invoke(it?.path ?: "")
+                }
+
             // permission manager
             KmpPermissionsManager.resultLauncher =
                 clientAppContext.registerForActivityResult(ActivityResultContracts.RequestPermission()) { result ->
@@ -72,12 +78,13 @@ class KmpAndroid {
                         val extras = it.data?.extras
                         if (extras != null) {
                             val imageBitmap = extras["data"] as? Bitmap?
-                            val mediaStore = MediaStore.Images.Media.insertImage( // adds the image from the camera to the store, then returns result
-                                KmpAndroid.clientAppContext.contentResolver,
-                                imageBitmap,
-                                "",
-                                ""
-                            )
+                            val mediaStore =
+                                MediaStore.Images.Media.insertImage( // adds the image from the camera to the store, then returns result
+                                    KmpAndroid.clientAppContext.contentResolver,
+                                    imageBitmap,
+                                    "",
+                                    ""
+                                )
 
                             KmpCamera.actionResult(mediaStore)
                         }

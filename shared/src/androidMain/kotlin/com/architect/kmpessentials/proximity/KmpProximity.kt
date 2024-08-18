@@ -6,7 +6,6 @@ import android.hardware.SensorManager
 import com.architect.kmpessentials.KmpAndroid
 import com.architect.kmpessentials.internal.ActionBoolParams
 
-
 actual class KmpProximity {
     actual companion object {
         internal lateinit var proxScope: ActionBoolParams

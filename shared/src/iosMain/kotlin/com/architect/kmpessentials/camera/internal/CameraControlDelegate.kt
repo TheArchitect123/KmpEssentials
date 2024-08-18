@@ -6,7 +6,7 @@ import platform.UIKit.UIImagePickerController
 import platform.UIKit.UIImagePickerControllerDelegateProtocol
 import platform.darwin.NSObject
 
-class CameraControlDelegate(val actionResult: ActionStringParams) : NSObject(),
+internal class CameraControlDelegate(val actionResult: ActionStringParams) : NSObject(),
     UIImagePickerControllerDelegateProtocol {
     override fun imagePickerController(
         picker: UIImagePickerController,
