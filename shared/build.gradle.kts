@@ -43,6 +43,8 @@ kotlin {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
+                implementation("dev.tmapps:konnection:1.4.1")
+                implementation("com.liftric:kvault:1.12.0")
             }
         }
 
@@ -84,7 +86,7 @@ afterEvaluate {
         coordinates(
             groupId = "io.github.thearchitect123",
             artifactId = "kmpEssentials",
-            version = "0.3.6"
+            version = "0.3.7"
         )
 
         // Configure POM metadata for the published artifact

@@ -3,9 +3,7 @@ package com.architect.kmpessentials.sms
 import android.content.Intent
 import android.net.Uri
 import com.architect.kmpessentials.KmpAndroid
-import com.architect.kmpessentials.launcher.KmpLauncher
 import com.architect.kmpessentials.mainThread.KmpMainThread
-
 
 actual class KmpSms {
     actual companion object {

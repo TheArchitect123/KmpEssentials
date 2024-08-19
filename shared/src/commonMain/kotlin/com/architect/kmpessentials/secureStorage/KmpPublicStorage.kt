@@ -1,8 +1,7 @@
 package com.architect.kmpessentials.secureStorage
 
-expect class KmpSecureStorage {
+expect class KmpPublicStorage {
     companion object {
-        fun configureSecurityForiOS(serviceName: String, accessGroup: String)
         fun clearEntireStore()
         fun deleteDataForKey(key: String)
         fun <TData> persistData(key: String, item: TData)
@@ -13,4 +12,3 @@ expect class KmpSecureStorage {
         fun getBooleanFromKey(key: String): Boolean
     }
 }
-

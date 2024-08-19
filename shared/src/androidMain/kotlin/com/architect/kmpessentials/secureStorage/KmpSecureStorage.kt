@@ -1,50 +1,49 @@
 package com.architect.kmpessentials.secureStorage
 
-import android.content.Context
 import com.architect.kmpessentials.KmpAndroid
+import com.liftric.kvault.KVault
 
 actual class KmpSecureStorage {
     actual companion object {
-        private var sharedPreferences =
-            KmpAndroid.clientAppContext.getPreferences(Context.MODE_PRIVATE)
-
+        private val keyVault: KVault = KVault(KmpAndroid.applicationContext)
         actual fun clearEntireStore() {
-            sharedPreferences.edit().clear().apply()
+            keyVault.clear()
         }
 
         actual fun deleteDataForKey(key: String) {
-            sharedPreferences.edit().remove(key).apply()
+            keyVault.deleteObject(key)
         }
 
         actual fun <TData> persistData(key: String, item: TData) {
             when (item) {
-                is Float -> sharedPreferences.edit().putFloat(key, item).apply()
-                is Boolean -> sharedPreferences.edit().putBoolean(key, item).apply()
-                is String -> sharedPreferences.edit().putString(key, item).apply()
-                is Int -> sharedPreferences.edit().putInt(key, item).apply()
+                is Float -> keyVault.set(key, item)
+                is Double -> keyVault.set(key, item)
+                is Boolean -> keyVault.set(key, item)
+                is String -> keyVault.set(key, item)
+                is Long -> keyVault.set(key, item)
             }
         }
 
         actual fun getStringFromKey(key: String): String {
-            return sharedPreferences.getString(key, "") ?: ""
+            return keyVault.string(key) ?: ""
         }
 
         actual fun getIntFromKey(key: String): Int {
-            return sharedPreferences.getInt(key, 0)
+            return keyVault.int(key) ?: 0
         }
 
         actual fun getFloatFromKey(key: String): Float {
-            return sharedPreferences.getFloat(key, 0f)
+            return keyVault.float(key) ?: 0f
         }
 
         actual fun getBooleanFromKey(key: String): Boolean {
-            return sharedPreferences.getBoolean(key, false)
+            return keyVault.bool(key) ?: false
         }
 
-        actual fun configureSecurity(isPrivate: Boolean) {
-            if (!isPrivate) {
-                sharedPreferences = KmpAndroid.clientAppContext.getPreferences(Context.MODE_PRIVATE)
-            }
+        actual fun configureSecurityForiOS(serviceName: String, accessGroup: String) {
+            TODO("This method is only used for iOS. DO NOT USE FOR ANDROID")
         }
+
     }
 }
+
