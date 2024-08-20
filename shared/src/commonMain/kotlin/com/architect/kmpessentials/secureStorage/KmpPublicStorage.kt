@@ -1,5 +1,10 @@
 package com.architect.kmpessentials.secureStorage
 
+/**
+ * Writes to a public storage
+ * For Android: Writes to Clear Text Shared Preferences
+ * For iOS: Writes to NSUserDefaults
+ * */
 expect class KmpPublicStorage {
     companion object {
         fun clearEntireStore()

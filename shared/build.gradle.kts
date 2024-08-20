@@ -11,6 +11,7 @@ plugins {
     id("signing")
     id("maven-publish")
     id("com.vanniktech.maven.publish") version "0.28.0"
+    id("org.jetbrains.dokka")
 }
 
 kotlin {

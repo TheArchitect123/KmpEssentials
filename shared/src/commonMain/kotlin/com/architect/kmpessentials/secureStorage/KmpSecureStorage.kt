@@ -1,5 +1,10 @@
 package com.architect.kmpessentials.secureStorage
 
+/**
+ * Writes to a public storage
+ * For Android: Writes to Encrypted Text Shared Preferences
+ * For iOS: Writes to Keychain Service
+ * */
 expect class KmpSecureStorage {
     companion object {
         fun configureSecurityForiOS(serviceName: String, accessGroup: String)
