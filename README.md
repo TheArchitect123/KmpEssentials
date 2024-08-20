@@ -64,12 +64,13 @@ KmpAccelerometer.startListening {
 }
 ```
 
-To stop listening to acc changes, we use the function stopListening. It's imporant to deactivate the listener, so the component doesn't continue to broadcast acc data changes to our app. 
+To stop listening to acc changes, we use the function stopListening. It's important to deactivate the listener, so the component doesn't continue to broadcast acc data changes to our app. 
 ```sh
 KmpAccelerometer.stoplistening()
 ```
 
 Below is a list of all modules, along with what each of them do.
+<br/>
 <strong>KmpAccelerometer</strong> - Used for fetching Accelerometer Data from your device (X,Y,Z Axes)
 <br/>
 <strong>KmpAlert</strong> - Used for rendering Alert Popups, and prompting confirmation from the user
