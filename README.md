@@ -54,6 +54,7 @@ To access and use each module you must use the static component belonging to eac
 <br/>
 So as an example, Here we are going to activate the device's accelerometer to fetch X,Y,Z axes data, and pass it into our app
 To subscribe to changes to the device's orientation, we invoke the <strong>startListening</strong> function. We can then process the results in our app.
+<br/>
 ```sh
 KmpAccelerometer.startListening { coords ->
      val x = coords.first
