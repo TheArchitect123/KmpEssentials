@@ -7,7 +7,7 @@ import android.provider.MediaStore
 import com.architect.kmpessentials.KmpAndroid
 import com.architect.kmpessentials.internal.ActionStringParams
 import com.architect.kmpessentials.mainThread.KmpMainThread
-import com.nmd.screenshot.Screenshot
+import com.architect.kmpessentials.screenshot.internals.Screenshot
 
 actual class KmpScreenshot {
     actual companion object {
