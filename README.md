@@ -71,6 +71,7 @@ KmpAccelerometer.stoplistening()
 
 Below is a list of all modules, along with what each of them do.
 <br/>
+<br/>
 <strong>KmpAccelerometer</strong> - Used for fetching Accelerometer Data from your device (X,Y,Z Axes)
 <br/>
 <strong>KmpAlert</strong> - Used for rendering Alert Popups, and prompting confirmation from the user
