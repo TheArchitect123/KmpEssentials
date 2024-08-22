@@ -33,6 +33,8 @@ To get started, import the library into your project:
 implementation("io.github.thearchitect123:kmpEssentials:0.3.8")
 ```
 ## Setup for Android
+
+In your Activity's **onCreate** add the below to initialize the framework.
 ```sh
  override onCreate(savedInstanceBundle: Bundle?) {
      KmpAndroid.initializeApp(this) {
@@ -107,7 +109,7 @@ Below is a list of all modules, along with what each of them do.
 <br/>
 <strong>KmpGeolocation </strong> - Fetch user's current location (requires Location Permissions Set)
 <br/>
-<strong>KmpGeolocation </strong> - Used for fetching Gyroscope Data from your device (X,Y,Z Axes)
+<strong>KmpGyroscope </strong> - Used for fetching Gyroscope Data from your device (X,Y,Z Axes)
 <br/>
 <strong>KmpLauncher</strong> - Launch urls via web browser, launch Google/Apple maps with address/coordinates, launch maps directions with the given address
 <br/>
