@@ -45,6 +45,18 @@ In your Activity's **onCreate** add the below to initialize the framework.
  }
 ```
 
+If your application consists of multiple activities, please make sure to initialize the framework in your activity's **onResume** function.
+
+```sh
+ override onResume() {
+     KmpAndroid.initializeApp(this) {
+         // optional action to invoke for any permissions disabled by the user. 
+         // Used only by the internal permissions module. 
+         // You can present a toast message or any error popup of some kind.
+    }
+ }
+```
+
 <strong>A comprehensive documentation site for each API is in development.</strong>
 However for now, below is a small snippet that explains how to use each module. <strong> The concept is the same for all modules. </strong>
 
