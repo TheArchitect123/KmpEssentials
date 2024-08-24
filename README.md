@@ -35,7 +35,7 @@ implementation("io.github.thearchitect123:kmpEssentials:0.4.4")
 ## Setup for Android
 
 In your Activity's **onCreate** add the below to initialize the framework.<br/><br/>
-**NEW:<br/> KmpEssentials for Android now uses Lifecycle Observers at the Application Layer. So it's enough even for multi application architecture based apps to register only onCreate**
+**NEW:<br/> KmpEssentials for Android now uses Lifecycle Observers at the Application Layer. So it's enough even for multi activity architecture based apps to register in each activity's onCreate**
 ```sh
  override onCreate(savedInstanceBundle: Bundle?) {
      KmpAndroid.initializeApp(this) {
