@@ -31,7 +31,7 @@ actual class KmpCamera {
             KmpMainThread.runViaMainThread {
                 this.actionResult = actionResult
                 val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                if (takePictureIntent.resolveActivity(KmpAndroid.clientAppContext.packageManager) != null) {
+                if (takePictureIntent.resolveActivity(KmpAndroid.applicationContext.packageManager) != null) {
                     resultLauncher.launch(takePictureIntent)
                 }
             }

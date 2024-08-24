@@ -12,15 +12,15 @@ actual class KmpFileSystem {
         }
 
         actual fun getTempCacheDirectory(): String {
-            return KmpAndroid.clientAppContext.cacheDir.absolutePath
+            return KmpAndroid.applicationContext.cacheDir.absolutePath
         }
 
         actual fun getExternalStorageDirectory(): String {
-            return KmpAndroid.clientAppContext.externalCacheDir?.absolutePath ?: ""
+            return KmpAndroid.applicationContext.externalCacheDir?.absolutePath ?: ""
         }
 
         actual fun deleteFileAt(path: String) {
-            KmpAndroid.clientAppContext.deleteFile(path)
+            KmpAndroid.applicationContext.deleteFile(path)
         }
 
         actual fun createFileAt(path: String) {

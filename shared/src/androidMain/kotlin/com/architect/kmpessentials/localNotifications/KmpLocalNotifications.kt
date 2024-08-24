@@ -9,16 +9,21 @@ import com.architect.kmpessentials.KmpAndroid
 
 actual class KmpLocalNotifications {
     actual companion object {
-        var notificationIcon: Int = 0
+        private var notificationIcon: Int = 0
         private val standardChannel = "default"
         private val notificationChannelName = "Default"
+
+        fun setNotificationIcon(icon: Int) {
+            notificationIcon = icon
+        }
+
         actual fun sendNotification(title: String, message: String) {
-            if(notificationIcon == 0){
+            if (notificationIcon == 0) {
                 throw Exception("Notification Icon must be set. Please set via your Activities OnCreate method")
             }
 
             val notifManager =
-                KmpAndroid.clientAppContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                KmpAndroid.applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val channel = NotificationChannel(
@@ -31,7 +36,7 @@ actual class KmpLocalNotifications {
             }
 
             val notification = NotificationCompat.Builder(
-                KmpAndroid.clientAppContext.applicationContext,
+                KmpAndroid.applicationContext,
                 standardChannel
             )
                 .setContentTitle(title).setContentText(message)

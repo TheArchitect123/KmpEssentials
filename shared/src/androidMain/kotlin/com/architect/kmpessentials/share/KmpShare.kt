@@ -8,11 +8,13 @@ actual class KmpShare {
     actual companion object {
         actual fun shareTextWithAnyApp(text: String, optionalTitle: String) {
             KmpMainThread.runViaMainThread {
-                val intent = Intent(Intent.ACTION_SEND)
+                val intent = Intent(Intent.ACTION_SEND).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
                 intent.setType("text/plain")
                 intent.putExtra(Intent.EXTRA_TEXT, text)
 
-                KmpAndroid.clientAppContext.startActivity(
+                KmpAndroid.applicationContext.startActivity(
                     Intent.createChooser(
                         intent,
                         optionalTitle
@@ -23,11 +25,13 @@ actual class KmpShare {
 
         actual fun shareFileWithAnyApp(filePath: String, optionalTitle: String) {
             KmpMainThread.runViaMainThread {
-                val intent = Intent(Intent.ACTION_SEND)
+                val intent = Intent(Intent.ACTION_SEND).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
                 intent.setType("text/plain")
                 intent.putExtra(Intent.EXTRA_TEXT, filePath)
 
-                KmpAndroid.clientAppContext.startActivity(
+                KmpAndroid.applicationContext.startActivity(
                     Intent.createChooser(
                         intent,
                         optionalTitle

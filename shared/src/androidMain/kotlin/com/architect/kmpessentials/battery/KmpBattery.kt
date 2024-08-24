@@ -92,7 +92,7 @@ actual class KmpBattery {
                 addAction(Intent.ACTION_BATTERY_CHANGED)
             }
 
-            KmpAndroid.clientAppContext.application.registerReceiver(batteryReceiver, stateFilter)
+            KmpAndroid.applicationContext.registerReceiver(batteryReceiver, stateFilter)
         }
 
         @RequiresApi(Build.VERSION_CODES.P)

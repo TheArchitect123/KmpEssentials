@@ -1,10 +1,9 @@
 package com.architect.kmpessentials.email
 
+import com.architect.kmpessentials.email.delegates.EmailReceipientDelegate
 import com.architect.kmpessentials.mainThread.KmpMainThread
 import platform.MessageUI.MFMailComposeViewController
 import platform.UIKit.UIApplication
-import platform.darwin.dispatch_async
-import platform.darwin.dispatch_get_main_queue
 
 actual class KmpEmail {
     actual companion object {
@@ -12,6 +11,7 @@ actual class KmpEmail {
             KmpMainThread.runViaMainThread {
                 val mailController = MFMailComposeViewController()
                 mailController.setToRecipients(arrayListOf(address))
+                mailController.setMailComposeDelegate(EmailReceipientDelegate(mailController))
 
                 UIApplication.sharedApplication.keyWindow?.rootViewController?.presentViewController(
                     mailController,
@@ -26,6 +26,8 @@ actual class KmpEmail {
             KmpMainThread.runViaMainThread {
                 val mailController = MFMailComposeViewController()
                 mailController.setToRecipients(arrayListOf(address, ccAddresses))
+                mailController.setMailComposeDelegate(EmailReceipientDelegate(mailController))
+
                 UIApplication.sharedApplication.keyWindow?.rootViewController?.presentViewController(
                     mailController,
                     true

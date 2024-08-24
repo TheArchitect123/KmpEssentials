@@ -9,11 +9,13 @@ actual class KmpSms {
     actual companion object {
         actual fun sendSmsToNumber(message: String, mobileNumber: String) {
             KmpMainThread.runViaMainThread {
-                val sendIntent = Intent(Intent.ACTION_VIEW)
+                val sendIntent = Intent(Intent.ACTION_VIEW).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
                 sendIntent.setData(Uri.parse("sms:$mobileNumber"))
                 sendIntent.putExtra("sms_body", message)
 
-                KmpAndroid.clientAppContext.startActivity(sendIntent)
+                KmpAndroid.applicationContext.startActivity(sendIntent)
             }
         }
     }

@@ -1,12 +1,10 @@
 package com.architect.kmpessentials
 
-import android.R.attr.data
 import android.app.Activity
 import android.app.Application
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Build.VERSION_CODES
-import android.os.Bundle
 import android.provider.MediaStore
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -17,7 +15,6 @@ import com.architect.kmpessentials.filePicker.File
 import com.architect.kmpessentials.filePicker.KmpFilePicker
 import com.architect.kmpessentials.permissions.KmpPermissionsManager
 import com.nareshchocha.filepickerlibrary.utilities.appConst.Const
-
 
 class KmpAndroid {
     companion object {
@@ -32,8 +29,8 @@ class KmpAndroid {
             userDisabledPermission: DefaultAction? = null
         ) {
             clientAppContext = context
+            clientAppContext.lifecycle.addObserver(sensorManagerObserver)
 
-            context.lifecycle.addObserver(sensorManagerObserver)
             if (!hasRegistered) {
                 applicationContext = clientAppContext.application
                 if (Build.VERSION.SDK_INT == VERSION_CODES.LOLLIPOP) { // battery services require Lolliop and above to work

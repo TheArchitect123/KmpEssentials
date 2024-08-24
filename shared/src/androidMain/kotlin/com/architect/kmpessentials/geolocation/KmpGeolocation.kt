@@ -17,7 +17,7 @@ actual class KmpGeolocation {
         actual fun getCurrentLocation(locationCoord: (Location) -> Unit) {
             KmpMainThread.runViaMainThread {
                 val fusedLocationClient =
-                    LocationServices.getFusedLocationProviderClient(KmpAndroid.clientAppContext)
+                    LocationServices.getFusedLocationProviderClient(KmpAndroid.applicationContext)
 
                 val locationCallback = object : LocationCallback() {
                     override fun onLocationResult(locationResult: LocationResult) {

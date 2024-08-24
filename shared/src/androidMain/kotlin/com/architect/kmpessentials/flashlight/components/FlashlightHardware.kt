@@ -11,7 +11,7 @@ import com.architect.kmpessentials.flashlight.FlashLightMode
 @TargetApi(Build.VERSION_CODES.M)
 internal class FlashlightHardware {
     private val cameraHardware =
-        KmpAndroid.clientAppContext.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+        KmpAndroid.applicationContext.getSystemService(Context.CAMERA_SERVICE) as CameraManager
     private var flashlightCameraId: String? = null
     // id of the first device found capable of flashlight hardware
 

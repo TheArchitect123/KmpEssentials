@@ -3,13 +3,10 @@ package com.architect.kmpessentials.contacts
 import com.architect.kmpessentials.KmpiOS
 import com.architect.kmpessentials.mainThread.KmpMainThread
 import kotlinx.cinterop.ExperimentalForeignApi
-import platform.Contacts.CNContact
 import platform.Contacts.CNContactFetchRequest
 import platform.Contacts.CNContactFormatter
 import platform.Contacts.CNContactStore
-import platform.ContactsUI.CNContactPickerDelegateProtocol
 import platform.ContactsUI.CNContactPickerViewController
-import platform.darwin.NSObject
 
 actual class KmpContacts {
     actual companion object {

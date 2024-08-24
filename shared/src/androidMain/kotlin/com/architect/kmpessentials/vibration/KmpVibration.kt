@@ -11,7 +11,7 @@ import com.architect.kmpessentials.permissions.PermissionsHelper
 actual class KmpVibration {
     actual companion object {
         private val vibrator by lazy {
-            KmpAndroid.clientAppContext.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            KmpAndroid.applicationContext.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         }
 
         @SuppressLint("MissingPermission")

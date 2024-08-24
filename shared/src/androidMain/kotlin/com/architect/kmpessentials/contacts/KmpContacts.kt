@@ -10,7 +10,7 @@ actual class KmpContacts {
     actual companion object {
         actual fun getAllContacts(contactsResponse: ContactsAction) {
             val contactsData = mutableListOf<Contact>()
-            val contentResolver: ContentResolver = KmpAndroid.clientAppContext.contentResolver
+            val contentResolver: ContentResolver = KmpAndroid.applicationContext.contentResolver
             val cursor =
                 contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null)
             if (cursor!!.moveToFirst()) {
@@ -53,8 +53,11 @@ actual class KmpContacts {
 
         actual fun pickContact(contactsResponse: SingleContactAction) {
             KmpMainThread.runViaMainThread {
-                val pickContact = Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI)
-                KmpAndroid.clientAppContext.startActivity(pickContact)
+                val pickContact =
+                    Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    }
+                KmpAndroid.applicationContext.startActivity(pickContact)
             }
         }
     }

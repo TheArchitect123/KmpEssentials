@@ -20,8 +20,8 @@ actual class KmpFilePicker {
         }
 
         private fun bootFilePickerActivity() {
-            KmpAndroid.clientAppContext.startActivity(
-                FilePicker.Builder(KmpAndroid.clientAppContext)
+            KmpAndroid.applicationContext.startActivity(
+                FilePicker.Builder(KmpAndroid.applicationContext)
                     .setPopUpConfig()
                     .addPickDocumentFile()
                     .addImageCapture()

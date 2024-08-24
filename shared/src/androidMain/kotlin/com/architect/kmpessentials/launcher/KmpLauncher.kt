@@ -45,8 +45,8 @@ actual class KmpLauncher {
             addIntentFlags(launchMapsApp)
 
             launchMapsApp.setPackage(MapAppPackageIdentifiers.googleMaps)
-            if (launchMapsApp.resolveActivity(KmpAndroid.clientAppContext.packageManager) != null) {
-                KmpAndroid.clientAppContext.startActivity(launchMapsApp)
+            if (launchMapsApp.resolveActivity(KmpAndroid.applicationContext.packageManager) != null) {
+                KmpAndroid.applicationContext.startActivity(launchMapsApp)
             }
         }
 
@@ -56,8 +56,8 @@ actual class KmpLauncher {
             }
             addIntentFlags(browserIntent)
 
-            if (browserIntent.resolveActivity(KmpAndroid.clientAppContext.packageManager) != null) {
-                KmpAndroid.clientAppContext.startActivity(browserIntent)
+            if (browserIntent.resolveActivity(KmpAndroid.applicationContext.packageManager) != null) {
+                KmpAndroid.applicationContext.startActivity(browserIntent)
             }
         }
 
@@ -67,8 +67,8 @@ actual class KmpLauncher {
             }
             addIntentFlags(browserIntent)
 
-            if (browserIntent.resolveActivity(KmpAndroid.clientAppContext.packageManager) != null) {
-                KmpAndroid.clientAppContext.startActivity(browserIntent)
+            if (browserIntent.resolveActivity(KmpAndroid.applicationContext.packageManager) != null) {
+                KmpAndroid.applicationContext.startActivity(browserIntent)
             }
         }
 
@@ -76,13 +76,13 @@ actual class KmpLauncher {
             val settingsIntent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
                 data = Uri.fromParts(
                     UriPrefixes.settingsPackage,
-                    KmpAndroid.clientAppContext.packageName!!,
+                    KmpAndroid.applicationContext.packageName!!,
                     null
                 )
             }
             addIntentFlags(settingsIntent)
-            if (settingsIntent.resolveActivity(KmpAndroid.clientAppContext.packageManager) != null) {
-                KmpAndroid.clientAppContext.startActivity(settingsIntent)
+            if (settingsIntent.resolveActivity(KmpAndroid.applicationContext.packageManager) != null) {
+                KmpAndroid.applicationContext.startActivity(settingsIntent)
             }
         }
 

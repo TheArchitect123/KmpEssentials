@@ -12,7 +12,7 @@ actual class KmpEmail {
                 val emailIntent = Intent(Intent.ACTION_VIEW)
                 emailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 emailIntent.setData(Uri.parse(address))
-                KmpAndroid.clientAppContext.startActivity(emailIntent)
+                KmpAndroid.applicationContext.startActivity(emailIntent)
             }
         }
 
@@ -22,7 +22,7 @@ actual class KmpEmail {
                 emailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 emailIntent.setData(Uri.parse(address))
                 emailIntent.putExtra(Intent.EXTRA_CC, arrayOf(ccAddresses))
-                KmpAndroid.clientAppContext.startActivity(emailIntent)
+                KmpAndroid.applicationContext.startActivity(emailIntent)
             }
         }
     }
