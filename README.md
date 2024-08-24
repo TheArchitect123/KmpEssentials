@@ -159,6 +159,8 @@ Below is a list of all modules, along with what each of them do.
 <br/>
 <strong>KmpVibration </strong> - Run a device vibration for a specified duration, stop a vibration
 <br/>
+
+
 ## License
 
 This software is licensed under the MIT license. See [LICENSE](./LICENSE) for full disclosure.
