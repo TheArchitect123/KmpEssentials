@@ -35,20 +35,9 @@ implementation("io.github.thearchitect123:kmpEssentials:0.4.2")
 ## Setup for Android
 
 In your Activity's **onCreate** add the below to initialize the framework.
+**NEW: KmpEssentials for Android now uses Lifecycle Observers at the Application Layer. So it's enough even for multi application architecture based apps to register only onCreate**
 ```sh
  override onCreate(savedInstanceBundle: Bundle?) {
-     KmpAndroid.initializeApp(this) {
-         // optional action to invoke for any permissions disabled by the user. 
-         // Used only by the internal permissions module. 
-         // You can present a toast message or any error popup of some kind.
-    }
- }
-```
-
-If your application consists of multiple activities, please make sure to initialize the framework in your activity's **onResume** function.
-
-```sh
- override onResume() {
      KmpAndroid.initializeApp(this) {
          // optional action to invoke for any permissions disabled by the user. 
          // Used only by the internal permissions module. 
