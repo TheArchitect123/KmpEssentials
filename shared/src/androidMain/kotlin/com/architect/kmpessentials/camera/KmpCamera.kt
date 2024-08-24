@@ -41,7 +41,10 @@ actual class KmpCamera {
                         resultLauncher.launch(takePictureIntent)
                     }
                 } else {
-                    throw Exception("Camera permission has not been requested. Please invoke KmpPermissionsManager.isPermissionGranted(Permission.Camera) and try again")
+                    // check if manifest contains camera permission
+                    KmpPermissionsManager.requestPermission(Permission.Camera) {
+                        capturePhoto(actionResult)
+                    }
                 }
             }
         }
@@ -65,7 +68,9 @@ actual class KmpCamera {
                         resultLauncher.launch(takeVideoIntent)
                     }
                 } else {
-                    throw Exception("Camera permission has not been requested. Please invoke KmpPermissionsManager.isPermissionGranted(Permission.Camera) and try again")
+                    KmpPermissionsManager.requestPermission(Permission.Camera) {
+                        captureVideo(actionResult)
+                    }
                 }
             }
         }
