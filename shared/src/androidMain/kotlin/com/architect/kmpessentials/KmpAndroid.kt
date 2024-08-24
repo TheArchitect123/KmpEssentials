@@ -19,18 +19,15 @@ import com.nareshchocha.filepickerlibrary.utilities.appConst.Const
 
 class KmpAndroid {
     companion object {
-        internal var hasRegistered: Boolean = false
+        private var hasRegistered: Boolean = false
         internal lateinit var applicationContext: Application
-
         internal lateinit var clientAppContext: AppCompatActivity
         internal val sensorManagerObserver = SensorObserver()
-
         fun initializeApp(
             context: AppCompatActivity,
             userDisabledPermission: DefaultAction? = null
         ) {
             clientAppContext = context
-            clientAppContext.lifecycle.addObserver(sensorManagerObserver)
 
             if (!hasRegistered) {
                 applicationContext = clientAppContext.application
@@ -38,6 +35,7 @@ class KmpAndroid {
                     KmpBattery.initializeBatteryService()
                 }
 
+                applicationContext.registerActivityLifecycleCallbacks(ActivityLifecycleObserver())
                 hasRegistered = true
             }
 
@@ -45,7 +43,7 @@ class KmpAndroid {
             KmpCamera.resultLauncher =
                 clientAppContext.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                     val imagePath = it.data?.data?.path
-                    if(!imagePath.isNullOrBlank()) {
+                    if (!imagePath.isNullOrBlank()) {
                         KmpCamera.actionResult.invoke(imagePath)
                     }
                 }
@@ -55,7 +53,7 @@ class KmpAndroid {
             KmpMediaPicker.galleryLauncher =
                 clientAppContext.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                     val imagePath = it.data?.data?.path
-                    if(!imagePath.isNullOrBlank()) {
+                    if (!imagePath.isNullOrBlank()) {
                         KmpMediaPicker.imagePickerResult.invoke(imagePath)
                     }
                 }

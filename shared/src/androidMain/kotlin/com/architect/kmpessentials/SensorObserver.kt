@@ -41,7 +41,8 @@ class SensorObserver : DefaultLifecycleObserver, SensorEventListener {
 
         // proximity sensor
         if (event?.sensor?.type == Sensor.TYPE_PROXIMITY) {
-            val isTriggered = event.values[0] >= -SENSOR_SENSITIVITY && event.values[0] <= SENSOR_SENSITIVITY
+            val isTriggered =
+                event.values[0] >= -SENSOR_SENSITIVITY && event.values[0] <= SENSOR_SENSITIVITY
             KmpProximity.proxScope.invoke(isTriggered)
         }
     }
@@ -50,3 +51,4 @@ class SensorObserver : DefaultLifecycleObserver, SensorEventListener {
 
     }
 }
+
