@@ -30,7 +30,7 @@ KmpEssentials is a library that contains apis to accelerate your development. Ev
 To get started, import the library into your project:
 
 ```sh
-implementation("io.github.thearchitect123:kmpEssentials:0.4.0")
+implementation("io.github.thearchitect123:kmpEssentials:0.4.1")
 ```
 ## Setup for Android
 
