@@ -99,7 +99,9 @@ Below is a list of all modules, along with what each of them do.
 <br/>
 <strong>KmpBiometrics </strong> - Used for Biometric Authentication (Fingerprint Scanning & Facial Detection)
 <br/>
-<strong>KmpCamera </strong> - Use this for taking photos either from the camera or photo gallery
+<strong>KmpCamera </strong> - Use this for taking photos/videos from the device's camera
+<br/>
+<strong>KmpMediaPicker </strong> - Use this for picking photos/videos from the device's photo gallery
 <br/>
 <strong>KmpClipboard </strong> - Use this for copying/fetching texts from your device's clipboard
 <br/>
