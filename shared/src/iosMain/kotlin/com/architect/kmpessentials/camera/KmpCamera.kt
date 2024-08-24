@@ -4,6 +4,7 @@ import com.architect.kmpessentials.KmpiOS
 import com.architect.kmpessentials.internal.ActionStringParams
 import com.architect.kmpessentials.mainThread.KmpMainThread
 import platform.UIKit.UIImagePickerController
+import platform.UIKit.UIImagePickerControllerCameraCaptureMode
 import platform.UIKit.UIImagePickerControllerSourceType
 
 actual class KmpCamera {
@@ -12,23 +13,29 @@ actual class KmpCamera {
             return true
         }
 
-        actual fun pickPhotoFromGallery(actionResult: ActionStringParams) {
+        private fun getCameraDevice(): UIImagePickerController {
+            val camera = UIImagePickerController()
+            camera.sourceType =
+                UIImagePickerControllerSourceType.UIImagePickerControllerSourceTypeCamera
+            camera.allowsEditing = true
+            return camera
+        }
+
+        actual fun capturePhoto(actionResult: ActionStringParams) {
             KmpMainThread.runViaMainThread {
-                val camera = UIImagePickerController()
-                camera.sourceType =
-                    UIImagePickerControllerSourceType.UIImagePickerControllerSourceTypePhotoLibrary
-                camera.allowsEditing = true
+                val camera = getCameraDevice()
+                camera.cameraCaptureMode =
+                    UIImagePickerControllerCameraCaptureMode.UIImagePickerControllerCameraCaptureModePhoto
 
                 KmpiOS.getTopViewController()?.presentViewController(camera, true, null)
             }
         }
 
-        actual fun capturePhoto(actionResult: ActionStringParams) {
+        actual fun captureVideo(actionResult: ActionStringParams) {
             KmpMainThread.runViaMainThread {
-                val camera = UIImagePickerController()
-                camera.sourceType =
-                    UIImagePickerControllerSourceType.UIImagePickerControllerSourceTypeCamera
-                camera.allowsEditing = true
+                val camera = getCameraDevice()
+                camera.cameraCaptureMode =
+                    UIImagePickerControllerCameraCaptureMode.UIImagePickerControllerCameraCaptureModeVideo
 
                 KmpiOS.getTopViewController()?.presentViewController(camera, true, null)
             }

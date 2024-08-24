@@ -13,6 +13,7 @@ import com.architect.kmpessentials.battery.KmpBattery
 import com.architect.kmpessentials.camera.KmpCamera
 import com.architect.kmpessentials.filePicker.File
 import com.architect.kmpessentials.filePicker.KmpFilePicker
+import com.architect.kmpessentials.mediaPicker.KmpMediaPicker
 import com.architect.kmpessentials.permissions.KmpPermissionsManager
 import com.nareshchocha.filepickerlibrary.utilities.appConst.Const
 
@@ -40,10 +41,23 @@ class KmpAndroid {
                 hasRegistered = true
             }
 
+            // camera apis
+            KmpCamera.resultLauncher =
+                clientAppContext.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                    val imagePath = it.data?.data?.path
+                    if(!imagePath.isNullOrBlank()) {
+                        KmpCamera.actionResult.invoke(imagePath)
+                    }
+                }
+
+
             // image picker
-            KmpCamera.galleryLauncher =
-                clientAppContext.registerForActivityResult(ActivityResultContracts.GetContent()) {
-                    KmpCamera.imagePickerResult.invoke(it?.path ?: "")
+            KmpMediaPicker.galleryLauncher =
+                clientAppContext.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                    val imagePath = it.data?.data?.path
+                    if(!imagePath.isNullOrBlank()) {
+                        KmpMediaPicker.imagePickerResult.invoke(imagePath)
+                    }
                 }
 
             // permission manager

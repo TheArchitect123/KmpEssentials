@@ -9,6 +9,6 @@ expect class KmpCamera {
     companion object {
         fun isSupported(): Boolean
         fun capturePhoto(actionResult: ActionStringParams)
-        fun pickPhotoFromGallery(actionResult: ActionStringParams)
+        fun captureVideo(actionResult: ActionStringParams)
     }
 }

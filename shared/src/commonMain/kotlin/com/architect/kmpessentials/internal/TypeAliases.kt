@@ -2,6 +2,7 @@ package com.architect.kmpessentials.internal
 
 internal typealias ActionNoParams = () -> Unit
 internal typealias ActionStringParams = (String) -> Unit
+internal typealias ActionListStringParams = (List<String>) -> Unit
 internal typealias ActionDoubleParams = (Double) -> Unit
 internal typealias ActionTripleDoubleParams = (Triple<Double, Double, Double>) -> Unit
 internal typealias ActionTripleFloatParams = (Triple<Float, Float, Float>) -> Unit
