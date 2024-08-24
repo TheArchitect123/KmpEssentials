@@ -30,11 +30,25 @@ KmpEssentials is a library that contains apis to accelerate your development. Ev
 To get started, import the library into your project:
 
 ```sh
-implementation("io.github.thearchitect123:kmpEssentials:0.3.7")
+implementation("io.github.thearchitect123:kmpEssentials:0.3.8")
 ```
 ## Setup for Android
+
+In your Activity's **onCreate** add the below to initialize the framework.
 ```sh
  override onCreate(savedInstanceBundle: Bundle?) {
+     KmpAndroid.initializeApp(this) {
+         // optional action to invoke for any permissions disabled by the user. 
+         // Used only by the internal permissions module. 
+         // You can present a toast message or any error popup of some kind.
+    }
+ }
+```
+
+If your application consists of multiple activities, please make sure to initialize the framework in your activity's **onResume** function.
+
+```sh
+ override onResume() {
      KmpAndroid.initializeApp(this) {
          // optional action to invoke for any permissions disabled by the user. 
          // Used only by the internal permissions module. 
@@ -107,7 +121,7 @@ Below is a list of all modules, along with what each of them do.
 <br/>
 <strong>KmpGeolocation </strong> - Fetch user's current location (requires Location Permissions Set)
 <br/>
-<strong>KmpGeolocation </strong> - Used for fetching Gyroscope Data from your device (X,Y,Z Axes)
+<strong>KmpGyroscope </strong> - Used for fetching Gyroscope Data from your device (X,Y,Z Axes)
 <br/>
 <strong>KmpLauncher</strong> - Launch urls via web browser, launch Google/Apple maps with address/coordinates, launch maps directions with the given address
 <br/>
