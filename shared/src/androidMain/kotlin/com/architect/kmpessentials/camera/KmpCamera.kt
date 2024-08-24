@@ -8,12 +8,14 @@ import androidx.activity.result.ActivityResultLauncher
 import com.architect.kmpessentials.KmpAndroid
 import com.architect.kmpessentials.internal.ActionStringParams
 import com.architect.kmpessentials.mainThread.KmpMainThread
+import com.architect.kmpessentials.permissions.KmpPermissionsManager
+import com.architect.kmpessentials.permissions.Permission
 import com.architect.kmpessentials.permissions.PermissionsHelper
 
 actual class KmpCamera {
     actual companion object {
-        lateinit var resultLauncher: ActivityResultLauncher<Intent>
-        lateinit var actionResult: ActionStringParams
+        internal lateinit var resultLauncher: ActivityResultLauncher<Intent>
+        internal lateinit var actionResult: ActionStringParams
 
         actual fun isSupported(): Boolean {
             return PermissionsHelper.hasHardwareFeature(PackageManager.FEATURE_CAMERA)
@@ -33,8 +35,13 @@ actual class KmpCamera {
                     )
                 }
 
-                if (takePictureIntent.resolveActivity(KmpAndroid.applicationContext.packageManager) != null) {
-                    resultLauncher.launch(takePictureIntent)
+                // check if camera permission has been enabled
+                if (KmpPermissionsManager.isPermissionGranted(Permission.Camera)) {
+                    if (takePictureIntent.resolveActivity(KmpAndroid.applicationContext.packageManager) != null) {
+                        resultLauncher.launch(takePictureIntent)
+                    }
+                } else {
+                    throw Exception("Camera permission has not been requested. Please invoke KmpPermissionsManager.isPermissionGranted(Permission.Camera) and try again")
                 }
             }
         }
@@ -52,8 +59,13 @@ actual class KmpCamera {
                         storeValues
                     )
                 }
-                if (takeVideoIntent.resolveActivity(KmpAndroid.applicationContext.packageManager) != null) {
-                    resultLauncher.launch(takeVideoIntent)
+
+                if (KmpPermissionsManager.isPermissionGranted(Permission.Camera)) {
+                    if (takeVideoIntent.resolveActivity(KmpAndroid.applicationContext.packageManager) != null) {
+                        resultLauncher.launch(takeVideoIntent)
+                    }
+                } else {
+                    throw Exception("Camera permission has not been requested. Please invoke KmpPermissionsManager.isPermissionGranted(Permission.Camera) and try again")
                 }
             }
         }

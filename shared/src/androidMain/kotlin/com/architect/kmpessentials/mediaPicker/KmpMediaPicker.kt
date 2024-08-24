@@ -7,8 +7,8 @@ import com.architect.kmpessentials.mainThread.KmpMainThread
 
 actual class KmpMediaPicker {
     actual companion object {
-        lateinit var imagePickerResult: ActionStringParams
-        lateinit var galleryLauncher: ActivityResultLauncher<Intent>
+        internal lateinit var imagePickerResult: ActionStringParams
+        internal lateinit var galleryLauncher: ActivityResultLauncher<Intent>
 
         actual fun pickPhotoFromGallery(actionResult: ActionStringParams) {
             KmpMainThread.runViaMainThread {

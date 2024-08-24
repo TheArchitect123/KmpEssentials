@@ -12,9 +12,9 @@ import com.architect.kmpessentials.permissions.services.PermissionsTransformer
 
 actual class KmpPermissionsManager {
     actual companion object {
-        lateinit var resultLauncher: ActivityResultLauncher<String>
-        lateinit var resultManyLauncher: ActivityResultLauncher<Array<String>>
-        lateinit var successAction: ActionNoParams
+        internal lateinit var resultLauncher: ActivityResultLauncher<String>
+        internal lateinit var resultManyLauncher: ActivityResultLauncher<Array<String>>
+        internal lateinit var successAction: ActionNoParams
 
         actual fun isPermissionGranted(permission: Permission): Boolean {
             return when (permission) {
