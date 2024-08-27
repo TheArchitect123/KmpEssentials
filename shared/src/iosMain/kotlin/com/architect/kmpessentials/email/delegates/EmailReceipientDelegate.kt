@@ -7,7 +7,7 @@ import platform.MessageUI.MFMailComposeViewController
 import platform.MessageUI.MFMailComposeViewControllerDelegateProtocol
 import platform.darwin.NSObject
 
-internal class EmailReceipientDelegate(val mailController: MFMailComposeViewController) : NSObject(), MFMailComposeViewControllerDelegateProtocol{
+internal class EmailReceipientDelegate : NSObject(), MFMailComposeViewControllerDelegateProtocol{
 
     override fun mailComposeController(
         controller: MFMailComposeViewController,
@@ -15,7 +15,7 @@ internal class EmailReceipientDelegate(val mailController: MFMailComposeViewCont
         error: NSError?
     ) {
         KmpMainThread.runViaMainThread {
-            mailController.dismissViewControllerAnimated(true, null)
+            controller.dismissViewControllerAnimated(true, null)
         }
     }
 }

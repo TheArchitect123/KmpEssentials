@@ -3,6 +3,7 @@ package com.architect.kmpessentials.biometrics
 import com.architect.kmpessentials.internal.ActionBoolParams
 import com.architect.kmpessentials.internal.ActionStringParams
 import com.architect.kmpessentials.mainThread.KmpMainThread
+import kotlinx.cinterop.ExperimentalForeignApi
 import platform.LocalAuthentication.LAContext
 import platform.LocalAuthentication.LAPolicyDeviceOwnerAuthenticationWithBiometrics
 
@@ -11,8 +12,12 @@ actual class KmpBiometrics {
         private var fingerprintTitle = "Scan your fingerprint"
         private var fingerprintMessage = "Log in using your biometric credential"
 
+        @OptIn(ExperimentalForeignApi::class)
         actual fun isSupported(): Boolean {
-            return true
+            return LAContext().canEvaluatePolicy(
+                LAPolicyDeviceOwnerAuthenticationWithBiometrics,
+                null
+            )
         }
 
         actual fun setPromptInfo(title: String, message: String) {
@@ -20,7 +25,7 @@ actual class KmpBiometrics {
             fingerprintMessage = message
         }
 
-        actual fun scanFingerprint(
+        actual fun scanBiometrics(
             actionResult: ActionBoolParams,
             actionError: ActionStringParams
         ) {

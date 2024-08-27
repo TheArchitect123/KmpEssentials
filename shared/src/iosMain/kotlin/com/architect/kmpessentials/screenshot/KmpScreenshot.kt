@@ -8,6 +8,7 @@ import kotlinx.cinterop.ExperimentalForeignApi
 import platform.AssetsLibrary.ALAssetOrientation
 import platform.AssetsLibrary.ALAssetsLibrary
 import platform.UIKit.UIGraphicsImageRenderer
+import platform.UIKit.UIImageOrientation
 
 actual class KmpScreenshot {
     actual companion object {
@@ -28,7 +29,16 @@ actual class KmpScreenshot {
 
                 ALAssetsLibrary().writeImageToSavedPhotosAlbum(
                     screenShot.CGImage,
-                    ALAssetOrientation.valueOf(screenShot.imageOrientation.name)
+                    when (screenShot.imageOrientation) {
+                        UIImageOrientation.UIImageOrientationUp -> ALAssetOrientation.ALAssetOrientationUp
+                        UIImageOrientation.UIImageOrientationDown -> ALAssetOrientation.ALAssetOrientationDown
+                        UIImageOrientation.UIImageOrientationLeft -> ALAssetOrientation.ALAssetOrientationLeft
+                        UIImageOrientation.UIImageOrientationRight -> ALAssetOrientation.ALAssetOrientationRight
+                        UIImageOrientation.UIImageOrientationUpMirrored -> ALAssetOrientation.ALAssetOrientationUpMirrored
+                        UIImageOrientation.UIImageOrientationDownMirrored -> ALAssetOrientation.ALAssetOrientationDownMirrored
+                        UIImageOrientation.UIImageOrientationLeftMirrored -> ALAssetOrientation.ALAssetOrientationLeftMirrored
+                        else -> ALAssetOrientation.ALAssetOrientationRightMirrored
+                    }
                 ) { path, error ->
                     if (error == null) {
                         val pathFile = path?.absoluteString!!

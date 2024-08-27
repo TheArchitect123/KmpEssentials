@@ -1,6 +1,7 @@
 package com.architect.kmpessentials.camera
 
 import com.architect.kmpessentials.KmpiOS
+import com.architect.kmpessentials.camera.internal.CameraControlDelegate
 import com.architect.kmpessentials.internal.ActionStringParams
 import com.architect.kmpessentials.mainThread.KmpMainThread
 import platform.UIKit.UIImagePickerController
@@ -26,6 +27,7 @@ actual class KmpCamera {
                 val camera = getCameraDevice()
                 camera.cameraCaptureMode =
                     UIImagePickerControllerCameraCaptureMode.UIImagePickerControllerCameraCaptureModePhoto
+                camera.delegate = CameraControlDelegate(actionResult)
 
                 KmpiOS.getTopViewController()?.presentViewController(camera, true, null)
             }
@@ -36,6 +38,7 @@ actual class KmpCamera {
                 val camera = getCameraDevice()
                 camera.cameraCaptureMode =
                     UIImagePickerControllerCameraCaptureMode.UIImagePickerControllerCameraCaptureModeVideo
+                camera.delegate = CameraControlDelegate(actionResult)
 
                 KmpiOS.getTopViewController()?.presentViewController(camera, true, null)
             }

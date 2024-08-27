@@ -17,7 +17,7 @@ actual class KmpProximity {
             UIDevice.currentDevice.proximityMonitoringEnabled = true
             NSNotificationCenter.defaultCenter.addObserverForName(
                 name = UIDeviceProximityStateDidChangeNotification,
-                `object` = KmpiOS.getTopViewController(),
+                `object` = null,
                 queue = null
             ) {
                 proximityScope?.invoke(UIDevice.currentDevice.proximityState)

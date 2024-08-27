@@ -11,7 +11,7 @@ actual class KmpEmail {
             KmpMainThread.runViaMainThread {
                 val mailController = MFMailComposeViewController()
                 mailController.setToRecipients(arrayListOf(address))
-                mailController.setMailComposeDelegate(EmailReceipientDelegate(mailController))
+                mailController.setMailComposeDelegate(EmailReceipientDelegate())
 
                 UIApplication.sharedApplication.keyWindow?.rootViewController?.presentViewController(
                     mailController,
@@ -26,7 +26,7 @@ actual class KmpEmail {
             KmpMainThread.runViaMainThread {
                 val mailController = MFMailComposeViewController()
                 mailController.setToRecipients(arrayListOf(address, ccAddresses))
-                mailController.setMailComposeDelegate(EmailReceipientDelegate(mailController))
+                mailController.setMailComposeDelegate(EmailReceipientDelegate())
 
                 UIApplication.sharedApplication.keyWindow?.rootViewController?.presentViewController(
                     mailController,

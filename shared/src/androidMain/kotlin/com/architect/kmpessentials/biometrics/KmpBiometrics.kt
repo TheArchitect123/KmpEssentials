@@ -1,5 +1,6 @@
 package com.architect.kmpessentials.biometrics
 
+import android.media.FaceDetector
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
@@ -31,7 +32,7 @@ actual class KmpBiometrics {
             fingerprintMessage = message
         }
 
-        actual fun scanFingerprint(
+        actual fun scanBiometrics(
             actionResult: ActionBoolParams,
             actionError: ActionStringParams
         ) {

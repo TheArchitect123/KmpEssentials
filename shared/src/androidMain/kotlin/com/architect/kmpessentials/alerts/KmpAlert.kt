@@ -56,7 +56,7 @@ actual class KmpAlert {
                 val titleSpan = SpannableString(title)
                 if (titleStyle != 0) {
                     titleSpan.setSpan(
-                        TextAppearanceSpan(KmpAndroid.applicationContext, titleStyle),
+                        TextAppearanceSpan(KmpAndroid.clientAppContext, titleStyle),
                         0, title.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE
                     )
                 }
@@ -64,7 +64,7 @@ actual class KmpAlert {
                 val messageSpan = SpannableString(message)
                 if (messageStyle != 0) {
                     messageSpan.setSpan(
-                        TextAppearanceSpan(KmpAndroid.applicationContext, messageStyle),
+                        TextAppearanceSpan(KmpAndroid.clientAppContext, messageStyle),
                         0, message.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE
                     )
                 }
@@ -73,12 +73,12 @@ actual class KmpAlert {
                 val buttonSpan = SpannableString(buttonString)
                 if (buttonStyle != 0) {
                     buttonSpan.setSpan(
-                        TextAppearanceSpan(KmpAndroid.applicationContext, buttonStyle),
+                        TextAppearanceSpan(KmpAndroid.clientAppContext, buttonStyle),
                         0, buttonString.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE
                     )
                 }
 
-                val alert = AlertDialog.Builder(KmpAndroid.applicationContext, alertDialogStyle)
+                val alert = AlertDialog.Builder(KmpAndroid.clientAppContext, alertDialogStyle)
                     .setTitle(titleSpan)
                     .setMessage(messageSpan)
                     .setPositiveButton(buttonSpan) { result, dial ->
@@ -99,7 +99,7 @@ actual class KmpAlert {
                 val titleSpan = SpannableString(title)
                 if (titleStyle != 0) {
                     titleSpan.setSpan(
-                        TextAppearanceSpan(KmpAndroid.applicationContext, titleStyle),
+                        TextAppearanceSpan(KmpAndroid.clientAppContext, titleStyle),
                         0, title.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE
                     )
                 }
@@ -107,7 +107,7 @@ actual class KmpAlert {
                 val messageSpan = SpannableString(message)
                 if (messageStyle != 0) {
                     messageSpan.setSpan(
-                        TextAppearanceSpan(KmpAndroid.applicationContext, messageStyle),
+                        TextAppearanceSpan(KmpAndroid.clientAppContext, messageStyle),
                         0, message.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE
                     )
                 }
@@ -116,12 +116,12 @@ actual class KmpAlert {
                 val buttonSpan = SpannableString(buttonString)
                 if (buttonStyle != 0) {
                     buttonSpan.setSpan(
-                        TextAppearanceSpan(KmpAndroid.applicationContext, buttonStyle),
+                        TextAppearanceSpan(KmpAndroid.clientAppContext, buttonStyle),
                         0, buttonString.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE
                     )
                 }
 
-                val alert = AlertDialog.Builder(KmpAndroid.applicationContext, alertDialogStyle)
+                val alert = AlertDialog.Builder(KmpAndroid.clientAppContext, alertDialogStyle)
                     .setTitle(titleSpan)
                     .setMessage(messageSpan)
                     .setPositiveButton(buttonSpan) { result, dial ->
@@ -144,7 +144,7 @@ actual class KmpAlert {
                 val titleSpan = SpannableString(title)
                 if (titleStyle != 0) {
                     titleSpan.setSpan(
-                        TextAppearanceSpan(KmpAndroid.applicationContext, titleStyle),
+                        TextAppearanceSpan(KmpAndroid.clientAppContext, titleStyle),
                         0, title.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE
                     )
                 }
@@ -152,7 +152,7 @@ actual class KmpAlert {
                 val messageSpan = SpannableString(message)
                 if (messageStyle != 0) {
                     messageSpan.setSpan(
-                        TextAppearanceSpan(KmpAndroid.applicationContext, messageStyle),
+                        TextAppearanceSpan(KmpAndroid.clientAppContext, messageStyle),
                         0, message.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE
                     )
                 }
@@ -161,7 +161,7 @@ actual class KmpAlert {
                 val buttonSpan = SpannableString(buttonString)
                 if (buttonStyle != 0) {
                     buttonSpan.setSpan(
-                        TextAppearanceSpan(KmpAndroid.applicationContext, buttonStyle),
+                        TextAppearanceSpan(KmpAndroid.clientAppContext, buttonStyle),
                         0, buttonString.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE
                     )
                 }
@@ -170,12 +170,12 @@ actual class KmpAlert {
                 val cancelButtonSpan = SpannableString(cancelButtonString)
                 if (cancelButtonStyle != 0) {
                     cancelButtonSpan.setSpan(
-                        TextAppearanceSpan(KmpAndroid.applicationContext, cancelButtonStyle),
+                        TextAppearanceSpan(KmpAndroid.clientAppContext, cancelButtonStyle),
                         0, cancelButtonString.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE
                     )
                 }
 
-                val alert = AlertDialog.Builder(KmpAndroid.applicationContext, alertDialogStyle)
+                val alert = AlertDialog.Builder(KmpAndroid.clientAppContext, alertDialogStyle)
                     .setTitle(titleSpan)
                     .setMessage(messageSpan)
                     .setPositiveButton(buttonSpan) { result, dial ->
