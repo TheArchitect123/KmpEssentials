@@ -19,6 +19,14 @@ actual class KmpAlert {
                     UIAlertControllerStyleAlert
                 )
 
+                alertController.addAction(
+                    UIAlertAction.actionWithTitle(
+                        "Ok",
+                        UIAlertActionStyleDefault
+                    ) {
+
+                    })
+
                 KmpiOS.getTopViewController()?.presentViewController(alertController, true, null)
             }
         }

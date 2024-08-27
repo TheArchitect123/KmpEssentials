@@ -1,6 +1,5 @@
 package com.architect.kmpessentials.permissions
 
-import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Build.VERSION_CODES
@@ -17,35 +16,26 @@ actual class KmpPermissionsManager {
         internal lateinit var successAction: ActionNoParams
 
         actual fun isPermissionGranted(permission: Permission): Boolean {
-            return when (permission) {
-                Permission.Camera -> {
-                    KmpAndroid.clientAppContext.checkPermission(
-                        Manifest.permission.CAMERA,
-                        0,
-                        0
-                    ) == PackageManager.PERMISSION_GRANTED
-                }
-
-                else -> {
-                    false
-                }
+            if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
+                return KmpAndroid.applicationContext.checkSelfPermission(
+                    PermissionsTransformer.getPermissionFromEnum(permission)
+                ) == PackageManager.PERMISSION_GRANTED
             }
+
+            return true
         }
 
         actual fun requestPermission(
             permission: Permission,
             runAction: ActionNoParams
-        ) { // requests the runtime permission popup
+        ) {
             if (permission == Permission.Location) { // requires multiple permissions
                 requestPermissions(permission, runAction)
             } else {
                 successAction = runAction
                 if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
                     val cpermission = PermissionsTransformer.getPermissionFromEnum(permission)
-                    if (KmpAndroid.clientAppContext.checkSelfPermission(
-                            cpermission,
-                        ) == PackageManager.PERMISSION_GRANTED
-                    ) {
+                    if (isPermissionGranted(permission)) {
                         successAction()
                     } else {
                         resultLauncher.launch(cpermission)

@@ -5,7 +5,11 @@ enum class Permission {
     Flashlight,
     ExternalStorage,
     Location,
+
+    /**Android Specific Permission*/
+    CoarseLocation,
     Sms,
     Microphone,
+    PushNotifications
 }
 

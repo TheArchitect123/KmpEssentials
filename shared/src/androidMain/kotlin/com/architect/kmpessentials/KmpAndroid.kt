@@ -23,11 +23,14 @@ class KmpAndroid {
         internal lateinit var applicationContext: Application
         internal lateinit var clientAppContext: AppCompatActivity
         internal val sensorManagerObserver = SensorObserver()
+        internal var guserDisabledPermission: DefaultAction? = null
+
         fun initializeApp(
             context: AppCompatActivity,
             userDisabledPermission: DefaultAction? = null
         ) {
             clientAppContext = context
+            guserDisabledPermission = userDisabledPermission
 
             if (!hasRegistered) {
                 applicationContext = clientAppContext.application
@@ -39,6 +42,10 @@ class KmpAndroid {
                 hasRegistered = true
             }
 
+            registerAllContracts()
+        }
+
+        private fun registerAllContracts(){
             // camera apis
             KmpCamera.resultLauncher =
                 clientAppContext.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -47,7 +54,6 @@ class KmpAndroid {
                         KmpCamera.actionResult.invoke(imagePath)
                     }
                 }
-
 
             // image picker
             KmpMediaPicker.galleryLauncher =
@@ -65,14 +71,14 @@ class KmpAndroid {
                         KmpPermissionsManager.successAction()
                     } else {
                         // permission has not been enabled
-                        userDisabledPermission?.invoke()
+                        guserDisabledPermission?.invoke()
                     }
                 }
 
             KmpPermissionsManager.resultManyLauncher =
                 clientAppContext.registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
                     if (result.values.any { !it }) { // all permissions must be enabled for this to work
-                        userDisabledPermission?.invoke()
+                        guserDisabledPermission?.invoke()
                     } else {
                         KmpPermissionsManager.successAction()
                     }
@@ -135,6 +141,3 @@ class KmpAndroid {
         }
     }
 }
-
-
-
