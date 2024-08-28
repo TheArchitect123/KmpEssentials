@@ -7,15 +7,20 @@ import platform.UIKit.UIDocumentPickerDelegateProtocol
 import platform.UIKit.UIDocumentPickerViewController
 import platform.darwin.NSObject
 
-class DocumentPickerDelegate(private val action: DefaultFileAction) : NSObject(), UIDocumentPickerDelegateProtocol {
+class DocumentPickerDelegate(private val action: DefaultFileAction) : NSObject(),
+    UIDocumentPickerDelegateProtocol {
     override fun documentPicker(
         controller: UIDocumentPickerViewController,
         didPickDocumentAtURL: NSURL
     ) {
-        action.invoke(File(
-            didPickDocumentAtURL.description() ?: "",
-            didPickDocumentAtURL.absoluteURL?.absoluteString ?: ""
-        ))
+        if(!didPickDocumentAtURL.absoluteString.isNullOrBlank()) {
+            action.invoke(
+                File(
+                    didPickDocumentAtURL.description() ?: "",
+                    didPickDocumentAtURL.absoluteString!!
+                )
+            )
+        }
     }
 }
 

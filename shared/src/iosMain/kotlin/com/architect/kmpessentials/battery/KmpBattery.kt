@@ -1,6 +1,5 @@
 package com.architect.kmpessentials.battery
 
-import com.architect.kmpessentials.aliases.DefaultAction
 import com.architect.kmpessentials.battery.enums.BatteryChargeState
 import com.architect.kmpessentials.battery.enums.BatteryPowerSource
 import platform.Foundation.NSProcessInfo
@@ -35,11 +34,19 @@ actual class KmpBattery {
         }
 
         actual fun getCurrentChargeLevel(): Long {
-            return UIDevice.currentDevice.batteryLevel.roundToLong()
+            UIDevice.currentDevice.setBatteryMonitoringEnabled(true)
+
+            val roundBatteryState = UIDevice.currentDevice.batteryLevel.roundToLong()
+            UIDevice.currentDevice.setBatteryMonitoringEnabled(false)
+            return roundBatteryState
         }
 
         actual fun isEnergySaverOn(): Boolean {
-            return NSProcessInfo.processInfo.isLowPowerModeEnabled()
+            UIDevice.currentDevice.setBatteryMonitoringEnabled(true)
+
+            val isPowerMode = NSProcessInfo.processInfo.isLowPowerModeEnabled()
+            UIDevice.currentDevice.setBatteryMonitoringEnabled(false)
+            return isPowerMode
         }
     }
 }

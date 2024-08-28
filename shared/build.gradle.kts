@@ -87,7 +87,7 @@ afterEvaluate {
         coordinates(
             groupId = "io.github.thearchitect123",
             artifactId = "kmpEssentials",
-            version = "0.6.0"
+            version = "0.6.2"
         )
 
         // Configure POM metadata for the published artifact
