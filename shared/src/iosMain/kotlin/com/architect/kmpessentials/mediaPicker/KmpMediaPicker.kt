@@ -7,6 +7,7 @@ import com.architect.kmpessentials.mediaPicker.delegates.ImageMediaPickerDelegat
 import com.architect.kmpessentials.mediaPicker.delegates.MediaPickerDelegate
 import platform.UIKit.UIImagePickerController
 import platform.UIKit.UIImagePickerControllerSourceType
+import platform.UniformTypeIdentifiers.UTTypeImage
 
 actual class KmpMediaPicker {
     actual companion object {
@@ -28,7 +29,7 @@ actual class KmpMediaPicker {
             KmpMainThread.runViaMainThread {
                 photoActionResult = actionResult
                 val camera = getCameraPicker()
-                camera.mediaTypes = listOf("public.png", "public.jpeg", "public.gif")
+                camera.mediaTypes = listOf(UTTypeImage)
                 camera.setDelegate(photoDelegate)
                 KmpiOS.getTopViewController()?.presentViewController(camera, true, null)
             }
