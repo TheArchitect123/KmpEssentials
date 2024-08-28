@@ -29,7 +29,7 @@ actual class KmpMediaPicker {
             KmpMainThread.runViaMainThread {
                 photoActionResult = actionResult
                 val camera = getCameraPicker()
-                camera.mediaTypes = listOf(UTTypeImage)
+                camera.mediaTypes = listOf("public.image")
                 camera.setDelegate(photoDelegate)
                 KmpiOS.getTopViewController()?.presentViewController(camera, true, null)
             }
