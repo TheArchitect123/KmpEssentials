@@ -5,6 +5,7 @@ enum class Permission {
     Flashlight,
     ExternalStorage,
     Location,
+    PhotoGallery,
 
     /**Android Specific Permission*/
     CoarseLocation,

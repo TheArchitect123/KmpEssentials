@@ -11,6 +11,8 @@ import platform.AVFoundation.AVMediaTypeVideo
 import platform.AVFoundation.authorizationStatusForMediaType
 import platform.AVFoundation.requestAccessForMediaType
 import platform.CoreLocation.CLLocationManager
+import platform.Photos.PHAuthorizationStatusAuthorized
+import platform.Photos.PHPhotoLibrary
 import platform.UIKit.UIApplication
 import platform.UIKit.currentUserNotificationSettings
 import platform.UIKit.isRegisteredForRemoteNotifications
@@ -53,6 +55,15 @@ actual class KmpPermissionsManager {
                             }
                         }
 
+                        Permission.PhotoGallery -> {
+                            PHPhotoLibrary.requestAuthorization {
+                                when (it) {
+                                    PHAuthorizationStatusAuthorized -> runAction()
+                                    else -> print("Permission has not been enabled")
+                                }
+                            }
+                        }
+
                         Permission.Location -> {
                             val location = CLLocationManager()
                             location.delegate = LocationPermissionsDelegate(runAction)
@@ -75,6 +86,7 @@ actual class KmpPermissionsManager {
                     AVMediaTypeVideo
                 ) == AVAuthorizationStatusAuthorized
 
+                Permission.PhotoGallery -> PHPhotoLibrary.authorizationStatus() == PHAuthorizationStatusAuthorized
                 Permission.Location -> CLLocationManager().authorizationStatus() == 3 || CLLocationManager().authorizationStatus() == 4
                 Permission.PushNotifications -> UIApplication.sharedApplication()
                     .currentUserNotificationSettings() != null && UIApplication.sharedApplication()

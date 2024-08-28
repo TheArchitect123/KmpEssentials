@@ -9,7 +9,6 @@ import platform.LocalAuthentication.LAPolicyDeviceOwnerAuthenticationWithBiometr
 
 actual class KmpBiometrics {
     actual companion object {
-        private var fingerprintTitle = "Scan your fingerprint"
         private var fingerprintMessage = "Log in using your biometric credential"
 
         @OptIn(ExperimentalForeignApi::class)
@@ -21,7 +20,6 @@ actual class KmpBiometrics {
         }
 
         actual fun setPromptInfo(title: String, message: String) {
-            fingerprintTitle = title
             fingerprintMessage = message
         }
 
