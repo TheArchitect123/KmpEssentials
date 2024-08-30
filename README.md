@@ -78,6 +78,8 @@ Below is a list of all modules, along with what each of them do.
 <br/>
 <strong>KmpAccelerometer</strong> - Used for fetching Accelerometer Data from your device (X,Y,Z Axes)
 <br/>
+<strong>KmpAudio </strong> - Manage, create, and compress audio files
+<br/>
 <strong>KmpAlert</strong> - Used for rendering Alert Popups, and prompting confirmation from the user
 <br/>
 <strong>KmpAppInfo</strong> - Use this for fetching information about your app (Package Name, Version, Configured App Theme, etc)
@@ -149,6 +151,8 @@ Below is a list of all modules, along with what each of them do.
 <strong>KmpTextToSpeech </strong> - TextToSpeech Services, converts text to Speech, and microphone based Speech to Text
 <br/>
 <strong>KmpVibration </strong> - Run a device vibration for a specified duration, stop a vibration
+<br/>
+<strong>KmpToast</strong> - Present toast messages (notifications on the bottom of the screen). These require the app to run in a foreground state to work
 <br/>
 
 
