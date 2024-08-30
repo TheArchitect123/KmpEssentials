@@ -13,6 +13,8 @@ import platform.AVFoundation.requestAccessForMediaType
 import platform.CoreLocation.CLLocationManager
 import platform.Photos.PHAuthorizationStatusAuthorized
 import platform.Photos.PHPhotoLibrary
+import platform.Speech.SFSpeechRecognizer
+import platform.Speech.SFSpeechRecognizerAuthorizationStatus
 import platform.UIKit.UIApplication
 import platform.UIKit.currentUserNotificationSettings
 import platform.UIKit.isRegisteredForRemoteNotifications
@@ -30,6 +32,14 @@ actual class KmpPermissionsManager {
             KmpMainThread.runViaMainThread {
                 if (!isPermissionGranted(permission)) {
                     when (permission) {
+                        Permission.Speech -> {
+                            SFSpeechRecognizer.requestAuthorization {
+                                if (it == SFSpeechRecognizerAuthorizationStatus.SFSpeechRecognizerAuthorizationStatusAuthorized) {
+                                    runAction()
+                                }
+                            }
+                        }
+
                         Permission.Camera -> {
                             AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo) {
                                 runAction()
@@ -86,6 +96,7 @@ actual class KmpPermissionsManager {
                     AVMediaTypeVideo
                 ) == AVAuthorizationStatusAuthorized
 
+                Permission.Speech -> SFSpeechRecognizer.authorizationStatus() == SFSpeechRecognizerAuthorizationStatus.SFSpeechRecognizerAuthorizationStatusAuthorized
                 Permission.PhotoGallery -> PHPhotoLibrary.authorizationStatus() == PHAuthorizationStatusAuthorized
                 Permission.Location -> CLLocationManager().authorizationStatus() == 3 || CLLocationManager().authorizationStatus() == 4
                 Permission.PushNotifications -> UIApplication.sharedApplication()

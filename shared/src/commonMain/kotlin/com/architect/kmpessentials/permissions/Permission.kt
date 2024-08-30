@@ -6,6 +6,7 @@ enum class Permission {
     ExternalStorage,
     Location,
     PhotoGallery,
+    Speech,
 
     /**Android Specific Permission*/
     CoarseLocation,
