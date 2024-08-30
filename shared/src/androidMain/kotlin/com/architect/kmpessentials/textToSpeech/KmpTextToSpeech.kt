@@ -80,6 +80,10 @@ actual class KmpTextToSpeech {
             })
         }
 
+        actual fun stopSpeechEngine() {
+            speechToText.stopListening()
+        }
+
         // must run from the main thread
         actual fun convertSpeechToText(response: SpeechActionResult) {
             if (SpeechRecognizer.isRecognitionAvailable(KmpAndroid.applicationContext)) {

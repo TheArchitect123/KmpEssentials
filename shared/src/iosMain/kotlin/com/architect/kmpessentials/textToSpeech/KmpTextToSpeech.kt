@@ -8,6 +8,7 @@ import platform.AVFAudio.AVAudioEngine
 import platform.AVFAudio.AVAudioSession
 import platform.AVFAudio.AVAudioSessionCategoryOptionDuckOthers
 import platform.AVFAudio.AVAudioSessionCategoryRecord
+import platform.AVFAudio.AVAudioSessionModeMeasurement
 import platform.AVFAudio.AVSpeechSynthesizer
 import platform.AVFAudio.AVSpeechUtterance
 import platform.AVFAudio.setActive
@@ -18,7 +19,7 @@ import platform.Speech.SFSpeechRecognizer
 actual class KmpTextToSpeech {
     actual companion object {
         @OptIn(ExperimentalForeignApi::class)
-        fun stopSpeechEngine() {
+        actual fun stopSpeechEngine() {
             recognitionTask?.cancel()
             recognitionTask = null
             audioEngine.stop()
@@ -43,7 +44,9 @@ actual class KmpTextToSpeech {
                 val audioSession = AVAudioSession.sharedInstance()
                 audioSession.setCategory(
                     AVAudioSessionCategoryRecord,
-                    AVAudioSessionCategoryOptionDuckOthers, null
+                    AVAudioSessionModeMeasurement,
+                    AVAudioSessionCategoryOptionDuckOthers,
+                    null
                 )
 
                 audioSession.setActive(true, null)
