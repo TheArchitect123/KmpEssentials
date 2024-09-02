@@ -27,6 +27,32 @@ kotlin {
     iosArm64()
     iosSimulatorArm64()
 
+    // watchOS (Apple)
+//    watchosArm64()
+//    watchosArm32()
+//    watchosX64()
+//    watchosSimulatorArm64()
+
+    // tvos (Apple)
+//    tvosX64()
+//    tvosArm64()
+//    tvosSimulatorArm64()
+
+    // java target
+    //jvm()
+
+    //mac & desktop targets
+//    macosX64()
+//    macosArm64()
+//
+//    linuxX64()
+//    linuxArm64()
+//
+//    mingwX64()
+
+    // browser
+    //js().browser()
+
     cocoapods {
         summary = "Some description for the Shared Module"
         homepage = "Link to the Shared Module homepage"
@@ -87,7 +113,7 @@ afterEvaluate {
         coordinates(
             groupId = "io.github.thearchitect123",
             artifactId = "kmpEssentials",
-            version = "0.6.4"
+            version = "0.6.5"
         )
 
         // Configure POM metadata for the published artifact

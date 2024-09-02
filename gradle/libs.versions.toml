@@ -1,14 +1,11 @@
 [versions]
 agp = "8.2.1"
-kotlin = "1.9.23"
+kotlin = "2.0.0"
 droidCompileSdk = "34"
 droidTargetSdk = "34"
 droidMinSdk = "16"
-org-jetbrains-kotlin-jvm = "1.9.22"
-dokka-v = "1.9.10"
 
 [plugins]
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinCocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
-dokka = { id = "org.jetbrains.dokka", version.ref = "dokka-v" }

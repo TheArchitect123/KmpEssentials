@@ -11,11 +11,11 @@ actual class KmpAppInfo {
         }
 
         actual fun getPackageVersion(): String {
-            return NSBundle.mainBundle.infoDictionary?.getValue("CFBundleVersion") as? String ?: ""
+            return NSBundle.mainBundle.infoDictionary?.getValue("CFBundleShortVersionString") as? String ?: ""
         }
 
         actual fun getPackageVersionCode(): Int {
-            return "${NSBundle.mainBundle.infoDictionary?.getValue("CFBundleShortVersionString") as? String ?: "1"}".toInt()
+            return "${NSBundle.mainBundle.infoDictionary?.getValue("CFBundleVersion") as? String ?: "1"}".toInt()
         }
 
         actual fun getPackageMinOS(): Int {
