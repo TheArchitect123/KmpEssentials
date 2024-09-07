@@ -28,10 +28,10 @@ kotlin {
     iosSimulatorArm64()
 
     // watchOS (Apple)
-//    watchosArm64()
-//    watchosArm32()
-//    watchosX64()
-//    watchosSimulatorArm64()
+    watchosArm64()
+    watchosArm32()
+    watchosX64()
+    watchosSimulatorArm64()
 
     // tvos (Apple)
 //    tvosX64()
@@ -69,14 +69,34 @@ kotlin {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
-                implementation("dev.tmapps:konnection:1.4.1")
-                implementation("com.liftric:kvault:1.12.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
             }
         }
 
+        // watch os target
+        val watchosMain by getting {
+            dependsOn(commonMain)
+        }
+        val watchosX64Main by getting {
+            dependsOn(watchosMain)
+        }
+        val watchosArm32Main by getting {
+            dependsOn(watchosMain)
+        }
+        val watchosArm64Main by getting {
+            dependsOn(watchosMain)
+        }
+        val watchosSimulatorArm64Main by getting {
+            dependsOn(watchosMain)
+        }
+
+        // android & iOS targets
         val androidMain by getting {
+            dependsOn(commonMain)
             dependencies {
+                implementation("dev.tmapps:konnection:1.4.1")
+                implementation("com.liftric:kvault:1.12.0")
+
                 implementation("com.google.android.material:material:1.12.0")
                 implementation("androidx.biometric:biometric:1.1.0")
                 implementation("androidx.activity:activity-ktx:1.9.1")
@@ -87,13 +107,16 @@ kotlin {
                 implementation("androidx.work:work-runtime-ktx:2.9.1")
                 implementation("com.google.android.gms:play-services-location:21.3.0")
                 implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.4")
-                implementation("androidx.activity:activity-compose:1.9.1")
             }
         }
 
         // iOS Targets
         val iosMain by getting {
             dependsOn(commonMain)
+            dependencies {
+                implementation("dev.tmapps:konnection:1.4.1")
+                implementation("com.liftric:kvault:1.12.0")
+            }
         }
         val iosArm64Main by getting {
             dependsOn(iosMain)
@@ -113,7 +136,7 @@ afterEvaluate {
         coordinates(
             groupId = "io.github.thearchitect123",
             artifactId = "kmpEssentials",
-            version = "0.6.5"
+            version = "0.7.7"
         )
 
         // Configure POM metadata for the published artifact

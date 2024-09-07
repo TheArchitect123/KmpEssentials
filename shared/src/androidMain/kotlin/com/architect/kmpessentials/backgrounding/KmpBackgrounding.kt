@@ -6,22 +6,23 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.architect.kmpessentials.KmpAndroid
 import com.architect.kmpessentials.aliases.DefaultAction
-import com.architect.kmpessentials.aliases.DefaultActionAsync
 import com.architect.kmpessentials.backgrounding.requests.LongRunnerJob
 
 actual class KmpBackgrounding {
     actual companion object {
-        actual fun createAndStartWorker(options: BackgroundOptions, action: DefaultAction) {
+        actual fun createAndStartWorker(options: BackgroundOptions?, action: DefaultAction) {
             val constraints =
                 Constraints.Builder()
-            if (options.requiresInternet) {
-                constraints.setRequiredNetworkType(NetworkType.CONNECTED)
-            }
-            if (options.requiresStorage) {
-                constraints.setRequiresStorageNotLow(true)
-            }
-            if (options.requiresSufficientBattery) {
-                constraints.setRequiresBatteryNotLow(true)
+            if (options != null) {
+                if (options.requiresInternet) {
+                    constraints.setRequiredNetworkType(NetworkType.CONNECTED)
+                }
+                if (options.requiresStorage) {
+                    constraints.setRequiresStorageNotLow(true)
+                }
+                if (options.requiresSufficientBattery) {
+                    constraints.setRequiresBatteryNotLow(true)
+                }
             }
 
             LongRunnerJob.mutableTypes.add(action)

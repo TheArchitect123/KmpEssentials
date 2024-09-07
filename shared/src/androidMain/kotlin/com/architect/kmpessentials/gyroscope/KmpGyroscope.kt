@@ -4,8 +4,6 @@ import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorManager
 import com.architect.kmpessentials.KmpAndroid
-import com.architect.kmpessentials.internal.ActionDoubleParams
-import com.architect.kmpessentials.internal.ActionStringParams
 import com.architect.kmpessentials.internal.ActionTripleFloatParams
 
 actual class KmpGyroscope {

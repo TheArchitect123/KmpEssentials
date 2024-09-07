@@ -12,7 +12,7 @@ expect class KmpBackgrounding {
          * @param options Configure if your worker requires network connectivity, or sufficient battery, etc
          * @param action your action to invoke in the background
          * */
-        fun createAndStartWorker(options: BackgroundOptions, action: DefaultAction)
+        fun createAndStartWorker(options: BackgroundOptions? = null, action: DefaultAction)
     }
 }
 

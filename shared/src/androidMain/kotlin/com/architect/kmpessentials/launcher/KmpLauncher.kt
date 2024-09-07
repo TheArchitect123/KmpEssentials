@@ -7,7 +7,6 @@ import android.os.Looper
 import android.provider.Settings
 import com.architect.kmpessentials.KmpAndroid
 import com.architect.kmpessentials.aliases.DefaultActionWithBooleanReturn
-import com.architect.kmpessentials.launcher.constants.MapAppPackageIdentifiers
 import com.architect.kmpessentials.launcher.constants.UriPrefixes
 import com.architect.kmpessentials.mainThread.KmpMainThread
 
@@ -40,11 +39,14 @@ actual class KmpLauncher {
             intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
         }
 
-        private fun openMapsUrl(addressPath: Uri) {
-            val launchMapsApp = Intent(Intent.ACTION_VIEW, addressPath)
+        private fun openMapsUrl(parameters: String) {
+            //check for whitespace between address info, and replace with +
+            val newParameters = parameters.replace("\\s+".toRegex(), "+")
+            val mapPrefix = UriPrefixes.mapsDirectionsPrefix.plus("&destination=$newParameters&travelmode=driving")
+
+            val launchMapsApp = Intent(Intent.ACTION_VIEW, Uri.parse(mapPrefix))
             addIntentFlags(launchMapsApp)
 
-            launchMapsApp.setPackage(MapAppPackageIdentifiers.googleMaps)
             if (launchMapsApp.resolveActivity(KmpAndroid.applicationContext.packageManager) != null) {
                 KmpAndroid.applicationContext.startActivity(launchMapsApp)
             }
@@ -90,8 +92,7 @@ actual class KmpLauncher {
             address: String,
             markerTitle: String
         ) {
-            val addressPath = Uri.parse(UriPrefixes.addressPrefix.plus(address))
-            openMapsUrl(addressPath)
+            openMapsUrl(address)
         }
 
         actual fun launchExternalMapsAppWithCoordinates(
@@ -99,8 +100,7 @@ actual class KmpLauncher {
             longitude: Double,
             markerTitle: String
         ) {
-            val addressPath = Uri.parse(UriPrefixes.coordPrefix.plus("$latitude,$longitude"))
-            openMapsUrl(addressPath)
+            openMapsUrl("$latitude,$longitude")
         }
 
         actual fun launchAppStoreViaIdentifier(appStoreLink: String) {

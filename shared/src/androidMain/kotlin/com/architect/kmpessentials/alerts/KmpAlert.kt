@@ -157,21 +157,19 @@ actual class KmpAlert {
                     )
                 }
 
-                val buttonString = okText
-                val buttonSpan = SpannableString(buttonString)
+                val buttonSpan = SpannableString(okText)
                 if (buttonStyle != 0) {
                     buttonSpan.setSpan(
                         TextAppearanceSpan(KmpAndroid.clientAppContext, buttonStyle),
-                        0, buttonString.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                        0, okText.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE
                     )
                 }
 
-                val cancelButtonString = okText
-                val cancelButtonSpan = SpannableString(cancelButtonString)
+                val cancelButtonSpan = SpannableString(cancelText)
                 if (cancelButtonStyle != 0) {
                     cancelButtonSpan.setSpan(
                         TextAppearanceSpan(KmpAndroid.clientAppContext, cancelButtonStyle),
-                        0, cancelButtonString.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                        0, cancelText.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE
                     )
                 }
 

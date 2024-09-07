@@ -14,6 +14,7 @@ import com.architect.kmpessentials.battery.enums.BatteryPowerSource
 import com.architect.kmpessentials.battery.models.BatteryInfo
 import com.architect.kmpessentials.battery.receivers.BatteryManagerBroadcastReceiver
 import com.architect.kmpessentials.battery.utils.BatteryInfoUtils
+import kotlin.math.roundToLong
 
 actual class KmpBattery {
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
@@ -26,18 +27,13 @@ actual class KmpBattery {
             KmpAndroid.applicationContext.getSystemService(Context.POWER_SERVICE) as PowerManager
         }
 
-
         private val batteryReceiver: BatteryManagerBroadcastReceiver by lazy {
             BatteryManagerBroadcastReceiver {
-                var propertyChargeCounter = 0L
                 var propertyEnergyCounter = 0L
                 if (Build.VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
-                    propertyChargeCounter =
-                        batteryService.getLongProperty(BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER)
                     propertyEnergyCounter =
                         batteryService.getLongProperty(BatteryManager.BATTERY_PROPERTY_ENERGY_COUNTER)
                 }
-
 
                 var isCharging: Boolean? = null
                 var chargeTimeRemaining: Long? = null
@@ -46,6 +42,12 @@ actual class KmpBattery {
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     chargeTimeRemaining = batteryService.computeChargeTimeRemaining()
+                }
+
+                val batteryPct: Float? = it?.let { intent ->
+                    val level: Int = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
+                    val scale: Int = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
+                    level * 100 / scale.toFloat()
                 }
 
                 batteryState = BatteryInfo(
@@ -81,7 +83,7 @@ actual class KmpBattery {
                     currentTemperature = it.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, -99)
                         .toLong(),
                     chargeTimeRemainingMs = chargeTimeRemaining ?: 0L,
-                    currentBatteryCharge = propertyChargeCounter,
+                    currentBatteryCharge = batteryPct?.roundToLong() ?: 0L,
                     currentEnergyCounter = propertyEnergyCounter
                 )
             }
@@ -109,7 +111,7 @@ actual class KmpBattery {
         }
 
         actual fun isEnergySaverOn(): Boolean {
-            return powerManager.isPowerSaveMode()
+            return powerManager.isPowerSaveMode
         }
     }
 }

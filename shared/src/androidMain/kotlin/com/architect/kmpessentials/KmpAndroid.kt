@@ -2,10 +2,9 @@ package com.architect.kmpessentials
 
 import android.app.Activity
 import android.app.Application
-import android.graphics.Bitmap
 import android.os.Build
 import android.os.Build.VERSION_CODES
-import android.provider.MediaStore
+import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.architect.kmpessentials.aliases.DefaultAction
@@ -13,6 +12,7 @@ import com.architect.kmpessentials.battery.KmpBattery
 import com.architect.kmpessentials.camera.KmpCamera
 import com.architect.kmpessentials.filePicker.File
 import com.architect.kmpessentials.filePicker.KmpFilePicker
+import com.architect.kmpessentials.internals.FilePickingMode
 import com.architect.kmpessentials.mediaPicker.KmpMediaPicker
 import com.architect.kmpessentials.permissions.KmpPermissionsManager
 import com.nareshchocha.filepickerlibrary.utilities.appConst.Const
@@ -34,7 +34,7 @@ class KmpAndroid {
 
             if (!hasRegistered) {
                 applicationContext = clientAppContext.application
-                if (Build.VERSION.SDK_INT == VERSION_CODES.LOLLIPOP) { // battery services require Lolliop and above to work
+                if (Build.VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) { // battery services require Lolliop and above to work
                     KmpBattery.initializeBatteryService()
                 }
 
@@ -45,23 +45,17 @@ class KmpAndroid {
             registerAllContracts()
         }
 
-        private fun registerAllContracts(){
+        private fun registerAllContracts() {
             // camera apis
             KmpCamera.resultLauncher =
                 clientAppContext.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                    val imagePath = it.data?.data?.path
-                    if (!imagePath.isNullOrBlank()) {
-                        KmpCamera.actionResult.invoke(imagePath)
-                    }
+                    loadFileDataViaIntent(it, FilePickingMode.TakeDataFromCamera)
                 }
 
             // image picker
             KmpMediaPicker.galleryLauncher =
                 clientAppContext.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                    val imagePath = it.data?.data?.path
-                    if (!imagePath.isNullOrBlank()) {
-                        KmpMediaPicker.imagePickerResult.invoke(imagePath)
-                    }
+                    loadFileDataViaIntent(it, FilePickingMode.PickMediaFromGallery)
                 }
 
             // permission manager
@@ -85,56 +79,67 @@ class KmpAndroid {
                 }
 
             // file picker
-            clientAppContext.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                if (it.resultCode == Activity.RESULT_OK) {
-                    // check if intent is a photo
-                    if (it.data?.action == MediaStore.ACTION_IMAGE_CAPTURE) {
-                        // Handle the image taken from the camera
-                        val extras = it.data?.extras
-                        if (extras != null) {
-                            val imageBitmap = extras["data"] as? Bitmap?
-                            val mediaStore =
-                                MediaStore.Images.Media.insertImage( // adds the image from the camera to the store, then returns result
-                                    KmpAndroid.clientAppContext.contentResolver,
-                                    imageBitmap,
-                                    "",
-                                    ""
-                                )
+            KmpFilePicker.resultLauncher =
+                clientAppContext.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                    loadFileDataViaIntent(it, FilePickingMode.PickFileFromFileSystem)
+                }
+        }
 
-                            KmpCamera.actionResult(mediaStore)
-                        }
-                    } else {
-                        // Use the uri to load the image
-                        val singlePath = it.data!!.getStringExtra(Const.BundleExtras.FILE_PATH)
-                        if (singlePath != null) {
-                            val singleFile =
-                                java.io.File(singlePath)
+        private fun loadFileDataViaIntent(
+            it: ActivityResult,
+            mode: FilePickingMode
+        ) {
+            if (it.resultCode == Activity.RESULT_OK) {
+                val singlePath = it.data!!.getStringExtra(Const.BundleExtras.FILE_PATH)
+                if (singlePath != null) {
+                    val singleFile =
+                        java.io.File(singlePath)
+
+                    val pickedFile = File(
+                        name = singleFile.name,
+                        absolutePath = singleFile.absolutePath,
+                        createdISO = "",
+                        isProtected = singleFile.isHidden,
+                        modifiedISO = ""
+                    )
+                    when (mode) {
+                        FilePickingMode.PickFileFromFileSystem -> {
                             KmpFilePicker.actionResultSingleFile(
-                                File(
-                                    name = singleFile.name,
-                                    absolutePath = singleFile.absolutePath,
-                                    createdISO = "",
-                                    isProtected = singleFile.isHidden,
-                                    modifiedISO = ""
-                                )
+                                pickedFile
                             )
-                        } else {
-                            val filePaths =
-                                it.data?.getStringArrayListExtra(Const.BundleExtras.FILE_PATH_LIST)
-                                    ?.map { file ->
-                                        val singleFile =
-                                            java.io.File(file)
-                                        File(
-                                            name = singleFile.name,
-                                            absolutePath = singleFile.absolutePath,
-                                            createdISO = "",
-                                            isProtected = singleFile.isHidden,
-                                            modifiedISO = ""
-                                        )
-                                    }
-
-                            KmpFilePicker.actionResultManyFiles(filePaths)
                         }
+
+                        FilePickingMode.PickMediaFromGallery -> {
+                            KmpMediaPicker.imagePickerResult(
+                                pickedFile.absolutePath
+                            )
+                        }
+
+                        FilePickingMode.TakeDataFromCamera -> {
+                            KmpCamera.actionResult(
+                                pickedFile.absolutePath
+                            )
+                        }
+                    }
+                } else {
+                    if (mode == FilePickingMode.PickFileFromFileSystem) {
+                        val filePaths =
+                            it.data?.getStringArrayListExtra(Const.BundleExtras.FILE_PATH_LIST)
+                                ?.map { file ->
+                                    val singleFile =
+                                        java.io.File(file)
+                                    File(
+                                        name = singleFile.name,
+                                        absolutePath = singleFile.absolutePath,
+                                        createdISO = "",
+                                        isProtected = singleFile.isHidden,
+                                        modifiedISO = ""
+                                    )
+                                }
+
+                        KmpFilePicker.actionResultManyFiles(
+                            filePaths
+                        )
                     }
                 }
             }

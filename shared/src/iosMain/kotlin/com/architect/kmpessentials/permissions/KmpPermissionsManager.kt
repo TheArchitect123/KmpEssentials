@@ -1,5 +1,6 @@
 package com.architect.kmpessentials.permissions
 
+import com.architect.kmpessentials.internal.ActionBoolParams
 import com.architect.kmpessentials.internal.ActionNoParams
 import com.architect.kmpessentials.mainThread.KmpMainThread
 import com.architect.kmpessentials.permissions.delegates.LocationPermissionsDelegate
@@ -30,66 +31,69 @@ actual class KmpPermissionsManager {
             runAction: ActionNoParams
         ) {
             KmpMainThread.runViaMainThread {
-                if (!isPermissionGranted(permission)) {
-                    when (permission) {
-                        Permission.Speech -> {
-                            SFSpeechRecognizer.requestAuthorization {
-                                if (it == SFSpeechRecognizerAuthorizationStatus.SFSpeechRecognizerAuthorizationStatusAuthorized) {
-                                    runAction()
-                                }
-                            }
-                        }
-
-                        Permission.Camera -> {
-                            AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo) {
-                                runAction()
-                            }
-                        }
-
-                        Permission.PushNotifications -> {
-                            UNUserNotificationCenter.currentNotificationCenter()
-                                .requestAuthorizationWithOptions(
-                                    UNAuthorizationOptionAlert and UNAuthorizationOptionBadge and UNAuthorizationOptionProvisional
-                                ) { res, error ->
-                                    if (error != null && res) {
+                isPermissionGranted(permission) {
+                    if (it) {
+                        when (permission) {
+                            Permission.Speech -> {
+                                SFSpeechRecognizer.requestAuthorization {
+                                    if (it == SFSpeechRecognizerAuthorizationStatus.SFSpeechRecognizerAuthorizationStatusAuthorized) {
                                         runAction()
                                     }
                                 }
-                        }
+                            }
 
-                        Permission.Microphone -> {
-                            AVAudioSession.sharedInstance().requestRecordPermission {
-                                if (it) {
+                            Permission.Camera -> {
+                                AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo) {
                                     runAction()
                                 }
                             }
-                        }
 
-                        Permission.PhotoGallery -> {
-                            PHPhotoLibrary.requestAuthorization {
-                                when (it) {
-                                    PHAuthorizationStatusAuthorized -> runAction()
-                                    else -> print("Permission has not been enabled")
+                            Permission.PushNotifications -> {
+                                UNUserNotificationCenter.currentNotificationCenter()
+                                    .requestAuthorizationWithOptions(
+                                        UNAuthorizationOptionAlert and UNAuthorizationOptionBadge and UNAuthorizationOptionProvisional
+                                    ) { res, error ->
+                                        if (error != null && res) {
+                                            runAction()
+                                        }
+                                    }
+                            }
+
+                            Permission.Microphone -> {
+                                AVAudioSession.sharedInstance().requestRecordPermission {
+                                    if (it) {
+                                        runAction()
+                                    }
                                 }
                             }
-                        }
 
-                        Permission.Location -> {
-                            val location = CLLocationManager()
-                            location.delegate = LocationPermissionsDelegate(runAction)
-                            location.requestWhenInUseAuthorization()
-                        }
+                            Permission.PhotoGallery -> {
+                                PHPhotoLibrary.requestAuthorization {
+                                    when (it) {
+                                        PHAuthorizationStatusAuthorized -> runAction()
+                                        else -> print("Permission has not been enabled")
+                                    }
+                                }
+                            }
 
-                        else -> {
+                            Permission.Location -> {
+                                val location = CLLocationManager()
+                                location.delegate = LocationPermissionsDelegate(runAction)
+                                location.requestWhenInUseAuthorization()
+                            }
 
+                            else -> {
+
+                            }
                         }
+                    } else {
+                        runAction()
                     }
-                } else {
-                    runAction()
                 }
             }
         }
 
+        // DEPRECATED API
         actual fun isPermissionGranted(permission: Permission): Boolean {
             return when (permission) {
                 Permission.Camera -> AVCaptureDevice.authorizationStatusForMediaType(
@@ -107,6 +111,30 @@ actual class KmpPermissionsManager {
                     .recordPermission() == AVAudioSessionRecordPermissionGranted
 
                 else -> false
+            }
+        }
+
+        actual fun isPermissionGranted(permission: Permission, actionResult: ActionBoolParams) {
+            KmpMainThread.runViaMainThread {
+                actionResult(
+                    when (permission) {
+                        Permission.Camera -> AVCaptureDevice.authorizationStatusForMediaType(
+                            AVMediaTypeVideo
+                        ) == AVAuthorizationStatusAuthorized
+
+                        Permission.Speech -> SFSpeechRecognizer.authorizationStatus() == SFSpeechRecognizerAuthorizationStatus.SFSpeechRecognizerAuthorizationStatusAuthorized
+                        Permission.PhotoGallery -> PHPhotoLibrary.authorizationStatus() == PHAuthorizationStatusAuthorized
+                        Permission.Location -> CLLocationManager().authorizationStatus() == 3 || CLLocationManager().authorizationStatus() == 4
+                        Permission.PushNotifications -> UIApplication.sharedApplication()
+                            .currentUserNotificationSettings() != null && UIApplication.sharedApplication()
+                            .isRegisteredForRemoteNotifications()
+
+                        Permission.Microphone -> AVAudioSession.sharedInstance()
+                            .recordPermission() == AVAudioSessionRecordPermissionGranted
+
+                        else -> false
+                    }
+                )
             }
         }
     }
