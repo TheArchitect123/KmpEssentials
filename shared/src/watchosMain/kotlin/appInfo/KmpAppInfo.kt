@@ -1,5 +1,7 @@
 package com.architect.kmpessentials.appInfo
 
+import platform.WatchKit.WKApplication
+
 actual class KmpAppInfo {
     actual companion object {
 
@@ -20,7 +22,11 @@ actual class KmpAppInfo {
         }
 
         actual fun getSystemThemeMode(): AppDeviceTheme {
-            return AppDeviceTheme.System
+            if(WKApplication.sharedApplication(). ?.rootViewController?.traitCollection?.userInterfaceStyle() == UIUserInterfaceStyle.UIUserInterfaceStyleDark){
+                return AppDeviceTheme.Dark
+            }
+
+            return AppDeviceTheme.Light
         }
     }
 }
