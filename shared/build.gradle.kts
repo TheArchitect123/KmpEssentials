@@ -34,21 +34,21 @@ kotlin {
     watchosSimulatorArm64()
 
     // tvos (Apple)
-//    tvosX64()
-//    tvosArm64()
-//    tvosSimulatorArm64()
+    tvosX64()
+    tvosArm64()
+    tvosSimulatorArm64()
 
     // java target
     //jvm()
 
     //mac & desktop targets
-//    macosX64()
-//    macosArm64()
+    macosX64()
+    macosArm64()
 //
-//    linuxX64()
-//    linuxArm64()
+    linuxX64()
+    linuxArm64()
 //
-//    mingwX64()
+    mingwX64()
 
     // browser
     //js().browser()
@@ -73,6 +73,25 @@ kotlin {
             }
         }
 
+        // windows desktop target
+        val mingwMain by getting {
+            dependsOn(commonMain)
+        }
+        val mingwX64Main by getting {
+            dependsOn(mingwMain)
+        }
+
+        // linux
+        val linuxMain by getting {
+            dependsOn(commonMain)
+        }
+        val linuxX64Main by getting {
+            dependsOn(linuxMain)
+        }
+        val linuxArm64Main by getting {
+            dependsOn(linuxMain)
+        }
+
         // watch os target
         val watchosMain by getting {
             dependsOn(commonMain)
@@ -88,6 +107,31 @@ kotlin {
         }
         val watchosSimulatorArm64Main by getting {
             dependsOn(watchosMain)
+        }
+
+        // macos main
+        val macosMain by getting {
+            dependsOn(commonMain)
+        }
+        val macosX64Main by getting {
+            dependsOn(macosMain)
+        }
+        val macosArm64Main by getting {
+            dependsOn(macosMain)
+        }
+
+        // tvos targets
+        val tvosMain by getting {
+            dependsOn(commonMain)
+        }
+        val tvosX64Main by getting {
+            dependsOn(tvosMain)
+        }
+        val tvosArm64Main by getting {
+            dependsOn(tvosMain)
+        }
+        val tvosSimulatorArm64Main by getting {
+            dependsOn(tvosMain)
         }
 
         // android & iOS targets
@@ -136,7 +180,7 @@ afterEvaluate {
         coordinates(
             groupId = "io.github.thearchitect123",
             artifactId = "kmpEssentials",
-            version = "0.7.7"
+            version = "0.8.0"
         )
 
         // Configure POM metadata for the published artifact

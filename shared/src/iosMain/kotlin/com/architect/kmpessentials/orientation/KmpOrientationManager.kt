@@ -1,6 +1,5 @@
 package com.architect.kmpessentials.orientation
 
-import com.architect.kmpessentials.KmpiOS
 import com.architect.kmpessentials.orientation.internal.OrientationListener
 import kotlinx.cinterop.BetaInteropApi
 import kotlinx.cinterop.ExperimentalForeignApi
@@ -11,10 +10,6 @@ import platform.Foundation.NSSelectorFromString
 import platform.UIKit.UIDevice
 import platform.UIKit.UIDeviceOrientation
 import platform.UIKit.UIDeviceOrientationDidChangeNotification
-import platform.UIKit.UIInterfaceOrientationLandscapeLeft
-import platform.UIKit.UIInterfaceOrientationLandscapeRight
-import platform.UIKit.UIInterfaceOrientationPortrait
-import platform.UIKit.interfaceOrientation
 import platform.darwin.NSObject
 
 actual class KmpOrientationManager {

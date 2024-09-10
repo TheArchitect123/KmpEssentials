@@ -1,7 +1,10 @@
 package com.architect.kmpessentials.orientation
 
-enum class OrientationState{
+enum class OrientationState {
     Landscape,
     Portrait,
-    Unknown
+    Unknown,
+
+    LeftWrist,
+    RightWrist,
 }

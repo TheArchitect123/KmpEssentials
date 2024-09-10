@@ -32,7 +32,7 @@ actual class KmpPermissionsManager {
         ) {
             KmpMainThread.runViaMainThread {
                 isPermissionGranted(permission) {
-                    if (it) {
+                    if (!it) {
                         when (permission) {
                             Permission.Speech -> {
                                 SFSpeechRecognizer.requestAuthorization {
