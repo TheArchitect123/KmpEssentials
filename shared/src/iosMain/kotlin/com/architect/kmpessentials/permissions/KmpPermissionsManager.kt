@@ -31,63 +31,57 @@ actual class KmpPermissionsManager {
             runAction: ActionNoParams
         ) {
             KmpMainThread.runViaMainThread {
-                isPermissionGranted(permission) {
-                    if (!it) {
-                        when (permission) {
-                            Permission.Speech -> {
-                                SFSpeechRecognizer.requestAuthorization {
-                                    if (it == SFSpeechRecognizerAuthorizationStatus.SFSpeechRecognizerAuthorizationStatusAuthorized) {
-                                        runAction()
-                                    }
-                                }
+                when (permission) {
+                    Permission.Speech -> {
+                        SFSpeechRecognizer.requestAuthorization {
+                            if (it == SFSpeechRecognizerAuthorizationStatus.SFSpeechRecognizerAuthorizationStatusAuthorized) {
+                                runAction()
                             }
+                        }
+                    }
 
-                            Permission.Camera -> {
-                                AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo) {
+                    Permission.Camera -> {
+                        AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo) {
+                            runAction()
+                        }
+                    }
+
+                    Permission.PushNotifications -> {
+                        UNUserNotificationCenter.currentNotificationCenter()
+                            .requestAuthorizationWithOptions(
+                                UNAuthorizationOptionAlert and UNAuthorizationOptionBadge and UNAuthorizationOptionProvisional
+                            ) { res, error ->
+                                if (res) {
                                     runAction()
                                 }
                             }
+                    }
 
-                            Permission.PushNotifications -> {
-                                UNUserNotificationCenter.currentNotificationCenter()
-                                    .requestAuthorizationWithOptions(
-                                        UNAuthorizationOptionAlert and UNAuthorizationOptionBadge and UNAuthorizationOptionProvisional
-                                    ) { res, error ->
-                                        if (error != null && res) {
-                                            runAction()
-                                        }
-                                    }
-                            }
-
-                            Permission.Microphone -> {
-                                AVAudioSession.sharedInstance().requestRecordPermission {
-                                    if (it) {
-                                        runAction()
-                                    }
-                                }
-                            }
-
-                            Permission.PhotoGallery -> {
-                                PHPhotoLibrary.requestAuthorization {
-                                    when (it) {
-                                        PHAuthorizationStatusAuthorized -> runAction()
-                                        else -> print("Permission has not been enabled")
-                                    }
-                                }
-                            }
-
-                            Permission.Location -> {
-                                val location = CLLocationManager()
-                                location.delegate = LocationPermissionsDelegate(runAction)
-                                location.requestWhenInUseAuthorization()
-                            }
-
-                            else -> {
-
+                    Permission.Microphone -> {
+                        AVAudioSession.sharedInstance().requestRecordPermission {
+                            if (it) {
+                                runAction()
                             }
                         }
-                    } else {
-                        runAction()
+                    }
+
+                    Permission.PhotoGallery -> {
+                        PHPhotoLibrary.requestAuthorization {
+                            when (it) {
+                                PHAuthorizationStatusAuthorized -> runAction()
+                                else -> print("Permission has not been enabled")
+                            }
+                        }
+                    }
+
+                    Permission.Location -> {
+                        val location = CLLocationManager()
+                        location.delegate = LocationPermissionsDelegate(runAction)
+                        location.requestWhenInUseAuthorization()
+                    }
+
+                    else -> {
+
                     }
                 }
             }
@@ -116,25 +110,29 @@ actual class KmpPermissionsManager {
 
         actual fun isPermissionGranted(permission: Permission, actionResult: ActionBoolParams) {
             KmpMainThread.runViaMainThread {
-                actionResult(
-                    when (permission) {
-                        Permission.Camera -> AVCaptureDevice.authorizationStatusForMediaType(
-                            AVMediaTypeVideo
-                        ) == AVAuthorizationStatusAuthorized
+                if (permission == Permission.PushNotifications) {
+                    UNUserNotificationCenter.currentNotificationCenter()
+                        .getNotificationSettingsWithCompletionHandler {
+                            actionResult(it?.alertSetting() == 2L)
+                        }
+                } else {
+                    actionResult(
+                        when (permission) {
+                            Permission.Camera -> AVCaptureDevice.authorizationStatusForMediaType(
+                                AVMediaTypeVideo
+                            ) == AVAuthorizationStatusAuthorized
 
-                        Permission.Speech -> SFSpeechRecognizer.authorizationStatus() == SFSpeechRecognizerAuthorizationStatus.SFSpeechRecognizerAuthorizationStatusAuthorized
-                        Permission.PhotoGallery -> PHPhotoLibrary.authorizationStatus() == PHAuthorizationStatusAuthorized
-                        Permission.Location -> CLLocationManager().authorizationStatus() == 3 || CLLocationManager().authorizationStatus() == 4
-                        Permission.PushNotifications -> UIApplication.sharedApplication()
-                            .currentUserNotificationSettings() != null && UIApplication.sharedApplication()
-                            .isRegisteredForRemoteNotifications()
+                            Permission.Speech -> SFSpeechRecognizer.authorizationStatus() == SFSpeechRecognizerAuthorizationStatus.SFSpeechRecognizerAuthorizationStatusAuthorized
+                            Permission.PhotoGallery -> PHPhotoLibrary.authorizationStatus() == PHAuthorizationStatusAuthorized
+                            Permission.Location -> CLLocationManager().authorizationStatus() == 3 || CLLocationManager().authorizationStatus() == 4
 
-                        Permission.Microphone -> AVAudioSession.sharedInstance()
-                            .recordPermission() == AVAudioSessionRecordPermissionGranted
+                            Permission.Microphone -> AVAudioSession.sharedInstance()
+                                .recordPermission() == AVAudioSessionRecordPermissionGranted
 
-                        else -> false
-                    }
-                )
+                            else -> false
+                        }
+                    )
+                }
             }
         }
     }
