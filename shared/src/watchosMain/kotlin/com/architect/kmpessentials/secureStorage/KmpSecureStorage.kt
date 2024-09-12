@@ -19,7 +19,7 @@ actual class KmpSecureStorage {
                 is Double -> keyVault.set(key, item)
                 is Boolean -> keyVault.set(key, item)
                 is String -> keyVault.set(key, item)
-                is Long -> keyVault.set(key, item)
+                is Int -> keyVault.set(key, item)
             }
         }
 

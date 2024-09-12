@@ -22,6 +22,7 @@ import platform.UIKit.isRegisteredForRemoteNotifications
 import platform.UserNotifications.UNAuthorizationOptionAlert
 import platform.UserNotifications.UNAuthorizationOptionBadge
 import platform.UserNotifications.UNAuthorizationOptionProvisional
+import platform.UserNotifications.UNNotificationSettingEnabled
 import platform.UserNotifications.UNUserNotificationCenter
 
 actual class KmpPermissionsManager {
@@ -115,7 +116,7 @@ actual class KmpPermissionsManager {
                 if (permission == Permission.PushNotifications) {
                     UNUserNotificationCenter.currentNotificationCenter()
                         .getNotificationSettingsWithCompletionHandler {
-                            actionResult(it?.alertSetting() == 2L)
+                            actionResult(it?.alertSetting() == UNNotificationSettingEnabled)
                         }
                 } else {
                     actionResult(

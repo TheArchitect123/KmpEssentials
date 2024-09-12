@@ -9,6 +9,7 @@ import platform.AVFAudio.AVAudioSession
 import platform.AVFAudio.AVAudioSessionRecordPermissionGranted
 import platform.CoreLocation.CLLocationManager
 import platform.UserNotifications.UNAuthorizationOptionAlert
+import platform.UserNotifications.UNNotificationSettingEnabled
 import platform.UserNotifications.UNUserNotificationCenter
 
 @OptIn(UnsafeNumber::class)
@@ -62,7 +63,7 @@ actual class KmpPermissionsManager {
                 if (permission == Permission.PushNotifications) {
                     UNUserNotificationCenter.currentNotificationCenter()
                         .getNotificationSettingsWithCompletionHandler {
-                            actionResult(it?.alertSetting() == 2)
+                            actionResult(it?.alertSetting() == UNNotificationSettingEnabled)
                         }
                 } else {
                     actionResult(

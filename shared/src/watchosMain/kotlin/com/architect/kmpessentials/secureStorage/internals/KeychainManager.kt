@@ -76,10 +76,6 @@ internal class KeychainManager(
         return addOrUpdate(key, NSNumber(int = intValue).toNSData())
     }
 
-    fun set(key: String, longValue: Long): Boolean {
-        return addOrUpdate(key, NSNumber(longValue).toNSData())
-    }
-
     fun set(key: String, floatValue: Float): Boolean {
         return addOrUpdate(key, NSNumber(float = floatValue).toNSData())
     }
