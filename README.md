@@ -30,7 +30,7 @@ KmpEssentials is a library that contains apis to accelerate your development. Ev
 To get started, import the library into your project:
 
 ```sh
-implementation("io.github.thearchitect123:kmpEssentials:0.7.7")
+implementation("io.github.thearchitect123:kmpEssentials:0.8.2")
 ```
 ## Setup for Android
 
@@ -73,9 +73,8 @@ To stop listening to acc changes, we use the function stopListening. It's import
 KmpAccelerometer.stoplistening()
 ```
 
-Below is a list of all modules, along with what each of them do.
-<br/>
-<br/>
+## Below is a list of all modules, along with what each of them do.
+
 <strong>KmpAccelerometer</strong> - Used for fetching Accelerometer Data from your device (X,Y,Z Axes)
 <br/>
 <strong>KmpAudio </strong> - Manage, create, and compress audio files
