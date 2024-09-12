@@ -74,8 +74,7 @@ KmpAccelerometer.stoplistening()
 ```
 
 ## Below is a list of all modules, along with what each of them do.
-<br/>
-<br/>
+
 <strong>KmpAccelerometer</strong> - Used for fetching Accelerometer Data from your device (X,Y,Z Axes)
 <br/>
 <strong>KmpAudio </strong> - Manage, create, and compress audio files
