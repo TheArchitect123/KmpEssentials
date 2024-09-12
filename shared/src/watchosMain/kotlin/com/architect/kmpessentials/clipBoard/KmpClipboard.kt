@@ -3,7 +3,7 @@ package com.architect.kmpessentials.clipBoard
 actual class KmpClipboard {
     actual companion object {
         actual fun getTextFromClipboard(): String {
-            TODO("NOT IMPLEMENTED YET")
+            return ""
         }
 
         actual fun copyTextIntoClipboard(textToCopy: String) {
@@ -11,7 +11,7 @@ actual class KmpClipboard {
         }
 
         actual fun isSupported(): Boolean {
-            return true
+            return false
         }
     }
 }

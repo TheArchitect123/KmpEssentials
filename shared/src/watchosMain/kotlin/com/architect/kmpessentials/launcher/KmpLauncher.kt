@@ -16,7 +16,9 @@ import platform.MapKit.MKLaunchOptionsDirectionsModeKey
 import platform.MapKit.MKMapItem
 import platform.MapKit.MKPlacemark
 import platform.WatchKit.WKApplication
+import platform.WatchKit.WKInterfaceDevice
 
+// most apis on watch os will require watch connectivity framework (will require an active iphone connection to work)
 @OptIn(ExperimentalForeignApi::class)
 actual class KmpLauncher {
     actual companion object {
@@ -98,15 +100,15 @@ actual class KmpLauncher {
         }
 
         actual fun launchAppStoreViaIdentifier(appStoreLink: String) {
-            KmpMainThread.runViaMainThread {
-                val viewController = UIApplication.sharedApplication.keyWindow?.rootViewController
-                val store = SKStoreProductViewController()
-                store.loadProductWithParameters(
-                    mapOf(SKStoreProductParameterITunesItemIdentifier to appStoreLink),
-                    null
-                )
-                viewController?.presentViewController(store, true, null)
-            }
+//            KmpMainThread.runViaMainThread {
+//                val viewController = UIApplication.sharedApplication.keyWindow?.rootViewController
+//                val store = SKStoreProductViewController()
+//                store.loadProductWithParameters(
+//                    mapOf(SKStoreProductParameterITunesItemIdentifier to appStoreLink),
+//                    null
+//                )
+//                viewController?.presentViewController(store, true, null)
+//            }
         }
     }
 }

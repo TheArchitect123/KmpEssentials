@@ -7,15 +7,15 @@ actual class KmpBiometrics {
     actual companion object {
 
         actual fun isSupported(): Boolean {
-            TODO("NOT IMPLEMENTED YET")
+            return false
         }
 
         actual fun setPromptInfo(title: String, message: String) {
-            TODO("NOT IMPLEMENTED YET")
+
         }
 
         actual fun scanBiometrics(actionResult: ActionBoolParams, actionError: ActionStringParams) {
-            TODO("NOT IMPLEMENTED YET")
+
         }
     }
 }

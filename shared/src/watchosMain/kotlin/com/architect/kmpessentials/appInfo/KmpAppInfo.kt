@@ -1,7 +1,6 @@
 package com.architect.kmpessentials.appInfo
 
 import platform.Foundation.NSBundle
-import platform.WatchKit.WKApplication
 
 actual class KmpAppInfo {
     actual companion object {

@@ -7,7 +7,6 @@ actual class KmpDeviceDisplay {
     actual companion object {
         actual fun keepScreenOnActive() {
 
-            WKApplication.sharedApplication().
         }
 
         actual fun disableScreenOnActive() {

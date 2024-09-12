@@ -5,7 +5,7 @@ import com.architect.kmpessentials.internal.ActionStringParams
 actual class KmpCamera {
     actual companion object {
         actual fun isSupported(): Boolean {
-            return true
+            return false
         }
 
         actual fun capturePhoto(actionResult: ActionStringParams) {

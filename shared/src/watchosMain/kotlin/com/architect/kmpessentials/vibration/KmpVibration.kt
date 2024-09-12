@@ -1,6 +1,5 @@
 package com.architect.kmpessentials.vibration
 
-import platform.WatchKit.WKApplication
 import platform.WatchKit.WKHapticType
 import platform.WatchKit.WKInterfaceDevice
 
