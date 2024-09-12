@@ -4,7 +4,7 @@
 </p>
 
 <p align="center">
-An essentials library for Kotlin multiplatform that makes it easier to work with anything. Supports iOS & Android.
+An essentials library for Kotlin multiplatform that makes it easier to work with anything. Supports iOS, Android & AppleWatch.
     <br/>
 <strong>Currently only 12.3 kB in size</strong>
 
