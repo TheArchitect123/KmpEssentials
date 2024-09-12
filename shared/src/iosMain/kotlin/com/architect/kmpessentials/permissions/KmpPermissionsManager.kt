@@ -49,7 +49,9 @@ actual class KmpPermissionsManager {
                     Permission.PushNotifications -> {
                         UNUserNotificationCenter.currentNotificationCenter()
                             .requestAuthorizationWithOptions(
-                                UNAuthorizationOptionAlert and UNAuthorizationOptionBadge and UNAuthorizationOptionProvisional
+                                    UNAuthorizationOptionAlert or
+                                    UNAuthorizationOptionBadge or
+                                    UNAuthorizationOptionProvisional,
                             ) { res, error ->
                                 if (res) {
                                     runAction()

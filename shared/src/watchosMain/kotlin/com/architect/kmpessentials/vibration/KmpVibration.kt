@@ -1,9 +1,13 @@
 package com.architect.kmpessentials.vibration
 
+import platform.WatchKit.WKApplication
+import platform.WatchKit.WKHapticType
+import platform.WatchKit.WKInterfaceDevice
+
 actual class KmpVibration {
     actual companion object {
         actual fun startVibrating(durationMs: Long) {
-         //   AudioServ(kSystemSoundID_Vibrate)
+            WKInterfaceDevice.currentDevice().playHaptic(WKHapticType.WKHapticTypeNotification)
         }
 
         actual fun stopVibrating() {
