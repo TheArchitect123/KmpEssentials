@@ -30,7 +30,7 @@ KmpEssentials is a library that contains apis to accelerate your development. Ev
 To get started, import the library into your project:
 
 ```sh
-implementation("io.github.thearchitect123:kmpEssentials:0.8.5")
+implementation("io.github.thearchitect123:kmpEssentials:0.8.6")
 ```
 ## Setup for Android
 
@@ -44,6 +44,11 @@ In your Activity's **onCreate** add the below to initialize the framework.<br/><
          // You can present a toast message or any error popup of some kind.
     }
  }
+```
+
+If you're using Android Compose please make sure to also install **androidx.fragment** package from Google.
+```sh
+implementation("androidx.fragment:fragment:+") // latest package
 ```
 
 <strong>A comprehensive documentation site for each API is in development.</strong>
