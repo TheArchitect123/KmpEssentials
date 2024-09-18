@@ -45,7 +45,7 @@ In your Activity's **onCreate** add the below to initialize the framework.<br/><
     }
  }
 ```
-
+## Setup for Android (Jetpack Compose)
 If you're using Android Compose please make sure to also install **androidx.fragment** package from Google.
 ```sh
 implementation("androidx.fragment:fragment:+") // latest package
