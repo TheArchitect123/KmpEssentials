@@ -57,9 +57,8 @@ This is required for Biometric Services to work.
 <br/>
 
 ## How to Use
-<br/>
-**A comprehensive documentation site for each API is in development**
-However for now, below is a small snippet that explains how to use each module. **The concept is the same for all modules. **
+A comprehensive documentation site for each API is in development
+However for now, below is a small snippet that explains how to use each module. The concept is the same for all modules. 
 
 <br/>
 To access and use each module you must use the static component belonging to each module.
