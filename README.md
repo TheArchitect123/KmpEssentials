@@ -51,6 +51,9 @@ If you're using Android Compose please make sure to also install **androidx.frag
 implementation("androidx.fragment:fragment:+") // latest package
 ```
 
+And make sure that your activity inherits from **androidx.fragment.app.FragmentActivity**.
+This is required for Biometric Services to work.
+
 <strong>A comprehensive documentation site for each API is in development.</strong>
 However for now, below is a small snippet that explains how to use each module. <strong> The concept is the same for all modules. </strong>
 
