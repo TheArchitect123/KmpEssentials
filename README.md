@@ -54,7 +54,6 @@ implementation("androidx.fragment:fragment:+") // latest package
 
 And make sure that your activity inherits from **androidx.fragment.app.FragmentActivity**.
 This is required for Biometric Services to work.
-
 <br/>
 
 ## How to Use
