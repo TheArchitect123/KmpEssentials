@@ -57,6 +57,7 @@ This is required for Biometric Services to work.
 
 <br/>
 <br/>
+## How to Use
 <strong>A comprehensive documentation site for each API is in development.</strong>
 However for now, below is a small snippet that explains how to use each module. <strong> The concept is the same for all modules. </strong>
 
