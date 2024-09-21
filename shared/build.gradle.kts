@@ -141,6 +141,7 @@ kotlin {
                 implementation("dev.tmapps:konnection:1.4.1")
                 implementation("com.liftric:kvault:1.12.0")
 
+                implementation("androidx.preference:preference:1.2.1")
                 implementation("com.google.android.material:material:1.12.0")
                 implementation("androidx.biometric:biometric:1.1.0")
                 implementation("androidx.activity:activity-ktx:1.9.1")
@@ -180,7 +181,7 @@ afterEvaluate {
         coordinates(
             groupId = "io.github.thearchitect123",
             artifactId = "kmpEssentials",
-            version = "0.8.4"
+            version = "0.9.1"
         )
 
         // Configure POM metadata for the published artifact

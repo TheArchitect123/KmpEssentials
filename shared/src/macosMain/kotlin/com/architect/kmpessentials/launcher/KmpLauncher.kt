@@ -1,6 +1,7 @@
 package com.architect.kmpessentials.launcher
 
 import com.architect.kmpessentials.aliases.DefaultActionWithBooleanReturn
+import platform.AppKit.NSApplication
 
 actual class KmpLauncher {
     actual companion object {

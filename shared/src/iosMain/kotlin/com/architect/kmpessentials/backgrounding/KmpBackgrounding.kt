@@ -1,20 +1,45 @@
 package com.architect.kmpessentials.backgrounding
 
 import com.architect.kmpessentials.aliases.DefaultAction
+import com.architect.kmpessentials.aliases.DefaultActionAsync
+import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.usePinned
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import platform.UIKit.UIApplication
+import platform.UIKit.UIBackgroundTaskIdentifier
 
 actual class KmpBackgrounding {
     actual companion object {
         private const val appleDefaultId = "com.kmpessentials.default.backgrounding"
 
-        actual fun createAndStartWorker(options: BackgroundOptions?, action: DefaultAction) {
-            val backgroundId =
+        private val identifiers = mutableListOf<UIBackgroundTaskIdentifier>()
+
+        @OptIn(ExperimentalForeignApi::class)
+        actual fun createAndStartWorker(options: BackgroundOptions?, action: DefaultActionAsync) {
+            var backgroundId: UIBackgroundTaskIdentifier? = null
+            backgroundId =
                 UIApplication.sharedApplication.beginBackgroundTaskWithName(appleDefaultId) {
-                    // expiration
+
                 }
 
-            action()
+            identifiers.add(backgroundId)
+
+            GlobalScope.launch {
+                action()
+            }
+
             UIApplication.sharedApplication.endBackgroundTask(backgroundId)
+        }
+
+        actual fun cancelAllRunningWorkers() {
+            if (identifiers.isNotEmpty()) {
+                identifiers.forEach {
+                    UIApplication.sharedApplication.endBackgroundTask(it)
+                }
+            }
+
+            identifiers.clear()
         }
     }
 }

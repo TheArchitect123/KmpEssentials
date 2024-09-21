@@ -10,8 +10,10 @@ import com.architect.kmpessentials.flashlight.FlashLightMode
 
 @TargetApi(Build.VERSION_CODES.M)
 internal class FlashlightHardware {
-    private val cameraHardware =
+    private val cameraHardware by lazy {
         KmpAndroid.applicationContext.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+    }
+
     private var flashlightCameraId: String? = null
     // id of the first device found capable of flashlight hardware
 
@@ -64,6 +66,7 @@ internal class FlashlightHardware {
                         Math.round(flashLevelMax * 0.8f)
                     )
                 }
+
                 FlashLightMode.Max -> { // max strength level (users need to be warned not to use this unless they have to
                     cameraHardware.turnOnTorchWithStrengthLevel(
                         flashlightCameraId!!,

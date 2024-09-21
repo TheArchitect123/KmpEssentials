@@ -12,6 +12,9 @@ actual class KmpLocalNotifications {
         private var notificationIcon: Int = 0
         private val standardChannel = "default"
         private val notificationChannelName = "Default"
+        private val notifManager by lazy {
+            KmpAndroid.applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        }
 
         fun setNotificationIcon(icon: Int) {
             notificationIcon = icon
@@ -21,9 +24,6 @@ actual class KmpLocalNotifications {
             if (notificationIcon == 0) {
                 throw Exception("Notification Icon must be set. Please set via your Activities OnCreate method")
             }
-
-            val notifManager =
-                KmpAndroid.applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val channel = NotificationChannel(

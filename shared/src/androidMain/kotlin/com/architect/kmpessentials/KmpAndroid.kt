@@ -7,6 +7,7 @@ import android.os.Build.VERSION_CODES
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import com.architect.kmpessentials.aliases.DefaultAction
 import com.architect.kmpessentials.battery.KmpBattery
 import com.architect.kmpessentials.camera.KmpCamera
@@ -21,12 +22,12 @@ class KmpAndroid {
     companion object {
         private var hasRegistered: Boolean = false
         internal lateinit var applicationContext: Application
-        internal lateinit var clientAppContext: AppCompatActivity
+        internal lateinit var clientAppContext: FragmentActivity
         internal val sensorManagerObserver = SensorObserver()
         internal var guserDisabledPermission: DefaultAction? = null
 
         fun initializeApp(
-            context: AppCompatActivity,
+            context: FragmentActivity,
             userDisabledPermission: DefaultAction? = null
         ) {
             clientAppContext = context

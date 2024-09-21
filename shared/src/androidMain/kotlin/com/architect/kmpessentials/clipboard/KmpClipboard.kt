@@ -7,8 +7,9 @@ import com.architect.kmpessentials.KmpAndroid
 
 actual class KmpClipboard {
     actual companion object {
-        private val clipBoardManager =
+        private val clipBoardManager by lazy {
             KmpAndroid.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        }
 
         actual fun getTextFromClipboard(): String {
             if (clipBoardManager.hasPrimaryClip()) {

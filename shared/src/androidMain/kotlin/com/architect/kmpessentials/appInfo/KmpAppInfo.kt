@@ -5,10 +5,13 @@ import com.architect.kmpessentials.KmpAndroid
 
 actual class KmpAppInfo {
     actual companion object {
-        val packageInfo = KmpAndroid.applicationContext.packageManager.getPackageInfo(
-            getPackageName(),
-            0
-        )
+        val packageInfo by lazy {
+            KmpAndroid.applicationContext.packageManager.getPackageInfo(
+                getPackageName(),
+                0
+            )
+        }
+
         actual fun getPackageName(): String {
             return KmpAndroid.applicationContext.packageName
         }
@@ -25,7 +28,10 @@ actual class KmpAppInfo {
         }
 
         actual fun getPackageVersionCode(): Int {
-            return KmpAndroid.applicationContext.packageManager.getPackageInfo(getPackageName(), 0).versionCode
+            return KmpAndroid.applicationContext.packageManager.getPackageInfo(
+                getPackageName(),
+                0
+            ).versionCode
         }
 
         actual fun getPackageMinOS(): Int {

@@ -5,12 +5,18 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.architect.kmpessentials.KmpAndroid
-import com.architect.kmpessentials.aliases.DefaultAction
+import com.architect.kmpessentials.aliases.DefaultActionAsync
 import com.architect.kmpessentials.backgrounding.requests.LongRunnerJob
+import java.util.UUID
 
 actual class KmpBackgrounding {
     actual companion object {
-        actual fun createAndStartWorker(options: BackgroundOptions?, action: DefaultAction) {
+        private val workManager by lazy {
+            WorkManager.getInstance(KmpAndroid.applicationContext)
+        }
+
+        private val workerJobs = mutableListOf<UUID>()
+        actual fun createAndStartWorker(options: BackgroundOptions?, action: DefaultActionAsync) {
             val constraints =
                 Constraints.Builder()
             if (options != null) {
@@ -26,12 +32,24 @@ actual class KmpBackgrounding {
             }
 
             LongRunnerJob.mutableTypes.add(action)
-            WorkManager.getInstance(KmpAndroid.applicationContext).enqueue(
-                OneTimeWorkRequest.Builder(
-                    LongRunnerJob::class.java
-                ).setConstraints(constraints.build())
-                    .build()
-            )
+
+            val singleJob = OneTimeWorkRequest.Builder(
+                LongRunnerJob::class.java
+            ).setConstraints(constraints.build()).build()
+
+            workerJobs.add(singleJob.id)
+            workManager.enqueue(singleJob)
+        }
+
+        actual fun cancelAllRunningWorkers() {
+            if (workerJobs.isNotEmpty()) {
+                workerJobs.forEach {
+                    workManager.cancelWorkById(it)
+                }
+            }
+
+            workerJobs.clear()
+            LongRunnerJob.mutableTypes.clear()
         }
     }
 }
