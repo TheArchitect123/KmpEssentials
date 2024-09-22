@@ -27,7 +27,7 @@ An essentials library for Kotlin multiplatform that makes it easier to work with
 
 KmpEssentials is a library that contains apis to accelerate your development. Everything from managing the Battery, File System, or getting Package information. 
 
-[The new Website is live and you can find all documentation for KmpEssentials here](https://thearchitect123.github.io/ArtifactsDocProduction/)
+[The new Website is live and you can find all documentation for KmpEssentials here](https://thearchitect123.github.io/ArtifactsDocProduction/develop/kotlin/multiplatform/kmpessentials/)
 ## License
 
 This software is licensed under the MIT license. See [LICENSE](./LICENSE) for full disclosure.
