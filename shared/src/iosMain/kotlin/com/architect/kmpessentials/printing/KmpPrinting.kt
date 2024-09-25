@@ -11,6 +11,13 @@ actual class KmpPrinting {
 
         private fun runPrintJob(filePath: String, printType: UIPrintInfoOutputType) {
             KmpMainThread.runViaMainThread {
+                // check if file is remote
+                // if file is remote the file needs to be downloaded and cached locally, this then gets processed as a normal file
+
+                if(filePath.startsWith("https")){
+
+                }
+
                 val fileUrl = NSURL.fileURLWithPath(filePath)
                 if (isPrintingSupported() && UIPrintInteractionController.canPrintURL(
                         fileUrl
