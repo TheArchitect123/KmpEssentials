@@ -17,7 +17,7 @@ actual class KmpAppInfo {
         }
 
         actual fun getPackageVersion(): String {
-            return packageInfo.versionName
+            return packageInfo.versionName ?: ""
         }
 
         actual fun getSystemThemeMode(): AppDeviceTheme {
@@ -35,7 +35,7 @@ actual class KmpAppInfo {
         }
 
         actual fun getPackageMinOS(): Int {
-            return packageInfo.applicationInfo.targetSdkVersion
+            return packageInfo.applicationInfo?.targetSdkVersion ?: 21
         }
     }
 }

@@ -3,12 +3,32 @@ package com.architect.kmpessentials.email
 import android.content.Intent
 import android.net.Uri
 import com.architect.kmpessentials.KmpAndroid
+import com.architect.kmpessentials.aliases.DefaultActionWithBooleanReturn
+import com.architect.kmpessentials.internal.ActionBoolParams
 import com.architect.kmpessentials.mainThread.KmpMainThread
 import com.architect.kmpessentials.toast.KmpToast
 
 actual class KmpEmail {
     actual companion object {
-        val emailPrefix = "mailto:"
+
+        private val emailPrefix = "mailto:"
+        actual fun isEmailSupported(action: ActionBoolParams) {
+            KmpMainThread.runViaMainThread {
+                val emailAddress = "sample@gmail.com"
+
+                val emailIntent = Intent(Intent.ACTION_VIEW)
+                emailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                emailIntent.setData(Uri.parse(emailAddress))
+
+                action(
+                    KmpAndroid.applicationContext.packageManager.resolveActivity(
+                        emailIntent,
+                        0
+                    ) != null
+                )
+            }
+        }
+
         actual fun sendEmailToAddress(address: String) {
             KmpMainThread.runViaMainThread {
                 try {

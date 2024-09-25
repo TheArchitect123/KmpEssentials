@@ -1,12 +1,19 @@
 package com.architect.kmpessentials.email
 
 import com.architect.kmpessentials.email.delegates.EmailReceipientDelegate
+import com.architect.kmpessentials.internal.ActionBoolParams
 import com.architect.kmpessentials.mainThread.KmpMainThread
 import platform.MessageUI.MFMailComposeViewController
 import platform.UIKit.UIApplication
 
 actual class KmpEmail {
     actual companion object {
+        actual fun isEmailSupported(action: ActionBoolParams) {
+            KmpMainThread.runViaMainThread {
+                action(MFMailComposeViewController.canSendMail())
+            }
+        }
+
         actual fun sendEmailToAddress(address: String) {
             KmpMainThread.runViaMainThread {
                 val mailController = MFMailComposeViewController()

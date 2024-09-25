@@ -8,7 +8,7 @@ import java.io.File
 actual class KmpFileSystem {
     actual companion object {
         actual fun getAppDirectory(): String {
-            return KmpAppInfo.packageInfo.applicationInfo.dataDir
+            return KmpAppInfo.packageInfo.applicationInfo?.dataDir ?: ""
         }
 
         actual fun getTempCacheDirectory(): String {
