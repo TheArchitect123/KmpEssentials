@@ -26,8 +26,8 @@ actual class KmpPrinting {
             KmpMainThread.runViaMainThread {
                 val printFile = File(path)
                 if (isPrintingSupported() && printFile.exists()) {
-                    PrintHelper(KmpAndroid.applicationContext).also {
-                        it.printBitmap("", Uri.fromFile(printFile))
+                    PrintHelper(KmpAndroid.clientAppContext).also {
+                        it.printBitmap(printFile.name, Uri.fromFile(printFile))
                     }
                 }
             }
@@ -45,7 +45,7 @@ actual class KmpPrinting {
 
                 val htmlFile = File(path)
                 webView.createPrintDocumentAdapter(htmlFile.name)
-                printerManager.print("", webView.createPrintDocumentAdapter(htmlFile.name), null)
+                printerManager.print(htmlFile.name, webView.createPrintDocumentAdapter(htmlFile.name), null)
             }
         }
     }
