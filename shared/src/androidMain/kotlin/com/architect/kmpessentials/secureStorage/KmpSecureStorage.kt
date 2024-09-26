@@ -1,11 +1,16 @@
 package com.architect.kmpessentials.secureStorage
 
+import android.app.Application
 import com.architect.kmpessentials.KmpAndroid
 import com.liftric.kvault.KVault
 
 actual class KmpSecureStorage {
     actual companion object {
-        private val keyVault: KVault = KVault(KmpAndroid.applicationContext)
+        private var droidPreferenceName: String? = null
+        private val keyVault by lazy {
+            KVault(KmpAndroid.applicationContext, droidPreferenceName)
+        }
+
         actual fun clearEntireStore() {
             keyVault.clear()
         }
@@ -32,6 +37,10 @@ actual class KmpSecureStorage {
             return keyVault.int(key) ?: 0
         }
 
+        actual fun getLongFromKey(key: String): Long {
+            return keyVault.long(key) ?: 0
+        }
+
         actual fun getFloatFromKey(key: String): Float {
             return keyVault.float(key) ?: 0f
         }
@@ -40,10 +49,9 @@ actual class KmpSecureStorage {
             return keyVault.bool(key) ?: false
         }
 
-        actual fun configureSecurityForiOS(serviceName: String, accessGroup: String) {
-            TODO("This method is only used for iOS. DO NOT USE FOR ANDROID")
+        fun configureDroidPreferenceFileName(preferenceFileName: String) {
+            droidPreferenceName = preferenceFileName
         }
-
     }
 }
 

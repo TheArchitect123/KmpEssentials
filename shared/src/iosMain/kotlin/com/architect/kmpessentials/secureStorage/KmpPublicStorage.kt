@@ -2,7 +2,7 @@ package com.architect.kmpessentials.secureStorage
 
 import platform.Foundation.NSUserDefaults
 
-actual class KmpPublicStorage{
+actual class KmpPublicStorage {
     actual companion object {
         actual fun clearEntireStore() {
         }
@@ -24,6 +24,10 @@ actual class KmpPublicStorage{
 
         actual fun getStringFromKey(key: String): String {
             return NSUserDefaults.standardUserDefaults.stringForKey(key) ?: ""
+        }
+
+        actual fun getLongFromKey(key: String): Long {
+            return NSUserDefaults.standardUserDefaults.integerForKey(key)
         }
 
         actual fun getIntFromKey(key: String): Int {

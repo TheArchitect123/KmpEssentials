@@ -26,15 +26,17 @@ class KmpAndroid {
         internal val sensorManagerObserver = SensorObserver()
         internal var guserDisabledPermission: DefaultAction? = null
 
-        fun initializeApp(
-            context: FragmentActivity,
-            userDisabledPermission: DefaultAction? = null
-        ) {
-            clientAppContext = context
-            guserDisabledPermission = userDisabledPermission
+        fun getCurrentActivityContext(): FragmentActivity {
+            return clientAppContext
+        }
 
+        fun getCurrentApplicationContext(): Application {
+            return applicationContext
+        }
+
+        fun preRegisterApplicationContext(appContext: Application) {
             if (!hasRegistered) {
-                applicationContext = clientAppContext.application
+                applicationContext = appContext
                 if (Build.VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) { // battery services require Lolliop and above to work
                     KmpBattery.initializeBatteryService()
                 }
@@ -42,6 +44,17 @@ class KmpAndroid {
                 applicationContext.registerActivityLifecycleCallbacks(ActivityLifecycleObserver())
                 hasRegistered = true
             }
+        }
+
+        fun initializeApp(
+            context: FragmentActivity,
+            userDisabledPermission: DefaultAction? = null
+        ) {
+            clientAppContext = context
+            guserDisabledPermission = userDisabledPermission
+
+            // register application
+            preRegisterApplicationContext(context.application)
 
             registerAllContracts()
         }

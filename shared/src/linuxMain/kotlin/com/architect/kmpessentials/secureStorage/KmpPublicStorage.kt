@@ -10,6 +10,10 @@ actual class KmpPublicStorage {
 
         }
 
+        actual fun getLongFromKey(key: String): Long {
+            TODO()
+        }
+
         actual fun <TData> persistData(key: String, item: TData) {
 
         }

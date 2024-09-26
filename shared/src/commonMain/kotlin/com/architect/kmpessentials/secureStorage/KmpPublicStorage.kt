@@ -13,6 +13,7 @@ expect class KmpPublicStorage {
 
         fun getStringFromKey(key: String): String
         fun getIntFromKey(key: String): Int
+        fun getLongFromKey(key: String): Long
         fun getFloatFromKey(key: String): Float
         fun getBooleanFromKey(key: String): Boolean
     }

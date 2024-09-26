@@ -10,6 +10,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.FragmentActivity
 import com.architect.kmpessentials.KmpAndroid
 import com.architect.kmpessentials.printing.KmpPrinting
+import com.architect.kmpessentials.secureStorage.KmpSecureStorage
 import com.architect.testclient.Greeting
 
 class MainActivity : FragmentActivity() {
@@ -18,7 +19,7 @@ class MainActivity : FragmentActivity() {
 
         KmpAndroid.initializeApp(this)
 
-        KmpPrinting.printDocumentWithPath("https://example-files.online-convert.com/document/pdf/example.pdf")
+        KmpSecureStorage.configureDroidPreferenceFileName("hello")
         setContent {
             MyApplicationTheme {
                 Surface(

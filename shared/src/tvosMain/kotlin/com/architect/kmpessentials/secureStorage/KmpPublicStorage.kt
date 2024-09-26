@@ -14,6 +14,10 @@ actual class KmpPublicStorage {
 
         }
 
+        actual fun getLongFromKey(key: String): Long {
+            TODO()
+        }
+
         actual fun getStringFromKey(key: String): String {
             TODO()
         }

@@ -31,6 +31,10 @@ actual class KmpPublicStorage {
             return sharedPreference.getString(key, "") ?: ""
         }
 
+        actual fun getLongFromKey(key: String): Long {
+            return sharedPreference.getLong(key, 0)
+        }
+
         actual fun getIntFromKey(key: String): Int {
             return sharedPreference.getInt(key, 0)
         }

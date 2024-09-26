@@ -2,10 +2,6 @@ package com.architect.kmpessentials.secureStorage
 
 actual class KmpSecureStorage {
     actual companion object {
-        actual fun configureSecurityForiOS(serviceName: String, accessGroup: String) {
-
-        }
-
         actual fun clearEntireStore() {
 
         }
@@ -23,6 +19,9 @@ actual class KmpSecureStorage {
         }
 
         actual fun getIntFromKey(key: String): Int {
+            TODO()
+        }
+        actual fun getLongFromKey(key: String): Long {
             TODO()
         }
 

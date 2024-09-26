@@ -29,6 +29,10 @@ actual class KmpPublicStorage {
             return NSUserDefaults.standardUserDefaults.stringForKey(key) ?: ""
         }
 
+        actual fun getLongFromKey(key: String): Long {
+            return NSUserDefaults.standardUserDefaults.integerForKey(key).toLong()
+        }
+
         actual fun getIntFromKey(key: String): Int {
             return NSUserDefaults.standardUserDefaults.integerForKey(key).toInt()
         }

@@ -39,7 +39,7 @@ actual class KmpPrinting {
 
         actual fun printDocumentWithPath(path: String) {
             var pathFormat = path
-            if(path.endsWith(FileExtensions.PDF) && path.startsWith("https")){
+            if(path.startsWith("https")){
                 pathFormat = "https://docs.google.com/viewer?url=$path"
             }
 

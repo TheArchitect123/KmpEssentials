@@ -23,6 +23,10 @@ actual class KmpSecureStorage {
             }
         }
 
+        actual fun getLongFromKey(key: String): Long {
+            return keyVault.long(key) ?: 0
+        }
+
         actual fun getStringFromKey(key: String): String {
             return keyVault.string(key) ?: ""
         }
@@ -39,7 +43,7 @@ actual class KmpSecureStorage {
             return keyVault.bool(key) ?: false
         }
 
-        actual fun configureSecurityForiOS(serviceName: String, accessGroup: String) {
+        fun configureSecurityForiOS(serviceName: String, accessGroup: String) {
             keyVault = KVault(serviceName, accessGroup)
         }
 

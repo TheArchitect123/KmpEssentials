@@ -39,7 +39,11 @@ actual class KmpSecureStorage {
             return keyVault.bool(key) ?: false
         }
 
-        actual fun configureSecurityForiOS(serviceName: String, accessGroup: String) {
+        actual fun getLongFromKey(key: String): Long {
+            TODO()
+        }
+
+        fun configureSecurityForWatchOS(serviceName: String, accessGroup: String) {
             keyVault = KeychainManager(serviceName, accessGroup)
         }
     }
