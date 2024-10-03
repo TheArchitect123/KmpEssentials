@@ -11,10 +11,11 @@ expect class KmpPublicStorage {
         fun deleteDataForKey(key: String)
         fun <TData> persistData(key: String, item: TData)
 
-        fun getStringFromKey(key: String): String
-        fun getIntFromKey(key: String): Int
-        fun getLongFromKey(key: String): Long
-        fun getFloatFromKey(key: String): Float
-        fun getBooleanFromKey(key: String): Boolean
+        fun getStringFromKey(key: String): String?
+        fun getIntFromKey(key: String): Int?
+        fun getLongFromKey(key: String): Long?
+        fun getFloatFromKey(key: String): Float?
+        fun getDoubleFromKey(key: String): Double?
+        fun getBooleanFromKey(key: String): Boolean?
     }
 }

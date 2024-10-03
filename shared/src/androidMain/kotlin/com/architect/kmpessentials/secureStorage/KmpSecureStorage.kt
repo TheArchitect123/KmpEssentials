@@ -26,27 +26,32 @@ actual class KmpSecureStorage {
                 is Boolean -> keyVault.set(key, item)
                 is String -> keyVault.set(key, item)
                 is Long -> keyVault.set(key, item)
+                is Int -> keyVault.set(key, item)
             }
         }
 
-        actual fun getStringFromKey(key: String): String {
-            return keyVault.string(key) ?: ""
+        actual fun getStringFromKey(key: String): String? {
+            return keyVault.string(key)
         }
 
-        actual fun getIntFromKey(key: String): Int {
-            return keyVault.int(key) ?: 0
+        actual fun getIntFromKey(key: String): Int? {
+            return keyVault.int(key)
         }
 
-        actual fun getLongFromKey(key: String): Long {
-            return keyVault.long(key) ?: 0
+        actual fun getLongFromKey(key: String): Long? {
+            return keyVault.long(key)
         }
 
-        actual fun getFloatFromKey(key: String): Float {
-            return keyVault.float(key) ?: 0f
+        actual fun getFloatFromKey(key: String): Float? {
+            return keyVault.float(key)
         }
 
-        actual fun getBooleanFromKey(key: String): Boolean {
-            return keyVault.bool(key) ?: false
+        actual fun getBooleanFromKey(key: String): Boolean? {
+            return keyVault.bool(key)
+        }
+
+        actual fun getDoubleFromKey(key: String): Double? {
+            return keyVault.double(key)
         }
 
         fun configureDroidPreferenceFileName(preferenceFileName: String) {

@@ -37,6 +37,7 @@ android {
 }
 
 dependencies {
+    implementation("com.jsoizo:kotlin-csv-jvm:1.10.0") // for JVM platform
     implementation("androidx.fragment:fragment:1.8.3") // latest package
 
     implementation(projects.kmpEssentials)

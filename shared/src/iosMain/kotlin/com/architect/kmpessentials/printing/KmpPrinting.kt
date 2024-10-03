@@ -1,5 +1,7 @@
 package com.architect.kmpessentials.printing
 
+import com.architect.kmpessentials.logging.KmpLogging
+import com.architect.kmpessentials.logging.constants.ErrorCodes
 import com.architect.kmpessentials.mainThread.KmpMainThread
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -48,6 +50,9 @@ actual class KmpPrinting {
                             printingController.presentAnimated(true, null)
                         }
                     }
+                }
+                else {
+                    KmpLogging.writeErrorWithCode(ErrorCodes.HARDWARE_SPECS_NOT_MET)
                 }
             }
         }

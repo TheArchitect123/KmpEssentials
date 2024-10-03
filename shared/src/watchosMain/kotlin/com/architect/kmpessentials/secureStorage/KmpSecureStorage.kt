@@ -23,24 +23,28 @@ actual class KmpSecureStorage {
             }
         }
 
-        actual fun getStringFromKey(key: String): String {
-            return keyVault.string(key) ?: ""
+        actual fun getStringFromKey(key: String): String? {
+            return keyVault.string(key)
         }
 
-        actual fun getIntFromKey(key: String): Int {
-            return keyVault.int(key) ?: 0
+        actual fun getIntFromKey(key: String): Int? {
+            return keyVault.int(key)
         }
 
-        actual fun getFloatFromKey(key: String): Float {
-            return keyVault.float(key) ?: 0f
+        actual fun getFloatFromKey(key: String): Float? {
+            return keyVault.float(key)
         }
 
-        actual fun getBooleanFromKey(key: String): Boolean {
-            return keyVault.bool(key) ?: false
+        actual fun getBooleanFromKey(key: String): Boolean? {
+            return keyVault.bool(key)
         }
 
-        actual fun getLongFromKey(key: String): Long {
-            TODO()
+        actual fun getLongFromKey(key: String): Long? {
+            return keyVault.long(key)
+        }
+
+        actual fun getDoubleFromKey(key: String): Double? {
+            return keyVault.double(key)
         }
 
         fun configureSecurityForWatchOS(serviceName: String, accessGroup: String) {

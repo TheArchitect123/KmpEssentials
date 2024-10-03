@@ -27,26 +27,29 @@ actual class KmpPublicStorage {
             }.apply()
         }
 
-        actual fun getStringFromKey(key: String): String {
-            return sharedPreference.getString(key, "") ?: ""
+        actual fun getStringFromKey(key: String): String? {
+            return sharedPreference.getString(key, "")
         }
 
-        actual fun getLongFromKey(key: String): Long {
+        actual fun getLongFromKey(key: String): Long? {
             return sharedPreference.getLong(key, 0)
         }
 
-        actual fun getIntFromKey(key: String): Int {
+        actual fun getIntFromKey(key: String): Int? {
             return sharedPreference.getInt(key, 0)
         }
 
-        actual fun getFloatFromKey(key: String): Float {
+        actual fun getFloatFromKey(key: String): Float? {
             return sharedPreference.getFloat(key, 0f)
         }
 
-        actual fun getBooleanFromKey(key: String): Boolean {
+        actual fun getBooleanFromKey(key: String): Boolean? {
             return sharedPreference.getBoolean(key, false)
         }
 
+        actual fun getDoubleFromKey(key: String): Double?{
+            return sharedPreference.getFloat(key, 0.0f).toDouble()
+        }
     }
 
 }

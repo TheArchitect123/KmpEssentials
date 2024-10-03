@@ -1,12 +1,13 @@
 package com.architect.kmpessentials.vibration
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Vibrator
 import com.architect.kmpessentials.KmpAndroid
-import com.architect.kmpessentials.permissions.PermissionStatus
-import com.architect.kmpessentials.permissions.PermissionsHelper
+import com.architect.kmpessentials.logging.KmpLogging
+import com.architect.kmpessentials.logging.constants.ErrorCodes
+import com.architect.kmpessentials.permissions.KmpPermissionsManager
+import com.architect.kmpessentials.permissions.Permission
 
 actual class KmpVibration {
     actual companion object {
@@ -16,15 +17,23 @@ actual class KmpVibration {
 
         @SuppressLint("MissingPermission")
         actual fun startVibrating(durationMs: Long) {
-            if (PermissionsHelper.checkSelfPermission(Manifest.permission.VIBRATE) == PermissionStatus.Granted) {
-                vibrator.vibrate(durationMs)
+            KmpPermissionsManager.isPermissionGranted(Permission.Vibrator) {
+                if (it) {
+                    vibrator.vibrate(durationMs)
+                } else {
+                    KmpLogging.writeErrorWithCode(ErrorCodes.MISSING_PERMISSION_CONFIGURATION)
+                }
             }
         }
 
         @SuppressLint("MissingPermission")
         actual fun stopVibrating() {
-            if (PermissionsHelper.checkSelfPermission(Manifest.permission.VIBRATE) == PermissionStatus.Granted) {
-                vibrator.cancel()
+            KmpPermissionsManager.isPermissionGranted(Permission.Vibrator) {
+                if (it) {
+                    vibrator.cancel()
+                } else {
+                    KmpLogging.writeErrorWithCode(ErrorCodes.MISSING_PERMISSION_CONFIGURATION)
+                }
             }
         }
     }

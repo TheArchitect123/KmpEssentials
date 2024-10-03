@@ -7,6 +7,8 @@ import android.provider.MediaStore
 import androidx.activity.result.ActivityResultLauncher
 import com.architect.kmpessentials.KmpAndroid
 import com.architect.kmpessentials.internal.ActionStringParams
+import com.architect.kmpessentials.logging.KmpLogging
+import com.architect.kmpessentials.logging.constants.ErrorCodes
 import com.architect.kmpessentials.mainThread.KmpMainThread
 import com.architect.kmpessentials.permissions.KmpPermissionsManager
 import com.architect.kmpessentials.permissions.Permission
@@ -25,19 +27,17 @@ actual class KmpCamera {
         }
 
         actual fun capturePhoto(actionResult: ActionStringParams) {
-            KmpMainThread.runViaMainThread {
-                this.actionResult = actionResult
-                KmpPermissionsManager.isPermissionGranted(Permission.Camera) {
-                    if (it) {
-                        resultLauncher.launch(
-                            FilePicker.Builder(KmpAndroid.clientAppContext)
-                                .imageCaptureBuild(ImageCaptureConfig(isUseRearCamera = true))
-                        )
-                    } else {
-                        // check if manifest contains camera permission
-                        KmpPermissionsManager.requestPermission(Permission.Camera) {
-                            capturePhoto(actionResult)
-                        }
+            this.actionResult = actionResult
+            KmpPermissionsManager.isPermissionGranted(Permission.Camera) {
+                if (it) {
+                    resultLauncher.launch(
+                        FilePicker.Builder(KmpAndroid.clientAppContext)
+                            .imageCaptureBuild(ImageCaptureConfig(isUseRearCamera = true))
+                    )
+                } else {
+                    KmpLogging.writeErrorWithCode(ErrorCodes.PERMISSION_NOT_GRANTED_REQUESTING_NOW)
+                    KmpPermissionsManager.requestPermission(Permission.Camera) {
+                        capturePhoto(actionResult)
                     }
                 }
             }
@@ -53,6 +53,7 @@ actual class KmpCamera {
                                 .videoCaptureBuild(VideoCaptureConfig(isHighQuality = true))
                         )
                     } else {
+                        KmpLogging.writeErrorWithCode(ErrorCodes.PERMISSION_NOT_GRANTED_REQUESTING_NOW)
                         KmpPermissionsManager.requestPermission(Permission.Camera) {
                             captureVideo(actionResult)
                         }

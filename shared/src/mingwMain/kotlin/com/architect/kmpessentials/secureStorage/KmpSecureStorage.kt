@@ -14,22 +14,26 @@ actual class KmpSecureStorage {
 
         }
 
-        actual fun getStringFromKey(key: String): String {
+        actual fun getStringFromKey(key: String): String? {
             TODO()
         }
 
-        actual fun getIntFromKey(key: String): Int {
+        actual fun getIntFromKey(key: String): Int? {
             TODO()
         }
-        actual fun getLongFromKey(key: String): Long {
-            TODO()
-        }
-
-        actual fun getFloatFromKey(key: String): Float {
+        actual fun getLongFromKey(key: String): Long? {
             TODO()
         }
 
-        actual fun getBooleanFromKey(key: String): Boolean {
+        actual fun getFloatFromKey(key: String): Float? {
+            TODO()
+        }
+
+        actual fun getDoubleFromKey(key: String): Double? {
+            TODO()
+        }
+
+        actual fun getBooleanFromKey(key: String): Boolean? {
             TODO()
         }
     }

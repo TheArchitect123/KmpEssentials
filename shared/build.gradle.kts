@@ -67,6 +67,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
+                implementation("co.touchlab:kermit:2.0.4")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
@@ -181,7 +182,7 @@ afterEvaluate {
         coordinates(
             groupId = "io.github.thearchitect123",
             artifactId = "kmpEssentials",
-            version = "1.0.4"
+            version = "1.1.4"
         )
 
         // Configure POM metadata for the published artifact

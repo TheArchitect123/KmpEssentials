@@ -25,24 +25,28 @@ actual class KmpPublicStorage {
             }
         }
 
-        actual fun getStringFromKey(key: String): String {
-            return NSUserDefaults.standardUserDefaults.stringForKey(key) ?: ""
+        actual fun getStringFromKey(key: String): String? {
+            return NSUserDefaults.standardUserDefaults.stringForKey(key)
         }
 
-        actual fun getLongFromKey(key: String): Long {
+        actual fun getLongFromKey(key: String): Long? {
             return NSUserDefaults.standardUserDefaults.integerForKey(key).toLong()
         }
 
-        actual fun getIntFromKey(key: String): Int {
+        actual fun getIntFromKey(key: String): Int? {
             return NSUserDefaults.standardUserDefaults.integerForKey(key).toInt()
         }
 
-        actual fun getFloatFromKey(key: String): Float {
+        actual fun getFloatFromKey(key: String): Float? {
             return NSUserDefaults.standardUserDefaults.floatForKey(key)
         }
 
-        actual fun getBooleanFromKey(key: String): Boolean {
+        actual fun getBooleanFromKey(key: String): Boolean? {
             return NSUserDefaults.standardUserDefaults.boolForKey(key)
+        }
+
+        actual fun getDoubleFromKey(key: String): Double? {
+            return NSUserDefaults.standardUserDefaults.doubleForKey(key)
         }
     }
 }

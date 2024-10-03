@@ -8,6 +8,8 @@ import com.architect.kmpessentials.KmpAndroid
 import com.architect.kmpessentials.aliases.DefaultAction
 import com.architect.kmpessentials.internal.ActionBoolParams
 import com.architect.kmpessentials.internal.ActionNoParams
+import com.architect.kmpessentials.logging.KmpLogging
+import com.architect.kmpessentials.logging.constants.ErrorCodes
 import com.architect.kmpessentials.mainThread.KmpMainThread
 import com.architect.kmpessentials.permissions.services.PermissionsTransformer
 
@@ -25,8 +27,7 @@ actual class KmpPermissionsManager {
                             PermissionsTransformer.getPermissionFromEnum(permission)
                         ) == PackageManager.PERMISSION_GRANTED
                     )
-                }
-                else {
+                } else {
                     actionResult(true)
                 }
             }
@@ -77,16 +78,21 @@ actual class KmpPermissionsManager {
                 successAction = runAction
                 if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
                     val cpermission = PermissionsTransformer.getPermissionsFromEnum(permission)
-                    val deniedPermissions = cpermission.filter {
-                        KmpAndroid.clientAppContext.checkSelfPermission(
-                            it,
-                        ) != PackageManager.PERMISSION_GRANTED
-                    }.toTypedArray()
+                    if (cpermission.isNotEmpty()) {
+                        val deniedPermissions = cpermission.filter {
+                            KmpAndroid.clientAppContext.checkSelfPermission(
+                                it,
+                            ) != PackageManager.PERMISSION_GRANTED
+                        }.toTypedArray()
 
-                    if (deniedPermissions.isNotEmpty()) {
-                        resultManyLauncher.launch(deniedPermissions)
-                    } else {
-                        successAction()
+                        if (deniedPermissions.isNotEmpty()) {
+                            resultManyLauncher.launch(deniedPermissions)
+                        } else {
+                            successAction()
+                        }
+                    }
+                    else {
+                        KmpLogging.writeErrorWithCode(ErrorCodes.MULTIPLE_PERMISSIONS_NOT_FOUND)
                     }
                 } else {
                     successAction()

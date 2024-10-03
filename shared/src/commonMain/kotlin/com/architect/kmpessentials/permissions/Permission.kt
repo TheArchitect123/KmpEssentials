@@ -12,6 +12,9 @@ enum class Permission {
     CoarseLocation,
     Sms,
     Microphone,
-    PushNotifications
+    PushNotifications,
+    Biometrics,
+    Contacts,
+    Vibrator
 }
 

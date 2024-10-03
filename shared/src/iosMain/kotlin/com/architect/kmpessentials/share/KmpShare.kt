@@ -1,5 +1,7 @@
 package com.architect.kmpessentials.share
 
+import com.architect.kmpessentials.logging.KmpLogging
+import com.architect.kmpessentials.logging.constants.ErrorCodes
 import com.architect.kmpessentials.mainThread.KmpMainThread
 import platform.Foundation.NSData
 import platform.Foundation.NSFileManager
@@ -26,6 +28,9 @@ actual class KmpShare {
                     UIApplication.sharedApplication.keyWindow?.rootViewController()
                         ?.presentViewController(activityController, true, null)
                 }
+            }
+            else {
+                KmpLogging.writeErrorWithCode(ErrorCodes.FILE_NOT_FOUND)
             }
         }
     }

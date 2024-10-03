@@ -17,7 +17,11 @@ internal object PermissionsTransformer {
             } else {
                 ""
             }
+
             Permission.ExternalStorage -> Manifest.permission.READ_EXTERNAL_STORAGE
+            Permission.Biometrics -> "android.permission.USE_CREDENTIALS"
+            Permission.Contacts -> Manifest.permission.READ_CONTACTS
+            Permission.Vibrator -> Manifest.permission.VIBRATE
             else -> ""
         }
     }

@@ -6,7 +6,6 @@ import android.os.Build
 import android.os.Build.VERSION_CODES
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import com.architect.kmpessentials.aliases.DefaultAction
 import com.architect.kmpessentials.battery.KmpBattery

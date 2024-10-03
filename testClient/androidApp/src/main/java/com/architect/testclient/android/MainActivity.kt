@@ -9,9 +9,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.FragmentActivity
 import com.architect.kmpessentials.KmpAndroid
+import com.architect.kmpessentials.flashlight.KmpFlashlight
 import com.architect.kmpessentials.printing.KmpPrinting
 import com.architect.kmpessentials.secureStorage.KmpSecureStorage
 import com.architect.testclient.Greeting
+import java.io.FileOutputStream
 
 class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +33,19 @@ class MainActivity : FragmentActivity() {
             }
         }
     }
+}
+
+fun writeCsv() {
+    val row1 = listOf("a", "b", "c")
+    val row2 = listOf("d", "e", "f")
+
+    csvWriter().open("test.csv") {
+        writeRow(row1)
+        writeRow(row2)
+        writeRow("g", "h", "i")
+        writeRows(listOf(row1, row2))
+    }
+
 }
 
 @Composable

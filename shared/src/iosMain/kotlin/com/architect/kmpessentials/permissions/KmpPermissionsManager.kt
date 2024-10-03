@@ -2,6 +2,8 @@ package com.architect.kmpessentials.permissions
 
 import com.architect.kmpessentials.internal.ActionBoolParams
 import com.architect.kmpessentials.internal.ActionNoParams
+import com.architect.kmpessentials.logging.KmpLogging
+import com.architect.kmpessentials.logging.constants.ErrorCodes
 import com.architect.kmpessentials.mainThread.KmpMainThread
 import com.architect.kmpessentials.permissions.delegates.LocationPermissionsDelegate
 import platform.AVFAudio.AVAudioSession
@@ -11,6 +13,9 @@ import platform.AVFoundation.AVCaptureDevice
 import platform.AVFoundation.AVMediaTypeVideo
 import platform.AVFoundation.authorizationStatusForMediaType
 import platform.AVFoundation.requestAccessForMediaType
+import platform.Contacts.CNAuthorizationStatusAuthorized
+import platform.Contacts.CNContactStore
+import platform.Contacts.CNEntityType
 import platform.CoreLocation.CLLocationManager
 import platform.Photos.PHAuthorizationStatusAuthorized
 import platform.Photos.PHPhotoLibrary
@@ -37,33 +42,53 @@ actual class KmpPermissionsManager {
                         SFSpeechRecognizer.requestAuthorization {
                             if (it == SFSpeechRecognizerAuthorizationStatus.SFSpeechRecognizerAuthorizationStatusAuthorized) {
                                 runAction()
+                            } else {
+                                KmpLogging.writeErrorWithCode(ErrorCodes.RUNTIME_PERMISSION_NOT_GRANTED_REFUSED_BY_USER)
                             }
                         }
                     }
 
                     Permission.Camera -> {
                         AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo) {
-                            runAction()
+                            if (it) {
+                                runAction()
+                            } else {
+                                KmpLogging.writeErrorWithCode(ErrorCodes.RUNTIME_PERMISSION_NOT_GRANTED_REFUSED_BY_USER)
+                            }
                         }
                     }
 
                     Permission.PushNotifications -> {
                         UNUserNotificationCenter.currentNotificationCenter()
                             .requestAuthorizationWithOptions(
-                                    UNAuthorizationOptionAlert or
-                                    UNAuthorizationOptionBadge or
-                                    UNAuthorizationOptionProvisional,
+                                UNAuthorizationOptionAlert or
+                                        UNAuthorizationOptionBadge or
+                                        UNAuthorizationOptionProvisional,
                             ) { res, error ->
                                 if (res) {
                                     runAction()
+                                } else {
+                                    KmpLogging.writeErrorWithCode(ErrorCodes.RUNTIME_PERMISSION_NOT_GRANTED_REFUSED_BY_USER)
                                 }
                             }
+                    }
+
+                    Permission.Contacts -> {
+                        CNContactStore().requestAccessForEntityType(CNEntityType.CNEntityTypeContacts) { result, error ->
+                            if (result) {
+                                runAction()
+                            } else {
+                                KmpLogging.writeErrorWithCode(ErrorCodes.RUNTIME_PERMISSION_NOT_GRANTED_REFUSED_BY_USER)
+                            }
+                        }
                     }
 
                     Permission.Microphone -> {
                         AVAudioSession.sharedInstance().requestRecordPermission {
                             if (it) {
                                 runAction()
+                            } else {
+                                KmpLogging.writeErrorWithCode(ErrorCodes.RUNTIME_PERMISSION_NOT_GRANTED_REFUSED_BY_USER)
                             }
                         }
                     }
@@ -72,7 +97,7 @@ actual class KmpPermissionsManager {
                         PHPhotoLibrary.requestAuthorization {
                             when (it) {
                                 PHAuthorizationStatusAuthorized -> runAction()
-                                else -> print("Permission has not been enabled")
+                                else -> KmpLogging.writeErrorWithCode(ErrorCodes.RUNTIME_PERMISSION_NOT_GRANTED_REFUSED_BY_USER)
                             }
                         }
                     }
@@ -124,6 +149,10 @@ actual class KmpPermissionsManager {
                             Permission.Camera -> AVCaptureDevice.authorizationStatusForMediaType(
                                 AVMediaTypeVideo
                             ) == AVAuthorizationStatusAuthorized
+
+                            Permission.Contacts -> CNContactStore.authorizationStatusForEntityType(
+                                CNEntityType.CNEntityTypeContacts
+                            ) == CNAuthorizationStatusAuthorized
 
                             Permission.Speech -> SFSpeechRecognizer.authorizationStatus() == SFSpeechRecognizerAuthorizationStatus.SFSpeechRecognizerAuthorizationStatusAuthorized
                             Permission.PhotoGallery -> PHPhotoLibrary.authorizationStatus() == PHAuthorizationStatusAuthorized
