@@ -34,10 +34,13 @@ actual class KmpShare {
         actual fun shareTextWithAnyApp(text: String, optionalTitle: String) {
             KmpMainThread.runViaMainThread {
                 try {
+                    val titleOfIntent = if (optionalTitle.isNotBlank()) optionalTitle else text
                     val shareIntent =
                         ShareCompat.IntentBuilder(KmpAndroid.applicationContext)
                             .setType(Mimes.plainText)
-                            .setText(text).createChooserIntent()
+                            .setChooserTitle(titleOfIntent)
+                            .setText(text)
+                            .createChooserIntent()
 
                     shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
@@ -61,6 +64,7 @@ actual class KmpShare {
                                 File(filePath)
                             )
                         )
+                        .setChooserTitle(optionalTitle)
                         .setType(processedFileType)
                         .createChooserIntent()
 
