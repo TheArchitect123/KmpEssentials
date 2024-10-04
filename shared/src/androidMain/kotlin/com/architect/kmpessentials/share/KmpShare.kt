@@ -1,80 +1,88 @@
 package com.architect.kmpessentials.share
 
 import android.content.Intent
+import androidx.core.app.ShareCompat
+import androidx.core.content.FileProvider
 import com.architect.kmpessentials.KmpAndroid
 import com.architect.kmpessentials.internal.Mimes
+import com.architect.kmpessentials.logging.KmpLogging
+import com.architect.kmpessentials.logging.constants.ErrorTags
 import com.architect.kmpessentials.mainThread.KmpMainThread
 import java.io.File
 
 actual class KmpShare {
     actual companion object {
-        private var fileType: String = ""
-        private var fileName: String = ""
         private var fileFlags = mutableListOf<Int>()
+        private var fileType = ""
 
-        fun setFileType(cfileType: String) {
-            this.fileType = cfileType
+        fun setFileType(cFileType: String): Companion {
+            fileType = cFileType
+            return this
         }
 
-        fun setFileName(cfileName: String) {
-            this.fileName = cfileName
-        }
-
-        fun addOptionalFlags(cfileFlags: List<Int>) {
+        fun addOptionalFlags(cfileFlags: List<Int>): Companion {
             this.fileFlags.addAll(cfileFlags)
+
+            return this
         }
 
-        fun resetOptionalFlags() {
+        fun resetOptionalFlags(): Companion {
             fileFlags.clear()
+            return this
         }
 
         actual fun shareTextWithAnyApp(text: String, optionalTitle: String) {
             KmpMainThread.runViaMainThread {
-                val intent = Intent(Intent.ACTION_SEND).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                }
-                intent.setType(Mimes.plainText)
-                intent.putExtra(Intent.EXTRA_TEXT, text)
+                try {
+                    val shareIntent =
+                        ShareCompat.IntentBuilder(KmpAndroid.applicationContext)
+                            .setType(Mimes.plainText)
+                            .setText(text).createChooserIntent()
 
-                KmpAndroid.applicationContext.startActivity(
-                    Intent.createChooser(
-                        intent,
-                        optionalTitle
-                    )
-                )
+                    shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+                    KmpAndroid.applicationContext.startActivity(shareIntent)
+                } catch (ex: Exception) {
+                    KmpLogging.writeException(ErrorTags.GENERAL_ERROR_TAG, ex)
+                }
             }
         }
 
         actual fun shareFileWithAnyApp(filePath: String, optionalTitle: String) {
             KmpMainThread.runViaMainThread {
-                val fileNameToUse = if (fileName.isNotBlank()) fileName else File(filePath).name
-                val fileTypeToUse = if (fileType.isNotBlank()) fileType else Mimes.plainText
-                val intent = Intent(Intent.ACTION_SEND).apply {
-                    putExtra(Intent.EXTRA_STREAM, filePath)
-                    putExtra(Intent.EXTRA_TITLE, fileNameToUse)
-                    type = fileTypeToUse
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                }
+                try {
+                    val processedFileType = if (fileType.isNotBlank()) fileType else Mimes.plainText
+                    // copy the file into a directory that's accessible to all applications
+                    val shareIntent = ShareCompat.IntentBuilder(KmpAndroid.applicationContext)
+                        .addStream(
+                            FileProvider.getUriForFile(
+                                KmpAndroid.applicationContext,
+                                KmpAndroid.applicationContext.packageName + ".fileprovider",
+                                File(filePath)
+                            )
+                        )
+                        .setType(processedFileType)
+                        .createChooserIntent()
 
-                // process file flags & add to the intent
-                fileFlags.forEach {
-                    intent.addFlags(it)
-                }
+                    shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
-                resetAllConfiguration()
-                KmpAndroid.applicationContext.startActivity(
-                    Intent.createChooser(
-                        intent,
-                        optionalTitle
-                    )
-                )
+                    // process file flags & add to the intent
+                    fileFlags.forEach {
+                        shareIntent.addFlags(it)
+                    }
+
+                    resetAllConfiguration()
+                    KmpAndroid.applicationContext.startActivity(shareIntent)
+                } catch (ex: Exception) {
+                    KmpLogging.writeException(ErrorTags.GENERAL_ERROR_TAG, ex)
+                }
             }
         }
 
         private fun resetAllConfiguration() {
             fileFlags.clear()
             fileType = ""
-            fileName = ""
         }
     }
 }

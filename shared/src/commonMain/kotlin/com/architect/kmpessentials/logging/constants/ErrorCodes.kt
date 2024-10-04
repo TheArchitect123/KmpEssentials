@@ -1,6 +1,6 @@
 package com.architect.kmpessentials.logging.constants
 
-object ErrorCodes {
+internal object ErrorCodes {
     const val BACKGROUND_TASK_FAILED = "KMP_001"
     const val MISSING_PERMISSION_CONFIGURATION = "KMP_002"
     const val MULTIPLE_PERMISSIONS_NOT_FOUND = "KMP_003"
@@ -10,3 +10,4 @@ object ErrorCodes {
     const val FILE_NOT_FOUND = "KMP_007"
     const val HARDWARE_SPECS_NOT_MET = "KMP_008"
 }
+
