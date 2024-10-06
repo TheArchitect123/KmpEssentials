@@ -1,7 +1,12 @@
 package com.architect.kmpessentials.share
 
 expect class KmpShare {
-    companion object{
+    companion object {
+        /**
+         * Configure file type for the shared dialog
+         * */
+        fun setFileType(cFileType: String): Companion
+
         /**
          * Allows users to choose which app to share the text to
          * */

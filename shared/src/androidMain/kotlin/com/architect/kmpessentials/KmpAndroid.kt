@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.os.Build
 import android.os.Build.VERSION_CODES
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.FragmentActivity
@@ -19,6 +20,17 @@ import com.nareshchocha.filepickerlibrary.utilities.appConst.Const
 
 class KmpAndroid {
     companion object {
+        internal var customBackAction: DefaultAction? = null
+        internal val backButtonCallBack = object : OnBackPressedCallback(false) {
+            override fun handleOnBackPressed() {
+                if (customBackAction != null) {
+                    customBackAction!!.invoke()
+                    customBackAction = null
+                }
+            }
+        }
+
+
         private var hasRegistered: Boolean = false
         internal lateinit var applicationContext: Application
         internal lateinit var clientAppContext: FragmentActivity
@@ -56,6 +68,12 @@ class KmpAndroid {
             preRegisterApplicationContext(context.application)
 
             registerAllContracts()
+
+            // back button control
+            clientAppContext.onBackPressedDispatcher.addCallback(
+                clientAppContext,
+                backButtonCallBack
+            )
         }
 
         private fun registerAllContracts() {

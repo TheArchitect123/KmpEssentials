@@ -15,7 +15,7 @@ actual class KmpShare {
         private var fileFlags = mutableListOf<Int>()
         private var fileType = ""
 
-        fun setFileType(cFileType: String): Companion {
+        actual fun setFileType(cFileType: String): Companion {
             fileType = cFileType
             return this
         }
