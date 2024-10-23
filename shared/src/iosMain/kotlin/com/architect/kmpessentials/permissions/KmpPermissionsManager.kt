@@ -8,16 +8,20 @@ import com.architect.kmpessentials.mainThread.KmpMainThread
 import com.architect.kmpessentials.permissions.delegates.LocationPermissionsDelegate
 import platform.AVFAudio.AVAudioSession
 import platform.AVFAudio.AVAudioSessionRecordPermissionGranted
+import platform.AVFAudio.AVAudioSessionRecordPermissionUndetermined
 import platform.AVFoundation.AVAuthorizationStatusAuthorized
+import platform.AVFoundation.AVAuthorizationStatusNotDetermined
 import platform.AVFoundation.AVCaptureDevice
 import platform.AVFoundation.AVMediaTypeVideo
 import platform.AVFoundation.authorizationStatusForMediaType
 import platform.AVFoundation.requestAccessForMediaType
 import platform.Contacts.CNAuthorizationStatusAuthorized
+import platform.Contacts.CNAuthorizationStatusNotDetermined
 import platform.Contacts.CNContactStore
 import platform.Contacts.CNEntityType
 import platform.CoreLocation.CLLocationManager
 import platform.Photos.PHAuthorizationStatusAuthorized
+import platform.Photos.PHAuthorizationStatusNotDetermined
 import platform.Photos.PHPhotoLibrary
 import platform.Speech.SFSpeechRecognizer
 import platform.Speech.SFSpeechRecognizerAuthorizationStatus
@@ -27,6 +31,7 @@ import platform.UIKit.isRegisteredForRemoteNotifications
 import platform.UserNotifications.UNAuthorizationOptionAlert
 import platform.UserNotifications.UNAuthorizationOptionBadge
 import platform.UserNotifications.UNAuthorizationOptionProvisional
+import platform.UserNotifications.UNAuthorizationStatusNotDetermined
 import platform.UserNotifications.UNNotificationSettingEnabled
 import platform.UserNotifications.UNUserNotificationCenter
 
@@ -165,6 +170,32 @@ actual class KmpPermissionsManager {
                         }
                     )
                 }
+            }
+        }
+
+        actual fun canShowPromptDialog(permission: Permission, actionResult: ActionBoolParams) {
+            KmpMainThread.runViaMainThread {
+                val status = when (permission) {
+                    Permission.Camera -> AVCaptureDevice.authorizationStatusForMediaType(
+                        AVMediaTypeVideo
+                    ) == AVAuthorizationStatusNotDetermined
+
+                    Permission.Contacts -> CNContactStore.authorizationStatusForEntityType(
+                        CNEntityType.CNEntityTypeContacts
+                    ) == CNAuthorizationStatusNotDetermined
+
+                    Permission.Speech -> SFSpeechRecognizer.authorizationStatus() == SFSpeechRecognizerAuthorizationStatus.SFSpeechRecognizerAuthorizationStatusNotDetermined
+                    Permission.PhotoGallery -> PHPhotoLibrary.authorizationStatus() == PHAuthorizationStatusNotDetermined
+                    Permission.Location -> CLLocationManager().authorizationStatus() == 0
+                    Permission.Microphone -> AVAudioSession.sharedInstance()
+                        .recordPermission() == AVAudioSessionRecordPermissionUndetermined
+
+                    else -> false
+                }
+
+                actionResult(
+                    status
+                )
             }
         }
     }

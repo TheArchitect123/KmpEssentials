@@ -7,6 +7,7 @@ import androidx.work.WorkManager
 import com.architect.kmpessentials.KmpAndroid
 import com.architect.kmpessentials.aliases.DefaultActionAsync
 import com.architect.kmpessentials.backgrounding.requests.LongRunnerJob
+import com.architect.kmpessentials.backgrounding.requests.LongRunnerJobWithoutCancel
 import java.util.UUID
 
 actual class KmpBackgrounding {
@@ -38,6 +39,30 @@ actual class KmpBackgrounding {
             ).setConstraints(constraints.build()).build()
 
             workerJobs.add(singleJob.id)
+            workManager.enqueue(singleJob)
+        }
+
+        actual fun createAndStartWorkerWithoutCancel(options: BackgroundOptions?, action: DefaultActionAsync){
+            val constraints =
+                Constraints.Builder()
+            if (options != null) {
+                if (options.requiresInternet) {
+                    constraints.setRequiredNetworkType(NetworkType.CONNECTED)
+                }
+                if (options.requiresStorage) {
+                    constraints.setRequiresStorageNotLow(true)
+                }
+                if (options.requiresSufficientBattery) {
+                    constraints.setRequiresBatteryNotLow(true)
+                }
+            }
+
+            LongRunnerJobWithoutCancel.mutableTypes.add(action)
+
+            val singleJob = OneTimeWorkRequest.Builder(
+                LongRunnerJobWithoutCancel::class.java
+            ).setConstraints(constraints.build()).build()
+
             workManager.enqueue(singleJob)
         }
 

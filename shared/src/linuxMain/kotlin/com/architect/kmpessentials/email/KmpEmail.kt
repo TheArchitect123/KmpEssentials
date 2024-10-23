@@ -8,11 +8,11 @@ actual class KmpEmail {
 
         }
 
-        actual fun sendEmailToAddress(address: String) {
+        actual fun sendEmailToAddress(address: String, emailSubject : String, emailMessage: String) {
 
         }
 
-        actual fun sendEmailsToCCAddress(address: String, ccAddresses: Array<String>?) {
+        actual fun sendEmailsToCCAddress(address: String, ccAddresses: Array<String>?, emailSubject : String, emailMessage: String) {
 
         }
     }

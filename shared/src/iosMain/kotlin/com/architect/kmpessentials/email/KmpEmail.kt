@@ -14,11 +14,13 @@ actual class KmpEmail {
             }
         }
 
-        actual fun sendEmailToAddress(address: String) {
+        actual fun sendEmailToAddress(address: String, emailSubject : String, emailMessage: String) {
             KmpMainThread.runViaMainThread {
                 val mailController = MFMailComposeViewController()
                 mailController.setToRecipients(arrayListOf(address))
                 mailController.setMailComposeDelegate(EmailReceipientDelegate())
+                mailController.setSubject(emailSubject)
+                mailController.setMessageBody(emailMessage, false)
 
                 UIApplication.sharedApplication.keyWindow?.rootViewController?.presentViewController(
                     mailController,
@@ -29,11 +31,13 @@ actual class KmpEmail {
             }
         }
 
-        actual fun sendEmailsToCCAddress(address: String, ccAddresses: Array<String>?) {
+        actual fun sendEmailsToCCAddress(address: String, ccAddresses: Array<String>?, emailSubject : String, emailMessage: String) {
             KmpMainThread.runViaMainThread {
                 val mailController = MFMailComposeViewController()
                 mailController.setToRecipients(arrayListOf(address, ccAddresses))
                 mailController.setMailComposeDelegate(EmailReceipientDelegate())
+                mailController.setSubject(emailSubject)
+                mailController.setMessageBody(emailMessage, false)
 
                 UIApplication.sharedApplication.keyWindow?.rootViewController?.presentViewController(
                     mailController,

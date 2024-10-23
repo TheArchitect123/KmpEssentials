@@ -21,6 +21,16 @@ actual class KmpBackgrounding {
                 }
         }
 
+        actual fun createAndStartWorkerWithoutCancel(options: BackgroundOptions?, action: DefaultActionAsync){
+            WKApplication.sharedApplication()
+                .scheduleBackgroundRefreshWithPreferredDate(NSDate.now(), null) {
+                    // expiration
+                    GlobalScope.launch {
+                        action()
+                    }
+                }
+        }
+
         actual fun cancelAllRunningWorkers() {
         }
     }

@@ -7,6 +7,12 @@ import com.architect.kmpessentials.permissions.delegates.LocationPermissionsDele
 import kotlinx.cinterop.UnsafeNumber
 import platform.AVFAudio.AVAudioSession
 import platform.AVFAudio.AVAudioSessionRecordPermissionGranted
+import platform.AVFAudio.AVAudioSessionRecordPermissionUndetermined
+import platform.AVFoundation.AVAuthorizationStatusNotDetermined
+import platform.AVFoundation.AVMediaTypeVideo
+import platform.Contacts.CNAuthorizationStatusNotDetermined
+import platform.Contacts.CNContactStore
+import platform.Contacts.CNEntityType
 import platform.CoreLocation.CLLocationManager
 import platform.UserNotifications.UNAuthorizationOptionAlert
 import platform.UserNotifications.UNNotificationSettingEnabled
@@ -76,6 +82,22 @@ actual class KmpPermissionsManager {
                         }
                     )
                 }
+            }
+        }
+
+        actual fun canShowPromptDialog(permission: Permission, actionResult: ActionBoolParams) {
+            KmpMainThread.runViaMainThread {
+                val status = when (permission) {
+                    Permission.Location -> CLLocationManager().authorizationStatus() == 0
+                    Permission.Microphone -> AVAudioSession.sharedInstance()
+                        .recordPermission() == AVAudioSessionRecordPermissionUndetermined
+
+                    else -> false
+                }
+
+                actionResult(
+                    status
+                )
             }
         }
     }

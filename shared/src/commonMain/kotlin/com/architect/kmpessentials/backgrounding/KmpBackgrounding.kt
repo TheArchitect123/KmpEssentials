@@ -15,6 +15,13 @@ expect class KmpBackgrounding {
         fun createAndStartWorker(options: BackgroundOptions? = null, action: DefaultActionAsync)
 
         /**
+         * Use this for running a background worker, that cannot be cancelled
+         * @param options Configure if your worker requires network connectivity, or sufficient battery, etc
+         * @param action your action to invoke in the background
+         * */
+        fun createAndStartWorkerWithoutCancel(options: BackgroundOptions? = null, action: DefaultActionAsync)
+
+        /**
          * Use this for canceling all pending/running workers
          * */
         fun cancelAllRunningWorkers()

@@ -8,12 +8,12 @@ expect class KmpEmail {
         /**
          * Sends an email to a single recipient
          * */
-        fun sendEmailToAddress(address: String)
+        fun sendEmailToAddress(address: String, emailSubject : String = "", emailMessage: String = "")
 
         /**
          * Sends an email to multiple recipients
          * */
-        fun sendEmailsToCCAddress(address: String, ccAddresses: Array<String>? = null)
+        fun sendEmailsToCCAddress(address: String, ccAddresses: Array<String>? = null, emailSubject : String = "", emailMessage: String = "")
 
         /**
          * Checks if email is currently supported on the device.

@@ -22,7 +22,9 @@ actual class KmpShare {
             KmpMainThread.runViaMainThread {
                 val activityController = UIActivityViewController(listOf(text), null)
                 UIApplication.sharedApplication.keyWindow?.rootViewController()
-                    ?.presentViewController(activityController, true, null)
+                    ?.presentViewController(activityController, true) {
+                        com.architect.kmpessentials.share.KmpShare.Companion.resetFileSettings()
+                    }
             }
         }
 
@@ -33,12 +35,17 @@ actual class KmpShare {
                     val activityController = UIActivityViewController(listOf(physicalFile), null)
 
                     UIApplication.sharedApplication.keyWindow?.rootViewController()
-                        ?.presentViewController(activityController, true, null)
+                        ?.presentViewController(activityController, true) {
+                            resetFileSettings()
+                        }
                 }
-            }
-            else {
+            } else {
                 KmpLogging.writeErrorWithCode(ErrorCodes.FILE_NOT_FOUND)
             }
+        }
+
+        private fun resetFileSettings() {
+            fileType = ""
         }
     }
 }

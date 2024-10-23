@@ -3,7 +3,6 @@ package com.architect.kmpessentials.backgrounding.requests
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import co.touchlab.kermit.Logger
 import com.architect.kmpessentials.aliases.DefaultActionAsync
 import com.architect.kmpessentials.logging.KmpLogging
 import com.architect.kmpessentials.logging.constants.ErrorCodes
@@ -28,3 +27,5 @@ class LongRunnerJob(context: Context, param: WorkerParameters) : CoroutineWorker
 
 
 }
+
+

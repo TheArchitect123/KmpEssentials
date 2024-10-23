@@ -27,7 +27,7 @@ actual class KmpEmail {
             }
         }
 
-        actual fun sendEmailToAddress(address: String) {
+        actual fun sendEmailToAddress(address: String, emailSubject : String, emailMessage: String) {
             KmpMainThread.runViaMainThread {
                 try {
                     var emailAddress = address
@@ -35,9 +35,12 @@ actual class KmpEmail {
                         emailAddress = "$emailPrefix$address"
                     }
 
-                    val emailIntent = Intent(Intent.ACTION_VIEW)
-                    emailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    emailIntent.setData(Uri.parse(emailAddress))
+                    val emailIntent = Intent(Intent.ACTION_VIEW).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        data = Uri.parse(emailAddress.plus("?subject=$emailSubject&body=$emailMessage"))
+                        putExtra(Intent.EXTRA_SUBJECT, emailSubject)
+                        putExtra(Intent.EXTRA_TEXT, emailMessage);
+                    }
 
                     KmpAndroid.applicationContext.startActivity(emailIntent)
                 } catch (_: Exception) {
@@ -46,7 +49,7 @@ actual class KmpEmail {
             }
         }
 
-        actual fun sendEmailsToCCAddress(address: String, ccAddresses: Array<String>?) {
+        actual fun sendEmailsToCCAddress(address: String, ccAddresses: Array<String>?, emailSubject : String, emailMessage: String) {
             KmpMainThread.runViaMainThread {
                 try {
                     var emailAddress = address
@@ -54,10 +57,13 @@ actual class KmpEmail {
                         emailAddress = "$emailPrefix$address"
                     }
 
-                    val emailIntent = Intent(Intent.ACTION_VIEW)
-                    emailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    emailIntent.setData(Uri.parse(emailAddress))
-                    emailIntent.putExtra(Intent.EXTRA_CC, arrayOf(ccAddresses))
+                    val emailIntent = Intent(Intent.ACTION_VIEW).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        data = Uri.parse(emailAddress.plus("?subject=$emailSubject&body=$emailMessage"))
+                        putExtra(Intent.EXTRA_CC, arrayOf(ccAddresses))
+                        putExtra(Intent.EXTRA_SUBJECT, emailSubject)
+                        putExtra(Intent.EXTRA_TEXT, emailMessage);
+                    }
 
                     KmpAndroid.applicationContext.startActivity(emailIntent)
                 } catch (_: Exception) {

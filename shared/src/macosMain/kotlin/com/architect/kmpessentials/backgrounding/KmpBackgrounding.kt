@@ -25,6 +25,10 @@ actual class KmpBackgrounding {
 //            UIApplication.sharedApplication.endBackgroundTask(backgroundId)
         }
 
+        actual fun createAndStartWorkerWithoutCancel(options: BackgroundOptions?, action: DefaultActionAsync){
+
+        }
+
         actual fun cancelAllRunningWorkers() {
 //            if (identifiers.isNotEmpty()) {
 //                identifiers.forEach {

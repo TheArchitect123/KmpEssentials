@@ -13,23 +13,19 @@ import com.architect.kmpessentials.mainThread.KmpMainThread
 actual class KmpLauncher {
     actual companion object {
         actual fun startTimer(seconds: Double, action: DefaultActionWithBooleanReturn) {
-            KmpMainThread.runViaMainThread {
-                val handler = Handler(Looper.getMainLooper());
-                handler.postDelayed({
-                    if (action())
-                        startTimer(seconds, action);
-                }, seconds.toLong() * 1000);
-            }
+            val handler = Handler(Looper.getMainLooper());
+            handler.postDelayed({
+                if (action())
+                    startTimer(seconds, action);
+            }, seconds.toLong() * 1000);
         }
 
         actual fun startTimerRepeating(seconds: Double, action: DefaultActionWithBooleanReturn) {
-            KmpMainThread.runViaMainThread {
-                val handler = Handler(Looper.getMainLooper());
-                handler.postDelayed({
-                    if (action())
-                        startTimer(seconds, action);
-                }, seconds.toLong() * 1000);
-            }
+            val handler = Handler(Looper.getMainLooper());
+            handler.postDelayed({
+                if (action())
+                    startTimer(seconds, action);
+            }, seconds.toLong() * 1000);
         }
 
         private fun addIntentFlags(intent: Intent) {
@@ -42,7 +38,8 @@ actual class KmpLauncher {
         private fun openMapsUrl(parameters: String) {
             //check for whitespace between address info, and replace with +
             val newParameters = parameters.replace("\\s+".toRegex(), "+")
-            val mapPrefix = UriPrefixes.mapsDirectionsPrefix.plus("&destination=$newParameters&travelmode=driving")
+            val mapPrefix =
+                UriPrefixes.mapsDirectionsPrefix.plus("&destination=$newParameters&travelmode=driving")
 
             val launchMapsApp = Intent(Intent.ACTION_VIEW, Uri.parse(mapPrefix))
             addIntentFlags(launchMapsApp)

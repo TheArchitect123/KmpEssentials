@@ -134,5 +134,9 @@ actual class KmpPermissionsManager {
                 }
             }
         }
+
+        actual fun canShowPromptDialog(permission: Permission, actionResult: ActionBoolParams) {
+
+        }
     }
 }

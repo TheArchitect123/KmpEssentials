@@ -2,6 +2,8 @@ package com.architect.kmpessentials
 
 import android.app.Activity
 import android.app.Application
+import android.content.Context
+import android.content.IntentFilter
 import android.os.Build
 import android.os.Build.VERSION_CODES
 import androidx.activity.OnBackPressedCallback
@@ -14,6 +16,7 @@ import com.architect.kmpessentials.camera.KmpCamera
 import com.architect.kmpessentials.filePicker.File
 import com.architect.kmpessentials.filePicker.KmpFilePicker
 import com.architect.kmpessentials.internals.FilePickingMode
+import com.architect.kmpessentials.localNotifications.receivers.LocalAlarmReceiver
 import com.architect.kmpessentials.mediaPicker.KmpMediaPicker
 import com.architect.kmpessentials.permissions.KmpPermissionsManager
 import com.nareshchocha.filepickerlibrary.utilities.appConst.Const
@@ -30,8 +33,7 @@ class KmpAndroid {
             }
         }
 
-
-        private var hasRegistered: Boolean = false
+        private var hasRegistered = false
         internal lateinit var applicationContext: Application
         internal lateinit var clientAppContext: FragmentActivity
         internal val sensorManagerObserver = SensorObserver()
@@ -66,7 +68,6 @@ class KmpAndroid {
 
             // register application
             preRegisterApplicationContext(context.application)
-
             registerAllContracts()
 
             // back button control

@@ -25,5 +25,11 @@ expect class KmpPermissionsManager {
          * @param True if the permission is granted, False if Denied
          * */
         fun isPermissionGranted(permission: Permission, actionResult: ActionBoolParams)
+
+        /**
+         * Must be invoked on the main thread (otherwise could cause a crash)
+         * @param True if the permission dialog can be shown, false if cannot be shown (if the user has already denied permission)
+         * */
+        fun canShowPromptDialog(permission: Permission, actionResult: ActionBoolParams)
     }
 }

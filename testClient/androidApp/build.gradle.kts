@@ -5,10 +5,10 @@ plugins {
 }
 
 android {
-    namespace = "com.architect.testclient.android"
+    namespace = "com.architect.testclient.androidTest"
     compileSdk = 34
     defaultConfig {
-        applicationId = "com.architect.testclient.android"
+        applicationId = "com.architect.testclient.androidTest"
         minSdk = 21
         targetSdk = 34
         versionCode = 1

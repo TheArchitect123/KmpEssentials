@@ -28,5 +28,9 @@ actual class KmpLocalNotifications {
                     }
             }
         }
+
+        actual fun scheduleAlarmNotification(durationMS: Long, title: String, message: String){
+
+        }
     }
 }

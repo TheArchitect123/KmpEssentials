@@ -4,6 +4,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Build.VERSION_CODES
 import androidx.activity.result.ActivityResultLauncher
+import androidx.core.app.ActivityCompat
 import com.architect.kmpessentials.KmpAndroid
 import com.architect.kmpessentials.aliases.DefaultAction
 import com.architect.kmpessentials.internal.ActionBoolParams
@@ -12,6 +13,7 @@ import com.architect.kmpessentials.logging.KmpLogging
 import com.architect.kmpessentials.logging.constants.ErrorCodes
 import com.architect.kmpessentials.mainThread.KmpMainThread
 import com.architect.kmpessentials.permissions.services.PermissionsTransformer
+import com.architect.kmpessentials.secureStorage.KmpPublicStorage
 
 actual class KmpPermissionsManager {
     actual companion object {
@@ -90,12 +92,36 @@ actual class KmpPermissionsManager {
                         } else {
                             successAction()
                         }
-                    }
-                    else {
+                    } else {
                         KmpLogging.writeErrorWithCode(ErrorCodes.MULTIPLE_PERMISSIONS_NOT_FOUND)
                     }
                 } else {
                     successAction()
+                }
+            }
+        }
+
+        actual fun canShowPromptDialog(permission: Permission, actionResult: ActionBoolParams) {
+            KmpMainThread.runViaMainThread {
+                if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
+                    val cpermission = PermissionsTransformer.getPermissionFromEnum(permission)
+                    val hasRequestedPermission =
+                       if(cpermission.isNotBlank()) KmpPublicStorage.getBooleanFromKey(cpermission) ?: false else false
+
+                    var isDenied = !isPermissionGranted(permission)
+                    if (isDenied && hasRequestedPermission) {
+                        isDenied = ActivityCompat.shouldShowRequestPermissionRationale(
+                            KmpAndroid.clientAppContext,
+                            cpermission
+                        )
+                    }
+
+                    KmpPublicStorage.persistData(cpermission, true)
+                    actionResult(
+                        isDenied
+                    )
+                } else {
+                    actionResult(true)
                 }
             }
         }

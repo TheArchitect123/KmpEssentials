@@ -9,6 +9,13 @@ actual class KmpBackgrounding {
 
         }
 
+        actual fun createAndStartWorkerWithoutCancel(
+            options: BackgroundOptions?,
+            action: DefaultActionAsync
+        ) {
+
+        }
+
         actual fun cancelAllRunningWorkers() {
         }
     }

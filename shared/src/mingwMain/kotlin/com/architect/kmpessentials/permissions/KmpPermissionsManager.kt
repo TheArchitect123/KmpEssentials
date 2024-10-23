@@ -19,5 +19,8 @@ actual class KmpPermissionsManager {
         actual fun isPermissionGranted(permission: Permission, actionResult: ActionBoolParams) {
 
         }
+        actual fun canShowPromptDialog(permission: Permission, actionResult: ActionBoolParams) {
+
+        }
     }
 }
