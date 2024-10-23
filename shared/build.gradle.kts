@@ -2,7 +2,6 @@ import com.vanniktech.maven.publish.SonatypeHost
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.androidLibrary)
     kotlin("plugin.serialization") version "1.9.22"
 
@@ -10,10 +9,28 @@ plugins {
     id("signing")
     id("maven-publish")
     id("com.vanniktech.maven.publish") version "0.28.0"
+    id("io.github.ttypic.swiftklib")
 }
 
 kotlin {
-    targetHierarchy.default()
+    kotlin.applyDefaultHierarchyTemplate()
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64(),
+    ).forEach {
+//        it.compilations {
+//            val main by getting {
+//                cinterops {
+//                    create("SwiftEssentialsEngine")
+//                }
+//            }
+//        }
+        it.binaries.framework {
+            baseName = "shared"
+        }
+    }
+
     androidTarget {
         compilations.all {
             kotlinOptions {
@@ -21,11 +38,8 @@ kotlin {
             }
         }
 
-        publishLibraryVariants("release", "debug")
+        publishLibraryVariants("release")
     }
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
 
     // watchOS (Apple)
     watchosArm64()
@@ -52,17 +66,6 @@ kotlin {
 
     // browser
     //js().browser()
-
-    cocoapods {
-        summary = "Some description for the Shared Module"
-        homepage = "Link to the Shared Module homepage"
-        version = "1.0"
-        ios.deploymentTarget = "13.0"
-        framework {
-            baseName = "shared"
-            isStatic = true
-        }
-    }
 
     sourceSets {
         val commonMain by getting {
@@ -153,25 +156,23 @@ kotlin {
                 implementation("androidx.work:work-runtime-ktx:2.9.1")
                 implementation("com.google.android.gms:play-services-location:21.3.0")
                 implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.4")
+                implementation(libs.androidx.lifecycle.process)
             }
         }
 
         // iOS Targets
+        val iosArm64Main by getting
+        val iosX64Main by getting
+        val iosSimulatorArm64Main by getting
         val iosMain by getting {
             dependsOn(commonMain)
+            iosX64Main.dependsOn(this)
+            iosArm64Main.dependsOn(this)
+            iosSimulatorArm64Main.dependsOn(this)
             dependencies {
                 implementation("dev.tmapps:konnection:1.4.1")
                 implementation("com.liftric:kvault:1.12.0")
             }
-        }
-        val iosArm64Main by getting {
-            dependsOn(iosMain)
-        }
-        val iosX64Main by getting {
-            dependsOn(iosMain)
-        }
-        val iosSimulatorArm64Main by getting {
-            dependsOn(iosMain)
         }
     }
 }
@@ -182,7 +183,7 @@ afterEvaluate {
         coordinates(
             groupId = "io.github.thearchitect123",
             artifactId = "kmpEssentials",
-            version = "1.2.8"
+            version = "1.3.7"
         )
 
         // Configure POM metadata for the published artifact
@@ -231,5 +232,12 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+}
+
+swiftklib {
+    create("SwiftEssentialsEngine") {
+        path = file("native/SwiftEssentialsEngine")
+        packageName("com.ttypic.objclibs.swiftEssentialsEngine")
     }
 }

@@ -1,28 +1,29 @@
 package com.architect.kmpessentials
 
+import ApplicationLifecycleObserver
 import android.app.Activity
 import android.app.Application
-import android.content.Context
-import android.content.IntentFilter
 import android.os.Build
 import android.os.Build.VERSION_CODES
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ProcessLifecycleOwner
 import com.architect.kmpessentials.aliases.DefaultAction
 import com.architect.kmpessentials.battery.KmpBattery
 import com.architect.kmpessentials.camera.KmpCamera
 import com.architect.kmpessentials.filePicker.File
 import com.architect.kmpessentials.filePicker.KmpFilePicker
 import com.architect.kmpessentials.internals.FilePickingMode
-import com.architect.kmpessentials.localNotifications.receivers.LocalAlarmReceiver
 import com.architect.kmpessentials.mediaPicker.KmpMediaPicker
 import com.architect.kmpessentials.permissions.KmpPermissionsManager
 import com.nareshchocha.filepickerlibrary.utilities.appConst.Const
 
+
 class KmpAndroid {
     companion object {
+        private var hasRegistered = false
         internal var customBackAction: DefaultAction? = null
         internal val backButtonCallBack = object : OnBackPressedCallback(false) {
             override fun handleOnBackPressed() {
@@ -33,7 +34,7 @@ class KmpAndroid {
             }
         }
 
-        private var hasRegistered = false
+        internal var allowWorkersToRunBeyondApp: Boolean = true
         internal lateinit var applicationContext: Application
         internal lateinit var clientAppContext: FragmentActivity
         internal val sensorManagerObserver = SensorObserver()
@@ -47,7 +48,13 @@ class KmpAndroid {
             return applicationContext
         }
 
-        fun preRegisterApplicationContext(appContext: Application) {
+        fun setAllowWorkersToRunBeyondAppContext(allowWorkersToRunBeyondApp: Boolean) {
+            this.allowWorkersToRunBeyondApp = allowWorkersToRunBeyondApp
+        }
+
+        fun preRegisterApplicationContext(
+            appContext: Application
+        ) {
             if (!hasRegistered) {
                 applicationContext = appContext
                 if (Build.VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) { // battery services require Lolliop and above to work
@@ -55,6 +62,8 @@ class KmpAndroid {
                 }
 
                 applicationContext.registerActivityLifecycleCallbacks(ActivityLifecycleObserver())
+                ProcessLifecycleOwner.get().lifecycle.addObserver(ApplicationLifecycleObserver()) // application lifecycle observer
+
                 hasRegistered = true
             }
         }

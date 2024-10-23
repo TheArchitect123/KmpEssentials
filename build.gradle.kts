@@ -1,14 +1,10 @@
 plugins {
     alias(libs.plugins.androidLibrary).apply(false)
     alias(libs.plugins.kotlinMultiplatform).apply(false)
-    alias(libs.plugins.kotlinCocoapods).apply(false)
+    alias(libs.plugins.swiftklib).apply(false)
 }
 
 allprojects{
-//    tasks.withType<DokkaTask>().configureEach{
-//        outputDirectory = buildDir.resolve("dokka")
-//    }
-
     plugins.withId("com.android.library") {
         configure<com.android.build.gradle.LibraryExtension> {
             compileSdkVersion(libs.versions.droidCompileSdk.get().toInt())

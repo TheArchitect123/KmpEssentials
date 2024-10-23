@@ -31,8 +31,9 @@ import platform.UIKit.isRegisteredForRemoteNotifications
 import platform.UserNotifications.UNAuthorizationOptionAlert
 import platform.UserNotifications.UNAuthorizationOptionBadge
 import platform.UserNotifications.UNAuthorizationOptionProvisional
+import platform.UserNotifications.UNAuthorizationOptionSound
+import platform.UserNotifications.UNAuthorizationStatusAuthorized
 import platform.UserNotifications.UNAuthorizationStatusNotDetermined
-import platform.UserNotifications.UNNotificationSettingEnabled
 import platform.UserNotifications.UNUserNotificationCenter
 
 actual class KmpPermissionsManager {
@@ -64,11 +65,11 @@ actual class KmpPermissionsManager {
                     }
 
                     Permission.PushNotifications -> {
+                        val options =
+                            UNAuthorizationOptionAlert or UNAuthorizationOptionSound or UNAuthorizationOptionBadge
                         UNUserNotificationCenter.currentNotificationCenter()
                             .requestAuthorizationWithOptions(
-                                UNAuthorizationOptionAlert or
-                                        UNAuthorizationOptionBadge or
-                                        UNAuthorizationOptionProvisional,
+                                options.toULong()
                             ) { res, error ->
                                 if (res) {
                                     runAction()
@@ -146,7 +147,7 @@ actual class KmpPermissionsManager {
                 if (permission == Permission.PushNotifications) {
                     UNUserNotificationCenter.currentNotificationCenter()
                         .getNotificationSettingsWithCompletionHandler {
-                            actionResult(it?.alertSetting() == UNNotificationSettingEnabled)
+                            actionResult(it?.alertSetting() == UNAuthorizationStatusAuthorized)
                         }
                 } else {
                     actionResult(
@@ -175,27 +176,33 @@ actual class KmpPermissionsManager {
 
         actual fun canShowPromptDialog(permission: Permission, actionResult: ActionBoolParams) {
             KmpMainThread.runViaMainThread {
-                val status = when (permission) {
-                    Permission.Camera -> AVCaptureDevice.authorizationStatusForMediaType(
-                        AVMediaTypeVideo
-                    ) == AVAuthorizationStatusNotDetermined
+                if (permission == Permission.PushNotifications) {
+                    UNUserNotificationCenter.currentNotificationCenter()
+                        .getNotificationSettingsWithCompletionHandler {
+                            actionResult(it?.alertSetting() == UNAuthorizationStatusNotDetermined)
+                        }
+                } else {
+                    actionResult(
+                        when (permission) {
+                            Permission.Camera -> AVCaptureDevice.authorizationStatusForMediaType(
+                                AVMediaTypeVideo
+                            ) == AVAuthorizationStatusNotDetermined
 
-                    Permission.Contacts -> CNContactStore.authorizationStatusForEntityType(
-                        CNEntityType.CNEntityTypeContacts
-                    ) == CNAuthorizationStatusNotDetermined
+                            Permission.Contacts -> CNContactStore.authorizationStatusForEntityType(
+                                CNEntityType.CNEntityTypeContacts
+                            ) == CNAuthorizationStatusNotDetermined
 
-                    Permission.Speech -> SFSpeechRecognizer.authorizationStatus() == SFSpeechRecognizerAuthorizationStatus.SFSpeechRecognizerAuthorizationStatusNotDetermined
-                    Permission.PhotoGallery -> PHPhotoLibrary.authorizationStatus() == PHAuthorizationStatusNotDetermined
-                    Permission.Location -> CLLocationManager().authorizationStatus() == 0
-                    Permission.Microphone -> AVAudioSession.sharedInstance()
-                        .recordPermission() == AVAudioSessionRecordPermissionUndetermined
+                            Permission.Speech -> SFSpeechRecognizer.authorizationStatus() == SFSpeechRecognizerAuthorizationStatus.SFSpeechRecognizerAuthorizationStatusNotDetermined
+                            Permission.PhotoGallery -> PHPhotoLibrary.authorizationStatus() == PHAuthorizationStatusNotDetermined
+                            Permission.Location -> CLLocationManager().authorizationStatus() == 0
 
-                    else -> false
+                            Permission.Microphone -> AVAudioSession.sharedInstance()
+                                .recordPermission() == AVAudioSessionRecordPermissionUndetermined
+
+                            else -> false
+                        }
+                    )
                 }
-
-                actionResult(
-                    status
-                )
             }
         }
     }

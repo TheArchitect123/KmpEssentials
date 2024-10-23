@@ -39,3 +39,4 @@ class ActivityLifecycleObserver : Application.ActivityLifecycleCallbacks {
     override fun onActivityDestroyed(activity: Activity) {
     }
 }
+

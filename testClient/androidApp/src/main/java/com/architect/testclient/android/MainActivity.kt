@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ProcessLifecycleOwner
 import com.architect.kmpessentials.KmpAndroid
 import com.architect.kmpessentials.email.KmpEmail
 import com.architect.kmpessentials.fileSystem.KmpFileSystem

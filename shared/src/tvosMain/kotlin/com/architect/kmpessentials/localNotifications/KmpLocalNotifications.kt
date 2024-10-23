@@ -28,4 +28,3 @@ actual class KmpLocalNotifications {
         }
     }
 }
-}
