@@ -1,6 +1,5 @@
 package com.architect.kmpessentials.localNotifications
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.Notification
@@ -9,7 +8,6 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
@@ -19,6 +17,7 @@ import kotlin.random.Random
 
 actual class KmpLocalNotifications {
     actual companion object {
+        private var repeatingAlarms = mutableListOf<PendingIntent>()
         private var notificationIcon: Int = 0
         private val standardChannel = "default"
         private val notificationChannelName = "Default"
@@ -30,7 +29,26 @@ actual class KmpLocalNotifications {
             notificationIcon = icon
         }
 
-        fun notificationBuilder(title: String, message: String): Notification {
+        internal fun getPendingIntentForAlarmBroadcasts(
+            title: String,
+            message: String
+        ): PendingIntent {
+            // Create an intent to trigger LocalAlarmReceiver
+            val intent =
+                Intent(KmpAndroid.applicationContext, LocalAlarmReceiver::class.java).apply {
+                    putExtra("title", title)
+                    putExtra("message", message)
+                }
+
+            return PendingIntent.getBroadcast(
+                KmpAndroid.applicationContext,
+                0,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+        }
+
+        internal fun notificationBuilder(title: String, message: String): Notification {
             val notification = NotificationCompat.Builder(
                 KmpAndroid.applicationContext,
                 standardChannel
@@ -61,30 +79,48 @@ actual class KmpLocalNotifications {
             notifManager.notify(Random.nextInt(), notificationBuilder(title, message))
         }
 
-        @SuppressLint("MissingPermission")
+
         @RequiresApi(Build.VERSION_CODES.KITKAT)
+        @SuppressLint("MissingPermission")
         actual fun scheduleAlarmNotification(durationMS: Long, title: String, message: String) {
-            // Create an intent to trigger LocalAlarmReceiver
-            val intent =
-                Intent(KmpAndroid.applicationContext, LocalAlarmReceiver::class.java).apply {
-                    putExtra("title", title)
-                    putExtra("message", message)
-                }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // allows notification to run regardless of Doze mode
+                (KmpAndroid.applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager).setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,  // Use RTC_WAKEUP to wake the device when the alarm triggers
+                    durationMS,
+                    getPendingIntentForAlarmBroadcasts(title, message)
+                )
+            } else {
+                (KmpAndroid.applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager).setExact(
+                    AlarmManager.RTC_WAKEUP,  // Use RTC_WAKEUP to wake the device when the alarm triggers
+                    durationMS,
+                    getPendingIntentForAlarmBroadcasts(title, message)
+                )
+            }
+        }
 
+        actual fun scheduleAlarmNotificationRepeating(
+            durationMS: Long,
+            intervalMs: Long,
+            title: String,
+            message: String
+        ) {
+            val repeatingAlarm = getPendingIntentForAlarmBroadcasts(title, message)
+            repeatingAlarms.add(repeatingAlarm)
 
-            val pendingIntent = PendingIntent.getBroadcast(
-                KmpAndroid.applicationContext,
-                0,
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            )
-
-            // Schedule the alarm
-            (KmpAndroid.applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager).setExact(
+            (KmpAndroid.applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager).setRepeating(
                 AlarmManager.RTC_WAKEUP,  // Use RTC_WAKEUP to wake the device when the alarm triggers
                 durationMS,
-                pendingIntent
+                intervalMs,
+                repeatingAlarm
             )
+        }
+
+        actual fun cancelAllRepeatingAlarms() {
+            repeatingAlarms.forEach {
+                it.cancel()
+            }
+
+            repeatingAlarms.clear()
         }
     }
 }

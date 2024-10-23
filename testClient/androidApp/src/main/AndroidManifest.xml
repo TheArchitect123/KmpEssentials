@@ -19,10 +19,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <receiver android:name="com.architect.kmpessentials.localNotifications.receivers.LocalAlarmReceiver"
-            android:enabled="true"
-            android:exported="false">
-        </receiver>
+<!--        <receiver android:name="com.architect.kmpessentials.localNotifications.receivers.LocalAlarmReceiver"-->
+<!--            android:enabled="true"-->
+<!--            android:exported="false">-->
+<!--        </receiver>-->
 
         <provider
             android:name="androidx.core.content.FileProvider"
