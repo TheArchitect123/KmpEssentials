@@ -27,14 +27,14 @@ actual class KmpScreenshot {
                             try {
                                 // write file to cache directory
                                 val mediaStore = MediaStore.Images.Media.insertImage(
-                                    KmpAndroid.applicationContext.contentResolver,
+                                    KmpAndroid.applicationContext?.contentResolver,
                                     bitmap,
                                     shareDialogTitle,
                                     ""
                                 )
                                 val photoForScreen = Uri.parse(mediaStore)
                                 if (shareImage) { // share image with Intent Chooser
-                                    KmpAndroid.clientAppContext.startActivity(Intent(Intent.ACTION_SEND).apply {
+                                    KmpAndroid.clientAppContext?.startActivity(Intent(Intent.ACTION_SEND).apply {
                                         putExtra(Intent.EXTRA_STREAM, photoForScreen)
                                         type = "image/*"
                                         flags = Intent.FLAG_ACTIVITY_NEW_TASK

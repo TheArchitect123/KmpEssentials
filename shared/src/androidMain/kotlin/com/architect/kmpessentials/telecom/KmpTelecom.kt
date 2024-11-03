@@ -13,7 +13,7 @@ actual class KmpTelecom {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 }
                 intent.setData(Uri.parse("tel:$mobileNumber"))
-                KmpAndroid.applicationContext.startActivity(intent)
+                KmpAndroid.applicationContext?.startActivity(intent)
             }
         }
     }

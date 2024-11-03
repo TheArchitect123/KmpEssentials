@@ -8,19 +8,19 @@ import java.io.File
 actual class KmpFileSystem {
     actual companion object {
         actual fun getAppDirectory(): String {
-            return KmpAppInfo.packageInfo.applicationInfo?.dataDir ?: ""
+            return KmpAppInfo.packageInfo?.applicationInfo?.dataDir ?: ""
         }
 
         actual fun getTempCacheDirectory(): String {
-            return KmpAndroid.applicationContext.cacheDir.absolutePath
+            return KmpAndroid.applicationContext?.cacheDir?.absolutePath ?: ""
         }
 
         actual fun getExternalStorageDirectory(): String {
-            return KmpAndroid.applicationContext.externalCacheDir?.absolutePath ?: ""
+            return KmpAndroid.applicationContext?.externalCacheDir?.absolutePath ?: ""
         }
 
         actual fun deleteFileAt(path: String) {
-            KmpAndroid.applicationContext.deleteFile(path)
+            KmpAndroid.applicationContext?.deleteFile(path)
         }
 
         actual fun createFileAt(path: String) {

@@ -1,6 +1,7 @@
 package com.architect.kmpessentials.launcher
 
 import com.architect.kmpessentials.aliases.DefaultActionWithBooleanReturn
+import com.architect.kmpessentials.logging.KmpLogging
 import com.architect.kmpessentials.mainThread.KmpMainThread
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.useContents
@@ -88,18 +89,31 @@ actual class KmpLauncher {
         }
 
         private fun openExternalLink(linkPath: String) {
-            val link = NSURL.URLWithString(linkPath)!!
+            val link = NSURL(string = linkPath)
             if (UIApplication.sharedApplication.canOpenURL(link)) {
-                UIApplication.sharedApplication.openURL(link)
+                UIApplication.sharedApplication.openURL(link, options = emptyMap<Any?, Any>()) {
+                    if (!it) {
+                        KmpLogging.writeError("KmpEssentials", "Failed to Open NSURL")
+                    }
+                }
+            }
+            else {
+                KmpLogging.writeError("KmpEssentials", "Failed to Open NSURL")
             }
         }
 
         actual fun launchAppInternalSettings() {
             UIApplication.sharedApplication.openURL(
-                NSURL.URLWithString(
+                NSURL(
+                    string =
                     UIApplicationOpenSettingsURLString
-                )!!
-            )
+                ),
+                options = emptyMap<Any?, Any>()
+            ) {
+                if (!it) {
+                    KmpLogging.writeError("KmpEssentials", "Failed to Open NSURL")
+                }
+            }
         }
 
         actual fun launchAppStoreViaIdentifier(appStoreLink: String) {

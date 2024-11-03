@@ -18,7 +18,7 @@ actual class KmpMediaPicker {
             imagePickerResult = actionResult
             KmpMainThread.runViaMainThread {
                 galleryLauncher.launch(
-                    FilePicker.Builder(KmpAndroid.clientAppContext)
+                    FilePicker.Builder(KmpAndroid.clientAppContext!!)
                         .pickMediaBuild(PickMediaConfig(mPickMediaType = PickMediaType.ImageOnly))
                 )
             }
@@ -28,7 +28,7 @@ actual class KmpMediaPicker {
             imagePickerResult = actionResult
             KmpMainThread.runViaMainThread {
                 galleryLauncher.launch(
-                    FilePicker.Builder(KmpAndroid.clientAppContext)
+                    FilePicker.Builder(KmpAndroid.clientAppContext!!)
                         .pickMediaBuild(PickMediaConfig(mPickMediaType = PickMediaType.VideoOnly))
                 )
             }

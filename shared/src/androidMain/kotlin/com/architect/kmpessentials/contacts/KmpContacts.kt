@@ -16,10 +16,10 @@ actual class KmpContacts {
             KmpPermissionsManager.isPermissionGranted(Permission.Contacts) {
                 if (it) {
                     val contactsData = mutableListOf<Contact>()
-                    val contentResolver: ContentResolver =
-                        KmpAndroid.applicationContext.contentResolver
+                    val contentResolver =
+                        KmpAndroid.applicationContext?.contentResolver
                     val cursor =
-                        contentResolver.query(
+                        contentResolver?.query(
                             ContactsContract.Contacts.CONTENT_URI,
                             null,
                             null,
@@ -82,7 +82,7 @@ actual class KmpContacts {
                             ).apply {
                                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
                             }
-                        KmpAndroid.applicationContext.startActivity(pickContact)
+                        KmpAndroid.applicationContext?.startActivity(pickContact)
                     }
                 } else {
                     KmpLogging.writeErrorWithCode(ErrorCodes.MISSING_PERMISSION_CONFIGURATION)

@@ -15,9 +15,11 @@ actual class KmpGeolocation {
             }
 
             locationManager.startUpdatingLocation()
-            locationManager.location!!.coordinate.useContents {
-                locationCoord(Location(latitude, longitude))
-                locationManager.stopUpdatingLocation()
+            if (locationManager.location != null) {
+                locationManager.location?.coordinate?.useContents {
+                    locationCoord(Location(latitude, longitude))
+                    locationManager.stopUpdatingLocation()
+                }
             }
         }
     }

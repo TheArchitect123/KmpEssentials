@@ -6,7 +6,7 @@ import com.architect.kmpessentials.aliases.DefaultAction
 actual class KmpMainThread {
     actual companion object {
         actual fun runViaMainThread(action: DefaultAction) {
-            KmpAndroid.clientAppContext.runOnUiThread {
+            KmpAndroid.clientAppContext?.runOnUiThread {
                 action()
             }
         }

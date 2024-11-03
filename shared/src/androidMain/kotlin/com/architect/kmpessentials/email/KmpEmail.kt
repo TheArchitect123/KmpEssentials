@@ -19,7 +19,7 @@ actual class KmpEmail {
                 emailIntent.setData(Uri.parse(emailAddress))
 
                 action(
-                    KmpAndroid.applicationContext.packageManager.resolveActivity(
+                    KmpAndroid.applicationContext?.packageManager?.resolveActivity(
                         emailIntent,
                         0
                     ) != null
@@ -42,7 +42,7 @@ actual class KmpEmail {
                         putExtra(Intent.EXTRA_TEXT, emailMessage);
                     }
 
-                    KmpAndroid.applicationContext.startActivity(emailIntent)
+                    KmpAndroid.applicationContext?.startActivity(emailIntent)
                 } catch (_: Exception) {
                     KmpToast.showToastShort("Email is not supported on this device")
                 }
@@ -65,7 +65,7 @@ actual class KmpEmail {
                         putExtra(Intent.EXTRA_TEXT, emailMessage);
                     }
 
-                    KmpAndroid.applicationContext.startActivity(emailIntent)
+                    KmpAndroid.applicationContext?.startActivity(emailIntent)
                 } catch (_: Exception) {
                     KmpToast.showToastShort("Email is not supported on this device")
                 }

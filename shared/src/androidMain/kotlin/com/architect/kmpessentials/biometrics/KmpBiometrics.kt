@@ -1,6 +1,5 @@
 package com.architect.kmpessentials.biometrics
 
-import android.media.FaceDetector
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
@@ -12,7 +11,6 @@ import com.architect.kmpessentials.logging.constants.ErrorCodes
 import com.architect.kmpessentials.mainThread.KmpMainThread
 import com.architect.kmpessentials.permissions.KmpPermissionsManager
 import com.architect.kmpessentials.permissions.Permission
-import com.architect.kmpessentials.permissions.services.KmpPermissions
 import java.util.concurrent.Executor
 
 actual class KmpBiometrics {
@@ -23,7 +21,9 @@ actual class KmpBiometrics {
         private var fingerprintTitle = "Scan your fingerprint"
         private var fingerprintMessage = "Log in using your biometric credential"
 
-        private val biometric = BiometricManager.from(KmpAndroid.clientAppContext)
+        private val biometric by lazy {
+            BiometricManager.from(KmpAndroid.clientAppContext!!)
+        }
 
         actual fun isSupported(): Boolean {
             return biometric.canAuthenticate(
@@ -41,43 +41,45 @@ actual class KmpBiometrics {
             actionResult: ActionBoolParams,
             actionError: ActionStringParams
         ) {
-            KmpPermissionsManager.isPermissionGranted(Permission.Biometrics) {
-                if (it) {
-                    KmpMainThread.runViaMainThread {
-                        executor = ContextCompat.getMainExecutor(KmpAndroid.clientAppContext)
-                        biometricPrompt = BiometricPrompt(KmpAndroid.clientAppContext, executor,
-                            object : BiometricPrompt.AuthenticationCallback() {
-                                override fun onAuthenticationError(
-                                    errorCode: Int,
-                                    errString: CharSequence
-                                ) {
-                                    super.onAuthenticationError(errorCode, errString)
-                                    actionError(errString.toString())
-                                }
+            if(KmpAndroid.clientAppContext != null) {
+                KmpPermissionsManager.isPermissionGranted(Permission.Biometrics) {
+                    if (it) {
+                        KmpMainThread.runViaMainThread {
+                            executor = ContextCompat.getMainExecutor(KmpAndroid.clientAppContext!!)
+                            biometricPrompt = BiometricPrompt(KmpAndroid.clientAppContext!!, executor,
+                                object : BiometricPrompt.AuthenticationCallback() {
+                                    override fun onAuthenticationError(
+                                        errorCode: Int,
+                                        errString: CharSequence
+                                    ) {
+                                        super.onAuthenticationError(errorCode, errString)
+                                        actionError(errString.toString())
+                                    }
 
-                                override fun onAuthenticationSucceeded(
-                                    result: BiometricPrompt.AuthenticationResult
-                                ) {
-                                    super.onAuthenticationSucceeded(result)
-                                    actionResult(true)
-                                }
+                                    override fun onAuthenticationSucceeded(
+                                        result: BiometricPrompt.AuthenticationResult
+                                    ) {
+                                        super.onAuthenticationSucceeded(result)
+                                        actionResult(true)
+                                    }
 
-                                override fun onAuthenticationFailed() {
-                                    super.onAuthenticationFailed()
-                                    actionError("Failed to authenticate")
-                                }
-                            })
+                                    override fun onAuthenticationFailed() {
+                                        super.onAuthenticationFailed()
+                                        actionError("Failed to authenticate")
+                                    }
+                                })
 
-                        promptInfo = BiometricPrompt.PromptInfo.Builder()
-                            .setTitle(fingerprintTitle)
-                            .setSubtitle(fingerprintMessage)
-                            .setNegativeButtonText("Use password")
-                            .build()
+                            promptInfo = BiometricPrompt.PromptInfo.Builder()
+                                .setTitle(fingerprintTitle)
+                                .setSubtitle(fingerprintMessage)
+                                .setNegativeButtonText("Use password")
+                                .build()
 
-                        biometricPrompt.authenticate(promptInfo)
+                            biometricPrompt.authenticate(promptInfo)
+                        }
+                    } else {
+                        KmpLogging.writeErrorWithCode(ErrorCodes.MISSING_PERMISSION_CONFIGURATION)
                     }
-                } else {
-                    KmpLogging.writeErrorWithCode(ErrorCodes.MISSING_PERMISSION_CONFIGURATION)
                 }
             }
         }

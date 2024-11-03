@@ -22,30 +22,37 @@ actual class KmpGeolocation {
             KmpPermissionsManager.isPermissionGranted(Permission.Location) {
                 if (it) {
                     KmpMainThread.runViaMainThread {
-                        val fusedLocationClient =
-                            LocationServices.getFusedLocationProviderClient(KmpAndroid.applicationContext)
+                        if(KmpAndroid.applicationContext != null) {
+                            val fusedLocationClient =
+                                LocationServices.getFusedLocationProviderClient(KmpAndroid.applicationContext!!)
 
-                        val locationCallback = object : LocationCallback() {
-                            override fun onLocationResult(locationResult: LocationResult) {
-                                val location = locationResult.locations.firstOrNull()
-                                if (location == null) {
-                                    locationCoord(Location(0.0, 0.0))
-                                } else {
-                                    locationCoord(Location(location.latitude, location.longitude))
+                            val locationCallback = object : LocationCallback() {
+                                override fun onLocationResult(locationResult: LocationResult) {
+                                    val location = locationResult.locations.firstOrNull()
+                                    if (location == null) {
+                                        locationCoord(Location(0.0, 0.0))
+                                    } else {
+                                        locationCoord(
+                                            Location(
+                                                location.latitude,
+                                                location.longitude
+                                            )
+                                        )
+                                    }
+
+                                    fusedLocationClient.removeLocationUpdates(this)
                                 }
-
-                                fusedLocationClient.removeLocationUpdates(this)
                             }
-                        }
 
-                        val locationRequest =
-                            LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 500)
-                                .setWaitForAccurateLocation(false).build()
-                        fusedLocationClient.requestLocationUpdates(
-                            locationRequest,
-                            locationCallback,
-                            null
-                        )
+                            val locationRequest =
+                                LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 500)
+                                    .setWaitForAccurateLocation(false).build()
+                            fusedLocationClient.requestLocationUpdates(
+                                locationRequest,
+                                locationCallback,
+                                null
+                            )
+                        }
                     }
                 } else {
                     KmpLogging.writeErrorWithCode(ErrorCodes.RUNTIME_PERMISSION_NOT_GRANTED)

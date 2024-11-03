@@ -10,7 +10,7 @@ actual class KmpGyroscope {
     actual companion object {
         internal lateinit var gyroScope: ActionTripleFloatParams
         private val sensorManager by lazy {
-            KmpAndroid.applicationContext.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+            KmpAndroid.applicationContext?.getSystemService(Context.SENSOR_SERVICE) as SensorManager
         }
         private val gyroManager by lazy {
             sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)

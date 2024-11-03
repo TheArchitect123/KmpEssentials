@@ -10,7 +10,7 @@ actual class KmpProximity {
     actual companion object {
         internal lateinit var proxScope: ActionBoolParams
         private val sensorManager by lazy {
-            KmpAndroid.applicationContext.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+            KmpAndroid.applicationContext?.getSystemService(Context.SENSOR_SERVICE) as SensorManager
         }
         private val proxManager by lazy {
             sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY)

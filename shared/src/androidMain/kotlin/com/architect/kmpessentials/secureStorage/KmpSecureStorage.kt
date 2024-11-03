@@ -8,7 +8,7 @@ actual class KmpSecureStorage {
     actual companion object {
         private var droidPreferenceName: String? = null
         private val keyVault by lazy {
-            KVault(KmpAndroid.applicationContext, droidPreferenceName)
+            KVault(KmpAndroid.applicationContext!!, droidPreferenceName)
         }
 
         actual fun clearEntireStore() {

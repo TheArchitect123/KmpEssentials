@@ -11,7 +11,7 @@ typealias OrientationChange = (OrientationState) -> Unit
 class OrientationChangeReceiver(val stateManager : OrientationChange) : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if(intent?.action == Intent.ACTION_CONFIGURATION_CHANGED){
-            when(KmpAndroid.applicationContext.resources.configuration.orientation){
+            when(KmpAndroid.applicationContext?.resources?.configuration?.orientation){
                 Configuration.ORIENTATION_PORTRAIT -> stateManager(OrientationState.Portrait)
                 Configuration.ORIENTATION_LANDSCAPE -> stateManager(OrientationState.Landscape)
                 else -> stateManager(OrientationState.Unknown)

@@ -23,15 +23,17 @@ actual class KmpPrinting {
         }
 
         private val printerManager by lazy {
-            KmpAndroid.clientAppContext.getSystemService(Context.PRINT_SERVICE) as PrintManager
+            KmpAndroid.clientAppContext?.getSystemService(Context.PRINT_SERVICE) as PrintManager
         }
 
         actual fun printImageWithPath(path: String) {
             KmpMainThread.runViaMainThread {
                 val printFile = File(path)
                 if (isPrintingSupported() && printFile.exists()) {
-                    PrintHelper(KmpAndroid.clientAppContext).also {
-                        it.printBitmap(printFile.name, Uri.fromFile(printFile))
+                    if(KmpAndroid.clientAppContext != null) {
+                        PrintHelper(KmpAndroid.clientAppContext!!).also {
+                            it.printBitmap(printFile.name, Uri.fromFile(printFile))
+                        }
                     }
                 }
             }
@@ -49,25 +51,27 @@ actual class KmpPrinting {
         actual fun printHtmlWithPath(path: String) {
             KmpMainThread.runViaMainThread {
                 // load the html into a web view, and load that into a print documents adapter
-                val webView = WebView(KmpAndroid.clientAppContext)
-                webView.webViewClient = object : WebViewClient() {
-                    override fun shouldOverrideUrlLoading(
-                        view: WebView,
-                        request: WebResourceRequest
-                    ) = false
+                if(KmpAndroid.clientAppContext != null) {
+                    val webView = WebView(KmpAndroid.clientAppContext!!)
+                    webView.webViewClient = object : WebViewClient() {
+                        override fun shouldOverrideUrlLoading(
+                            view: WebView,
+                            request: WebResourceRequest
+                        ) = false
 
-                    override fun onPageFinished(view: WebView, url: String) {
-                        val htmlFile = File(path)
-                        webView.createPrintDocumentAdapter(htmlFile.name)
-                        printerManager.print(
-                            htmlFile.name,
-                            webView.createPrintDocumentAdapter(htmlFile.name),
-                            PrintAttributes.Builder().build()
-                        )
+                        override fun onPageFinished(view: WebView, url: String) {
+                            val htmlFile = File(path)
+                            webView.createPrintDocumentAdapter(htmlFile.name)
+                            printerManager.print(
+                                htmlFile.name,
+                                webView.createPrintDocumentAdapter(htmlFile.name),
+                                PrintAttributes.Builder().build()
+                            )
+                        }
                     }
-                }
 
                 webView.loadUrl(path)
+                    }
             }
         }
     }

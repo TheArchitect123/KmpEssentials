@@ -22,7 +22,7 @@ actual class KmpLocalNotifications {
         private val standardChannel = "default"
         private val notificationChannelName = "Default"
         private val notifManager by lazy {
-            KmpAndroid.applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            KmpAndroid.applicationContext?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         }
 
         fun setNotificationIcon(icon: Int) {
@@ -50,7 +50,7 @@ actual class KmpLocalNotifications {
 
         internal fun notificationBuilder(title: String, message: String): Notification {
             val notification = NotificationCompat.Builder(
-                KmpAndroid.applicationContext,
+                KmpAndroid.applicationContext!!,
                 standardChannel
             )
                 .setContentTitle(title)
@@ -84,13 +84,13 @@ actual class KmpLocalNotifications {
         @SuppressLint("MissingPermission")
         actual fun scheduleAlarmNotification(durationMS: Long, title: String, message: String) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // allows notification to run regardless of Doze mode
-                (KmpAndroid.applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager).setExactAndAllowWhileIdle(
+                (KmpAndroid.applicationContext?.getSystemService(Context.ALARM_SERVICE) as AlarmManager).setExactAndAllowWhileIdle(
                     AlarmManager.RTC_WAKEUP,  // Use RTC_WAKEUP to wake the device when the alarm triggers
                     durationMS,
                     getPendingIntentForAlarmBroadcasts(title, message)
                 )
             } else {
-                (KmpAndroid.applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager).setExact(
+                (KmpAndroid.applicationContext?.getSystemService(Context.ALARM_SERVICE) as AlarmManager).setExact(
                     AlarmManager.RTC_WAKEUP,  // Use RTC_WAKEUP to wake the device when the alarm triggers
                     durationMS,
                     getPendingIntentForAlarmBroadcasts(title, message)
@@ -107,7 +107,7 @@ actual class KmpLocalNotifications {
             val repeatingAlarm = getPendingIntentForAlarmBroadcasts(title, message)
             repeatingAlarms.add(repeatingAlarm)
 
-            (KmpAndroid.applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager).setRepeating(
+            (KmpAndroid.applicationContext?.getSystemService(Context.ALARM_SERVICE) as AlarmManager).setRepeating(
                 AlarmManager.RTC_WAKEUP,  // Use RTC_WAKEUP to wake the device when the alarm triggers
                 durationMS,
                 intervalMs,

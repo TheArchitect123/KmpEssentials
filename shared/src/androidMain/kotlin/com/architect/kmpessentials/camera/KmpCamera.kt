@@ -30,10 +30,12 @@ actual class KmpCamera {
             this.actionResult = actionResult
             KmpPermissionsManager.isPermissionGranted(Permission.Camera) {
                 if (it) {
-                    resultLauncher.launch(
-                        FilePicker.Builder(KmpAndroid.clientAppContext)
-                            .imageCaptureBuild(ImageCaptureConfig(isUseRearCamera = true))
-                    )
+                    if(KmpAndroid.clientAppContext != null) {
+                        resultLauncher.launch(
+                            FilePicker.Builder(KmpAndroid.clientAppContext!!)
+                                .imageCaptureBuild(ImageCaptureConfig(isUseRearCamera = true))
+                        )
+                    }
                 } else {
                     KmpLogging.writeErrorWithCode(ErrorCodes.PERMISSION_NOT_GRANTED_REQUESTING_NOW)
                     KmpPermissionsManager.requestPermission(Permission.Camera) {
@@ -48,10 +50,12 @@ actual class KmpCamera {
                 this.actionResult = actionResult
                 KmpPermissionsManager.isPermissionGranted(Permission.Camera) {
                     if (it) {
-                        resultLauncher.launch(
-                            FilePicker.Builder(KmpAndroid.clientAppContext)
-                                .videoCaptureBuild(VideoCaptureConfig(isHighQuality = true))
-                        )
+                        if(KmpAndroid.clientAppContext != null) {
+                            resultLauncher.launch(
+                                FilePicker.Builder(KmpAndroid.clientAppContext!!)
+                                    .videoCaptureBuild(VideoCaptureConfig(isHighQuality = true))
+                            )
+                        }
                     } else {
                         KmpLogging.writeErrorWithCode(ErrorCodes.PERMISSION_NOT_GRANTED_REQUESTING_NOW)
                         KmpPermissionsManager.requestPermission(Permission.Camera) {

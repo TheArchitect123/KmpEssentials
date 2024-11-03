@@ -15,7 +15,7 @@ actual class KmpSms {
                 sendIntent.setData(Uri.parse("sms:$mobileNumber"))
                 sendIntent.putExtra("sms_body", message)
 
-                KmpAndroid.applicationContext.startActivity(sendIntent)
+                KmpAndroid.applicationContext?.startActivity(sendIntent)
             }
         }
     }

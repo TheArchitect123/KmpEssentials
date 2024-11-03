@@ -25,7 +25,7 @@ actual class KmpPermissionsManager {
             KmpMainThread.runViaMainThread {
                 if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
                     actionResult(
-                        KmpAndroid.applicationContext.checkSelfPermission(
+                        KmpAndroid.applicationContext?.checkSelfPermission(
                             PermissionsTransformer.getPermissionFromEnum(permission)
                         ) == PackageManager.PERMISSION_GRANTED
                     )
@@ -37,7 +37,7 @@ actual class KmpPermissionsManager {
 
         actual fun isPermissionGranted(permission: Permission): Boolean {
             if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
-                return KmpAndroid.applicationContext.checkSelfPermission(
+                return KmpAndroid.applicationContext?.checkSelfPermission(
                     PermissionsTransformer.getPermissionFromEnum(permission)
                 ) == PackageManager.PERMISSION_GRANTED
             }
@@ -79,21 +79,26 @@ actual class KmpPermissionsManager {
             KmpMainThread.runViaMainThread {
                 successAction = runAction
                 if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
-                    val cpermission = PermissionsTransformer.getPermissionsFromEnum(permission)
-                    if (cpermission.isNotEmpty()) {
-                        val deniedPermissions = cpermission.filter {
-                            KmpAndroid.clientAppContext.checkSelfPermission(
-                                it,
-                            ) != PackageManager.PERMISSION_GRANTED
-                        }.toTypedArray()
+                    try {
+                        val cpermission = PermissionsTransformer.getPermissionsFromEnum(permission)
+                        if (cpermission.isNotEmpty()) {
+                            val deniedPermissions = cpermission.filter {
+                                KmpAndroid.clientAppContext?.checkSelfPermission(
+                                    it,
+                                ) != PackageManager.PERMISSION_GRANTED
+                            }
 
-                        if (deniedPermissions.isNotEmpty()) {
-                            resultManyLauncher.launch(deniedPermissions)
+                            if (deniedPermissions.isNotEmpty()) {
+                                resultManyLauncher.launch(deniedPermissions.toTypedArray())
+                            } else {
+                                successAction()
+                            }
                         } else {
-                            successAction()
+                            KmpLogging.writeErrorWithCode(ErrorCodes.MULTIPLE_PERMISSIONS_NOT_FOUND)
                         }
-                    } else {
-                        KmpLogging.writeErrorWithCode(ErrorCodes.MULTIPLE_PERMISSIONS_NOT_FOUND)
+                    }
+                    catch (ex: Exception) {
+                        KmpLogging.writeErrorWithCode(ex.stackTraceToString())
                     }
                 } else {
                     successAction()
@@ -110,10 +115,12 @@ actual class KmpPermissionsManager {
 
                     var isDenied = !isPermissionGranted(permission)
                     if (isDenied && hasRequestedPermission) {
-                        isDenied = ActivityCompat.shouldShowRequestPermissionRationale(
-                            KmpAndroid.clientAppContext,
-                            cpermission
-                        )
+                        if(KmpAndroid.clientAppContext != null) {
+                            isDenied = ActivityCompat.shouldShowRequestPermissionRationale(
+                                KmpAndroid.clientAppContext!!,
+                                cpermission
+                            )
+                        }
                     }
 
                     KmpPublicStorage.persistData(cpermission, true)

@@ -6,7 +6,7 @@ import com.architect.kmpessentials.KmpAndroid
 actual class KmpPublicStorage {
     actual companion object {
         private val sharedPreference by lazy {
-            PreferenceManager.getDefaultSharedPreferences(KmpAndroid.applicationContext)
+            PreferenceManager.getDefaultSharedPreferences(KmpAndroid.applicationContext!!)
         }
 
         actual fun clearEntireStore() {

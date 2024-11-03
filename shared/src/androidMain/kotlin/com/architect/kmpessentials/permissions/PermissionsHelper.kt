@@ -5,9 +5,9 @@ import com.architect.kmpessentials.KmpAndroid
 
 internal object PermissionsHelper {
     fun checkSelfPermission(permission: String): PermissionStatus {
-        return when (KmpAndroid.clientAppContext.packageManager.checkPermission(
+        return when (KmpAndroid.clientAppContext?.packageManager?.checkPermission(
             permission,
-            KmpAndroid.clientAppContext.packageName
+            KmpAndroid.clientAppContext?.packageName ?: ""
         )) {
             PackageManager.PERMISSION_GRANTED -> PermissionStatus.Granted
             PackageManager.PERMISSION_DENIED -> PermissionStatus.Denied
@@ -15,7 +15,7 @@ internal object PermissionsHelper {
         }
     }
 
-    fun hasHardwareFeature(feature: String) : Boolean{
-        return KmpAndroid.clientAppContext.packageManager.hasSystemFeature(feature)
+    fun hasHardwareFeature(feature: String): Boolean {
+        return KmpAndroid.clientAppContext?.packageManager?.hasSystemFeature(feature) ?: false
     }
 }

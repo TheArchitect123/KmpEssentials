@@ -21,10 +21,10 @@ actual class KmpBattery {
     actual companion object {
         private var batteryState: BatteryInfo? = null
         private val batteryService: BatteryManager by lazy {
-            KmpAndroid.applicationContext.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
+            KmpAndroid.applicationContext?.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
         }
         private val powerManager by lazy {
-            KmpAndroid.applicationContext.getSystemService(Context.POWER_SERVICE) as PowerManager
+            KmpAndroid.applicationContext?.getSystemService(Context.POWER_SERVICE) as PowerManager
         }
 
         private val batteryReceiver: BatteryManagerBroadcastReceiver by lazy {
@@ -94,7 +94,7 @@ actual class KmpBattery {
                 addAction(Intent.ACTION_BATTERY_CHANGED)
             }
 
-            KmpAndroid.applicationContext.registerReceiver(batteryReceiver, stateFilter)
+            KmpAndroid.applicationContext?.registerReceiver(batteryReceiver, stateFilter)
         }
 
         @RequiresApi(Build.VERSION_CODES.P)

@@ -86,16 +86,18 @@ actual class KmpTextToSpeech {
 
         // must run from the main thread
         actual fun convertSpeechToText(response: SpeechActionResult) {
-            if (SpeechRecognizer.isRecognitionAvailable(KmpAndroid.applicationContext)) {
-                val recognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
-                    putExtra(
-                        RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                        RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
-                    )
-                }
-                recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US")
+            if(KmpAndroid.applicationContext != null) {
+                if (SpeechRecognizer.isRecognitionAvailable(KmpAndroid.applicationContext!!)) {
+                    val recognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+                        putExtra(
+                            RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                            RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+                        )
+                    }
+                    recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US")
 
-                speechToText.startListening(recognizerIntent)
+                    speechToText.startListening(recognizerIntent)
+                }
             }
         }
 

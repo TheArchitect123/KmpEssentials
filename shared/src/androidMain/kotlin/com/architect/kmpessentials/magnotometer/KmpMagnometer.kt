@@ -12,7 +12,7 @@ actual class KmpMagnometer {
     actual companion object {
         internal lateinit var magScope: ActionTripleFloatParams
         private val sensorManager by lazy {
-            KmpAndroid.applicationContext.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+            KmpAndroid.applicationContext?.getSystemService(Context.SENSOR_SERVICE) as SensorManager
         }
         private val magManager by lazy {
             sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)

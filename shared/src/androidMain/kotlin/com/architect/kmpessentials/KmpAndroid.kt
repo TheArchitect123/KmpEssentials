@@ -20,7 +20,6 @@ import com.architect.kmpessentials.mediaPicker.KmpMediaPicker
 import com.architect.kmpessentials.permissions.KmpPermissionsManager
 import com.nareshchocha.filepickerlibrary.utilities.appConst.Const
 
-
 class KmpAndroid {
     companion object {
         private var hasRegistered = false
@@ -35,17 +34,17 @@ class KmpAndroid {
         }
 
         internal var allowWorkersToRunBeyondApp: Boolean = true
-        internal lateinit var applicationContext: Application
-        internal lateinit var clientAppContext: FragmentActivity
+        internal var applicationContext: Application? = null
+        internal var clientAppContext: FragmentActivity? = null
         internal val sensorManagerObserver = SensorObserver()
         internal var guserDisabledPermission: DefaultAction? = null
 
         fun getCurrentActivityContext(): FragmentActivity {
-            return clientAppContext
+            return clientAppContext!!
         }
 
         fun getCurrentApplicationContext(): Application {
-            return applicationContext
+            return applicationContext!!
         }
 
         fun setAllowWorkersToRunBeyondAppContext(allowWorkersToRunBeyondApp: Boolean) {
@@ -61,7 +60,7 @@ class KmpAndroid {
                     KmpBattery.initializeBatteryService()
                 }
 
-                applicationContext.registerActivityLifecycleCallbacks(ActivityLifecycleObserver())
+                applicationContext?.registerActivityLifecycleCallbacks(ActivityLifecycleObserver())
                 ProcessLifecycleOwner.get().lifecycle.addObserver(ApplicationLifecycleObserver()) // application lifecycle observer
 
                 hasRegistered = true
@@ -77,31 +76,33 @@ class KmpAndroid {
 
             // register application
             preRegisterApplicationContext(context.application)
-            registerAllContracts()
 
             // back button control
-            clientAppContext.onBackPressedDispatcher.addCallback(
-                clientAppContext,
-                backButtonCallBack
-            )
+            if(clientAppContext != null) {
+                registerAllContracts()
+                clientAppContext!!.onBackPressedDispatcher.addCallback(
+                    clientAppContext!!,
+                    backButtonCallBack
+                )
+            }
         }
 
         private fun registerAllContracts() {
             // camera apis
             KmpCamera.resultLauncher =
-                clientAppContext.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                clientAppContext!!.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                     loadFileDataViaIntent(it, FilePickingMode.TakeDataFromCamera)
                 }
 
             // image picker
             KmpMediaPicker.galleryLauncher =
-                clientAppContext.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                clientAppContext!!.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                     loadFileDataViaIntent(it, FilePickingMode.PickMediaFromGallery)
                 }
 
             // permission manager
             KmpPermissionsManager.resultLauncher =
-                clientAppContext.registerForActivityResult(ActivityResultContracts.RequestPermission()) { result ->
+                clientAppContext!!.registerForActivityResult(ActivityResultContracts.RequestPermission()) { result ->
                     if (result) {
                         KmpPermissionsManager.successAction()
                     } else {
@@ -111,7 +112,7 @@ class KmpAndroid {
                 }
 
             KmpPermissionsManager.resultManyLauncher =
-                clientAppContext.registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
+                clientAppContext!!.registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
                     if (result.values.any { !it }) { // all permissions must be enabled for this to work
                         guserDisabledPermission?.invoke()
                     } else {
@@ -121,7 +122,7 @@ class KmpAndroid {
 
             // file picker
             KmpFilePicker.resultLauncher =
-                clientAppContext.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                clientAppContext!!.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                     loadFileDataViaIntent(it, FilePickingMode.PickFileFromFileSystem)
                 }
         }

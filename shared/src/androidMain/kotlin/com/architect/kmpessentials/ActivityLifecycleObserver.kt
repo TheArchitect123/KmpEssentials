@@ -15,7 +15,7 @@ class ActivityLifecycleObserver : Application.ActivityLifecycleCallbacks {
 
     override fun onActivityResumed(activity: Activity) {
         try {
-            KmpAndroid.clientAppContext.lifecycle.addObserver(KmpAndroid.sensorManagerObserver)
+            KmpAndroid.clientAppContext?.lifecycle?.addObserver(KmpAndroid.sensorManagerObserver)
         } catch (ex: Exception) {
 
         }
@@ -23,7 +23,7 @@ class ActivityLifecycleObserver : Application.ActivityLifecycleCallbacks {
 
     override fun onActivityPaused(activity: Activity) {
         try {
-            KmpAndroid.clientAppContext.lifecycle.removeObserver(KmpAndroid.sensorManagerObserver)
+            KmpAndroid.clientAppContext?.lifecycle?.removeObserver(KmpAndroid.sensorManagerObserver)
         } catch (ex: Exception) {
 
         }

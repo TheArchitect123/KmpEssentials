@@ -10,7 +10,7 @@ actual class KmpAccelerometer {
     actual companion object {
         internal lateinit var accScope: ActionTripleFloatParams
         private val sensorManager by lazy {
-            KmpAndroid.applicationContext.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+            KmpAndroid.applicationContext?.getSystemService(Context.SENSOR_SERVICE) as SensorManager
         }
         private val accManager by lazy {
             sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)

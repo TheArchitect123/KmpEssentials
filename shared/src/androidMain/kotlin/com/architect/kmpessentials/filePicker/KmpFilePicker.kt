@@ -28,10 +28,12 @@ actual class KmpFilePicker {
         }
 
         private fun bootFilePickerActivity(callowMultiple: Boolean = false) {
-            resultLauncher.launch(
-                FilePicker.Builder(KmpAndroid.clientAppContext)
-                    .pickDocumentFileBuild(DocumentFilePickerConfig(allowMultiple = callowMultiple))
-            )
+            if(KmpAndroid.clientAppContext != null) {
+                resultLauncher.launch(
+                    FilePicker.Builder(KmpAndroid.clientAppContext!!)
+                        .pickDocumentFileBuild(DocumentFilePickerConfig(allowMultiple = callowMultiple))
+                )
+            }
         }
     }
 }

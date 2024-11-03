@@ -13,7 +13,7 @@ import java.util.UUID
 actual class KmpBackgrounding {
     actual companion object {
         private val workManager by lazy {
-            WorkManager.getInstance(KmpAndroid.applicationContext)
+            WorkManager.getInstance(KmpAndroid.applicationContext!!)
         }
 
         private val workerJobs = mutableListOf<UUID>()

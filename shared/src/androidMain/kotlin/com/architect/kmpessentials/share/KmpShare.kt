@@ -36,7 +36,7 @@ actual class KmpShare {
                 try {
                     val titleOfIntent = if (optionalTitle.isNotBlank()) optionalTitle else text
                     val shareIntent =
-                        ShareCompat.IntentBuilder(KmpAndroid.applicationContext)
+                        ShareCompat.IntentBuilder(KmpAndroid.applicationContext!!)
                             .setType(Mimes.plainText)
                             .setChooserTitle(titleOfIntent)
                             .setText(text)
@@ -44,7 +44,7 @@ actual class KmpShare {
 
                     shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
-                    KmpAndroid.applicationContext.startActivity(shareIntent)
+                    KmpAndroid.applicationContext?.startActivity(shareIntent)
                 } catch (ex: Exception) {
                     KmpLogging.writeException(ErrorTags.GENERAL_ERROR_TAG, ex)
                 }
@@ -56,11 +56,11 @@ actual class KmpShare {
                 try {
                     val processedFileType = if (fileType.isNotBlank()) fileType else Mimes.plainText
                     // copy the file into a directory that's accessible to all applications
-                    val shareIntent = ShareCompat.IntentBuilder(KmpAndroid.applicationContext)
+                    val shareIntent = ShareCompat.IntentBuilder(KmpAndroid.applicationContext!!)
                         .addStream(
                             FileProvider.getUriForFile(
-                                KmpAndroid.applicationContext,
-                                KmpAndroid.applicationContext.packageName + ".fileprovider",
+                                KmpAndroid.applicationContext!!,
+                                KmpAndroid.applicationContext?.packageName + ".fileprovider",
                                 File(filePath)
                             )
                         )
@@ -77,7 +77,7 @@ actual class KmpShare {
                     }
 
                     resetAllConfiguration()
-                    KmpAndroid.applicationContext.startActivity(shareIntent)
+                    KmpAndroid.applicationContext?.startActivity(shareIntent)
                 } catch (ex: Exception) {
                     KmpLogging.writeException(ErrorTags.GENERAL_ERROR_TAG, ex)
                 }

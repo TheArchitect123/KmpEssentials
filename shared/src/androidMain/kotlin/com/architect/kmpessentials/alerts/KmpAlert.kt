@@ -78,7 +78,7 @@ actual class KmpAlert {
                     )
                 }
 
-                val alert = AlertDialog.Builder(KmpAndroid.clientAppContext, alertDialogStyle)
+                val alert = AlertDialog.Builder(KmpAndroid.clientAppContext!!, alertDialogStyle)
                     .setTitle(titleSpan)
                     .setMessage(messageSpan)
                     .setPositiveButton(buttonSpan) { result, dial ->
@@ -121,7 +121,7 @@ actual class KmpAlert {
                     )
                 }
 
-                val alert = AlertDialog.Builder(KmpAndroid.clientAppContext, alertDialogStyle)
+                val alert = AlertDialog.Builder(KmpAndroid.clientAppContext!!, alertDialogStyle)
                     .setTitle(titleSpan)
                     .setMessage(messageSpan)
                     .setPositiveButton(buttonSpan) { result, dial ->
@@ -173,7 +173,7 @@ actual class KmpAlert {
                     )
                 }
 
-                val alert = AlertDialog.Builder(KmpAndroid.clientAppContext, alertDialogStyle)
+                val alert = AlertDialog.Builder(KmpAndroid.clientAppContext!!, alertDialogStyle)
                     .setTitle(titleSpan)
                     .setMessage(messageSpan)
                     .setPositiveButton(buttonSpan) { result, dial ->
