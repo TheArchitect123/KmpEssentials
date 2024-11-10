@@ -52,7 +52,7 @@ class KmpAndroid {
         }
 
         fun preRegisterApplicationContext(
-            appContext: Application
+            appContext: Application,
         ) {
             if (!hasRegistered) {
                 applicationContext = appContext
@@ -69,7 +69,7 @@ class KmpAndroid {
 
         fun initializeApp(
             context: FragmentActivity,
-            userDisabledPermission: DefaultAction? = null
+            userDisabledPermission: DefaultAction? = null,
         ) {
             clientAppContext = context
             guserDisabledPermission = userDisabledPermission

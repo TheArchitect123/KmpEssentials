@@ -29,6 +29,11 @@ actual class KmpLocalNotifications {
             notificationIcon = icon
         }
 
+        private var allowExact = true
+        fun allowSetExact(allowExact: Boolean) {
+            this.allowExact = allowExact
+        }
+
         internal fun getPendingIntentForAlarmBroadcasts(
             title: String,
             message: String
@@ -83,14 +88,26 @@ actual class KmpLocalNotifications {
         @RequiresApi(Build.VERSION_CODES.KITKAT)
         @SuppressLint("MissingPermission")
         actual fun scheduleAlarmNotification(durationMS: Long, title: String, message: String) {
+            val alarmManager =
+                (KmpAndroid.applicationContext?.getSystemService(Context.ALARM_SERVICE) as AlarmManager)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // allows notification to run regardless of Doze mode
-                (KmpAndroid.applicationContext?.getSystemService(Context.ALARM_SERVICE) as AlarmManager).setExactAndAllowWhileIdle(
+                if (allowExact) alarmManager.setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,  // Use RTC_WAKEUP to wake the device when the alarm triggers
+                    durationMS,
+                    getPendingIntentForAlarmBroadcasts(title, message)
+                ) else alarmManager.set(
                     AlarmManager.RTC_WAKEUP,  // Use RTC_WAKEUP to wake the device when the alarm triggers
                     durationMS,
                     getPendingIntentForAlarmBroadcasts(title, message)
                 )
             } else {
-                (KmpAndroid.applicationContext?.getSystemService(Context.ALARM_SERVICE) as AlarmManager).setExact(
+                if (allowExact)
+                    alarmManager.setExact(
+                        AlarmManager.RTC_WAKEUP,  // Use RTC_WAKEUP to wake the device when the alarm triggers
+                        durationMS,
+                        getPendingIntentForAlarmBroadcasts(title, message)
+                    )
+                else alarmManager.set(
                     AlarmManager.RTC_WAKEUP,  // Use RTC_WAKEUP to wake the device when the alarm triggers
                     durationMS,
                     getPendingIntentForAlarmBroadcasts(title, message)

@@ -56,13 +56,24 @@ actual class KmpPermissionsManager {
                 } else {
                     successAction = runAction
                     if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
-                        val cpermission = PermissionsTransformer.getPermissionFromEnum(permission)
-                        isPermissionGranted(permission) {
-                            if (it) {
-                                successAction()
-                            } else {
-                                resultLauncher.launch(cpermission)
+                        try {
+                            val cpermission =
+                                PermissionsTransformer.getPermissionFromEnum(permission)
+                            if(cpermission.isNotBlank()) {
+                                isPermissionGranted(permission) {
+                                    if (it) {
+                                        successAction()
+                                    } else {
+                                        resultLauncher.launch(cpermission)
+                                    }
+                                }
                             }
+                            else {
+                                successAction()
+                            }
+                        }
+                        catch (ex: Exception){
+                            KmpLogging.writeErrorWithCode(ex.stackTraceToString())
                         }
                     } else {
                         successAction()
@@ -94,7 +105,7 @@ actual class KmpPermissionsManager {
                                 successAction()
                             }
                         } else {
-                            KmpLogging.writeErrorWithCode(ErrorCodes.MULTIPLE_PERMISSIONS_NOT_FOUND)
+                            successAction()
                         }
                     }
                     catch (ex: Exception) {

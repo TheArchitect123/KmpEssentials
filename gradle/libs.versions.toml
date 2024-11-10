@@ -4,7 +4,7 @@ kotlin = "2.0.0"
 droidCompileSdk = "35"
 droidTargetSdk = "35"
 droidMinSdk = "16"
-lifecycleProcess = "2.8.6"
+lifecycleProcess = "2.8.7"
 swiftKlib =  "0.6.3"
 
 [libraries]
