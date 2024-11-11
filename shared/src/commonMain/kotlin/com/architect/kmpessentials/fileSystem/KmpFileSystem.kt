@@ -62,6 +62,11 @@ expect class KmpFileSystem {
          * @return text file content from the file, if no content exists returns null
          * */
         fun readTextFromFileAt(filePath: String): String?
+
+        /**
+         * @return generates a merged file path from the filename + directory path
+         * */
+        fun getMergedFilePathFromDirectory(directoryPath: String, fileName: String): String?
     }
 
 }

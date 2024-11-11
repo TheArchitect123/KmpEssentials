@@ -128,5 +128,14 @@ actual class KmpFileSystem {
 
             return true
         }
+
+        actual fun getMergedFilePathFromDirectory(
+            directoryPath: String,
+            fileName: String
+        ): String? {
+            val directoryUrl = NSURL.fileURLWithPath(directoryPath)
+            val combinedUrl = directoryUrl.URLByAppendingPathComponent(fileName)
+            return combinedUrl?.path
+        }
     }
 }

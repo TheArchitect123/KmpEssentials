@@ -7,6 +7,7 @@ import platform.Foundation.NSFileManager
 import platform.Foundation.NSString
 import platform.Foundation.NSURL
 import platform.Foundation.NSUTF8StringEncoding
+import platform.Foundation.URLByAppendingPathComponent
 import platform.Foundation.create
 import platform.Foundation.stringWithContentsOfURL
 import platform.Foundation.writeToURL
@@ -86,6 +87,15 @@ actual class KmpFileSystem {
             }
 
             return true
+        }
+
+        actual fun getMergedFilePathFromDirectory(
+            directoryPath: String,
+            fileName: String
+        ): String? {
+            val directoryUrl = NSURL.fileURLWithPath(directoryPath)
+            val combinedUrl = directoryUrl.URLByAppendingPathComponent(fileName)
+            return combinedUrl?.path
         }
     }
 }

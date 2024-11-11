@@ -9,7 +9,6 @@ plugins {
     id("signing")
     id("maven-publish")
     id("com.vanniktech.maven.publish") version "0.28.0"
-    id("io.github.ttypic.swiftklib")
 }
 
 kotlin {
@@ -183,7 +182,7 @@ afterEvaluate {
         coordinates(
             groupId = "io.github.thearchitect123",
             artifactId = "kmpEssentials",
-            version = "1.4.8"
+            version = "1.5.3"
         )
 
         // Configure POM metadata for the published artifact
@@ -232,12 +231,5 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
-    }
-}
-
-swiftklib {
-    create("SwiftEssentialsEngine") {
-        path = file("native/SwiftEssentialsEngine")
-        packageName("com.ttypic.objclibs.swiftEssentialsEngine")
     }
 }

@@ -1,6 +1,5 @@
 package com.architect.kmpessentials.email.delegates
 
-import com.architect.kmpessentials.KmpiOS
 import com.architect.kmpessentials.mainThread.KmpMainThread
 import platform.Foundation.NSError
 import platform.MessageUI.MFMailComposeResult
@@ -16,8 +15,7 @@ internal class EmailReceipientDelegate : NSObject(), MFMailComposeViewController
         error: NSError?
     ) {
         KmpMainThread.runViaMainThread {
-            KmpiOS.getTopViewController()?.presentedViewController()
-                ?.dismissViewControllerAnimated(true, null)
+            controller.dismissViewControllerAnimated(true, null)
         }
     }
 }

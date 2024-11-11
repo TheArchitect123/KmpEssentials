@@ -60,8 +60,16 @@ actual class KmpFileSystem {
         actual fun readTextFromFileAt(filePath: String): String? {
             return ""
         }
+
         actual fun wipeAllFilesFromDirectoryPath(directoryPath: String): Boolean {
             return false
+        }
+
+        actual fun getMergedFilePathFromDirectory(
+            directoryPath: String,
+            fileName: String
+        ): String? {
+            return null
         }
     }
 }

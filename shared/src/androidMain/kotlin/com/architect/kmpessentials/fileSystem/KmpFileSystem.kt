@@ -20,7 +20,10 @@ actual class KmpFileSystem {
         }
 
         actual fun deleteFileAt(path: String) {
-            KmpAndroid.applicationContext?.deleteFile(path)
+            val fileToDelete = File(path)
+            if (fileToDelete.exists()) {
+                fileToDelete.delete()
+            }
         }
 
         actual fun createFileAt(path: String) {
@@ -76,6 +79,13 @@ actual class KmpFileSystem {
             } else {
                 false // Return false if the directory doesn't exist or isn't a directory
             }
+        }
+
+        actual fun getMergedFilePathFromDirectory(
+            directoryPath: String,
+            fileName: String
+        ): String? {
+            return File(directoryPath, fileName).path
         }
     }
 }
