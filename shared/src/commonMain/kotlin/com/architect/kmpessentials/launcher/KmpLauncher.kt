@@ -1,6 +1,7 @@
 package com.architect.kmpessentials.launcher
 
 import com.architect.kmpessentials.aliases.DefaultActionWithBooleanReturn
+import com.architect.kmpessentials.aliases.DefaultActionWithBooleanReturnAsync
 
 @Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
 expect class KmpLauncher {

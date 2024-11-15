@@ -3,11 +3,11 @@ package com.architect.kmpessentials.mediaPicker
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import com.architect.kmpessentials.KmpAndroid
+import com.architect.kmpessentials.filePicker.internals.models.PickMediaConfig
+import com.architect.kmpessentials.filePicker.internals.models.PickMediaType
+import com.architect.kmpessentials.filePicker.internals.ui.FilePicker
 import com.architect.kmpessentials.internal.ActionStringParams
 import com.architect.kmpessentials.mainThread.KmpMainThread
-import com.nareshchocha.filepickerlibrary.models.PickMediaConfig
-import com.nareshchocha.filepickerlibrary.models.PickMediaType
-import com.nareshchocha.filepickerlibrary.ui.FilePicker
 
 actual class KmpMediaPicker {
     actual companion object {
@@ -19,7 +19,11 @@ actual class KmpMediaPicker {
             KmpMainThread.runViaMainThread {
                 galleryLauncher.launch(
                     FilePicker.Builder(KmpAndroid.clientAppContext!!)
-                        .pickMediaBuild(PickMediaConfig(mPickMediaType = PickMediaType.ImageOnly))
+                        .pickMediaBuild(
+                            PickMediaConfig(
+                                mPickMediaType = PickMediaType.ImageOnly
+                            )
+                        )
                 )
             }
         }
@@ -29,7 +33,11 @@ actual class KmpMediaPicker {
             KmpMainThread.runViaMainThread {
                 galleryLauncher.launch(
                     FilePicker.Builder(KmpAndroid.clientAppContext!!)
-                        .pickMediaBuild(PickMediaConfig(mPickMediaType = PickMediaType.VideoOnly))
+                        .pickMediaBuild(
+                            PickMediaConfig(
+                                mPickMediaType = PickMediaType.VideoOnly
+                            )
+                        )
                 )
             }
         }

@@ -15,10 +15,10 @@ import com.architect.kmpessentials.battery.KmpBattery
 import com.architect.kmpessentials.camera.KmpCamera
 import com.architect.kmpessentials.filePicker.File
 import com.architect.kmpessentials.filePicker.KmpFilePicker
+import com.architect.kmpessentials.filePicker.internals.utilities.appConst.Const
 import com.architect.kmpessentials.internals.FilePickingMode
 import com.architect.kmpessentials.mediaPicker.KmpMediaPicker
 import com.architect.kmpessentials.permissions.KmpPermissionsManager
-import com.nareshchocha.filepickerlibrary.utilities.appConst.Const
 
 class KmpAndroid {
     companion object {
@@ -78,7 +78,7 @@ class KmpAndroid {
             preRegisterApplicationContext(context.application)
 
             // back button control
-            if(clientAppContext != null) {
+            if (clientAppContext != null) {
                 registerAllContracts()
                 clientAppContext!!.onBackPressedDispatcher.addCallback(
                     clientAppContext!!,
@@ -132,7 +132,8 @@ class KmpAndroid {
             mode: FilePickingMode
         ) {
             if (it.resultCode == Activity.RESULT_OK) {
-                val singlePath = it.data!!.getStringExtra(Const.BundleExtras.FILE_PATH)
+                val singlePath =
+                    it.data!!.getStringExtra(Const.BundleExtras.FILE_PATH)
                 if (singlePath != null) {
                     val singleFile =
                         java.io.File(singlePath)

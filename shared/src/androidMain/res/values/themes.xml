@@ -1,0 +1,40 @@
+<resources>
+
+    <style name="Theme.FilePicker.Dialog" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
+
+    <style name="Theme.FilePicker.BottomSheetDialog" parent="Theme.MaterialComponents.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/Theme.FilePicker.BottomSheet</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="backgroundColor">@android:color/transparent</item>
+    </style>
+
+
+    <style name="Theme.FilePicker.BottomSheet" parent="Widget.MaterialComponents.BottomSheet">
+        <item name="backgroundColor">@android:color/white</item>
+        <item name="shapeAppearanceOverlay">@style/Theme.FilePicker.MediumComponent</item>
+    </style>
+
+    <style name="Theme.FilePicker.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerSizeTopLeft">20dp</item>
+        <item name="cornerSizeTopRight">20dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+    </style>
+
+    <style name="Theme.FilePicker.Dialog.NoActionBar" parent="Theme.FilePicker.Dialog">
+        <item name="windowActionBar">false</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="windowNoTitle">false</item>
+        <item name="actionBarSize">0dp</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowTitleSize">0dp</item>
+    </style>
+
+
+</resources>

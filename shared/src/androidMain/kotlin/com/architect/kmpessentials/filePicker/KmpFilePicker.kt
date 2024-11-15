@@ -3,9 +3,9 @@ package com.architect.kmpessentials.filePicker
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import com.architect.kmpessentials.KmpAndroid
+import com.architect.kmpessentials.filePicker.internals.models.DocumentFilePickerConfig
+import com.architect.kmpessentials.filePicker.internals.ui.FilePicker
 import com.architect.kmpessentials.mainThread.KmpMainThread
-import com.nareshchocha.filepickerlibrary.models.DocumentFilePickerConfig
-import com.nareshchocha.filepickerlibrary.ui.FilePicker
 
 actual class KmpFilePicker {
     actual companion object {

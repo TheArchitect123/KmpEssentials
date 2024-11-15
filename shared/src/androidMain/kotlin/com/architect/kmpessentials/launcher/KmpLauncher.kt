@@ -7,8 +7,8 @@ import android.os.Looper
 import android.provider.Settings
 import com.architect.kmpessentials.KmpAndroid
 import com.architect.kmpessentials.aliases.DefaultActionWithBooleanReturn
+import com.architect.kmpessentials.aliases.DefaultActionWithBooleanReturnAsync
 import com.architect.kmpessentials.launcher.constants.UriPrefixes
-import com.architect.kmpessentials.mainThread.KmpMainThread
 
 actual class KmpLauncher {
     actual companion object {

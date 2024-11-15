@@ -9,6 +9,7 @@ plugins {
     id("signing")
     id("maven-publish")
     id("com.vanniktech.maven.publish") version "0.28.0"
+    id("kotlin-parcelize")
 }
 
 kotlin {
@@ -144,11 +145,11 @@ kotlin {
                 implementation("dev.tmapps:konnection:1.4.1")
                 implementation("com.liftric:kvault:1.12.0")
 
+                implementation("io.coil-kt:coil:2.4.0")
                 implementation("androidx.preference:preference:1.2.1")
                 implementation("com.google.android.material:material:1.12.0")
                 implementation("androidx.biometric:biometric:1.1.0")
                 implementation("androidx.activity:activity-ktx:1.9.1")
-                implementation("io.github.chochanaresh:filepicker:0.2.5")
                 implementation("androidx.appcompat:appcompat:1.7.0")
                 implementation("androidx.startup:startup-runtime:1.1.1")
                 implementation("androidx.core:core-ktx:1.13.1")
@@ -182,7 +183,7 @@ afterEvaluate {
         coordinates(
             groupId = "io.github.thearchitect123",
             artifactId = "kmpEssentials",
-            version = "1.5.3"
+            version = "1.5.7"
         )
 
         // Configure POM metadata for the published artifact
@@ -227,6 +228,9 @@ android {
     compileSdk = libs.versions.droidCompileSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.droidMinSdk.get().toInt()
+    }
+    buildFeatures {
+        viewBinding = true // Enable ViewBinding
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
