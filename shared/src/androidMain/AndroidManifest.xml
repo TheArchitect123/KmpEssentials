@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <application
+        android:requestLegacyExternalStorage="true">
+        <activity
+            android:name="com.architect.kmpessentials.filePicker.internals.ui.activitys.PopUpActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FilePicker.Dialog" />
+        <activity
+            android:name="com.architect.kmpessentials.filePicker.internals.ui.activitys.MediaFilePickerActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FilePicker.Dialog.NoActionBar" />
+        <activity
+            android:name="com.architect.kmpessentials.filePicker.internals.ui.activitys.VideoCaptureActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FilePicker.Dialog.NoActionBar" />
+        <activity
+            android:name="com.architect.kmpessentials.filePicker.internals.ui.activitys.DocumentFilePickerActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FilePicker.Dialog.NoActionBar" />
+        <activity
+            android:name="com.architect.kmpessentials.filePicker.internals.ui.activitys.ImageCaptureActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FilePicker.Dialog.NoActionBar" />
+
+        <provider
+            android:name="com.architect.kmpessentials.filePicker.internals.utilities.CustomFileProvider"
+            android:authorities="${applicationId}.library.fileprovider"
+            android:exported="false"
+            android:forceUriPermissions="true"
+            android:grantUriPermissions="true"
+            tools:targetApi="q">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_provider_paths" />
+        </provider>
+    </application>
+</manifest>

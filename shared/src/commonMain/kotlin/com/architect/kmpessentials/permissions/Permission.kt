@@ -15,6 +15,7 @@ enum class Permission {
     PushNotifications,
     Biometrics,
     Contacts,
-    Vibrator
+    Vibrator,
+    Calendar
 }
 

@@ -24,11 +24,27 @@ actual class KmpPermissionsManager {
         actual fun isPermissionGranted(permission: Permission, actionResult: ActionBoolParams) {
             KmpMainThread.runViaMainThread {
                 if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
-                    actionResult(
-                        KmpAndroid.applicationContext?.checkSelfPermission(
-                            PermissionsTransformer.getPermissionFromEnum(permission)
-                        ) == PackageManager.PERMISSION_GRANTED
-                    )
+                    if (permission == Permission.Location || permission == Permission.Calendar) { // requires multiple permissions
+                        val permissions = PermissionsTransformer.getPermissionsFromEnum(permission)
+                        if (permissions.isNotEmpty()) {
+                            var isGranted = true
+                            permissions.forEach {
+                                if (isGranted) {
+                                    isGranted = KmpAndroid.applicationContext?.checkSelfPermission(
+                                        it
+                                    ) == PackageManager.PERMISSION_GRANTED
+                                }
+                            }
+
+                            actionResult(isGranted)
+                        }
+                    } else {
+                        actionResult(
+                            KmpAndroid.applicationContext?.checkSelfPermission(
+                                PermissionsTransformer.getPermissionFromEnum(permission)
+                            ) == PackageManager.PERMISSION_GRANTED
+                        )
+                    }
                 } else {
                     actionResult(true)
                 }
@@ -51,7 +67,7 @@ actual class KmpPermissionsManager {
             runAction: ActionNoParams
         ) {
             KmpMainThread.runViaMainThread {
-                if (permission == Permission.Location) { // requires multiple permissions
+                if (permission == Permission.Location || permission == Permission.Calendar) { // requires multiple permissions
                     requestPermissions(permission, runAction)
                 } else {
                     successAction = runAction
@@ -59,7 +75,7 @@ actual class KmpPermissionsManager {
                         try {
                             val cpermission =
                                 PermissionsTransformer.getPermissionFromEnum(permission)
-                            if(cpermission.isNotBlank()) {
+                            if (cpermission.isNotBlank()) {
                                 isPermissionGranted(permission) {
                                     if (it) {
                                         successAction()
@@ -67,12 +83,10 @@ actual class KmpPermissionsManager {
                                         resultLauncher.launch(cpermission)
                                     }
                                 }
-                            }
-                            else {
+                            } else {
                                 successAction()
                             }
-                        }
-                        catch (ex: Exception){
+                        } catch (ex: Exception) {
                             KmpLogging.writeErrorWithCode(ex.stackTraceToString())
                         }
                     } else {
@@ -107,8 +121,7 @@ actual class KmpPermissionsManager {
                         } else {
                             successAction()
                         }
-                    }
-                    catch (ex: Exception) {
+                    } catch (ex: Exception) {
                         KmpLogging.writeErrorWithCode(ex.stackTraceToString())
                     }
                 } else {
@@ -122,11 +135,12 @@ actual class KmpPermissionsManager {
                 if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
                     val cpermission = PermissionsTransformer.getPermissionFromEnum(permission)
                     val hasRequestedPermission =
-                       if(cpermission.isNotBlank()) KmpPublicStorage.getBooleanFromKey(cpermission) ?: false else false
+                        if (cpermission.isNotBlank()) KmpPublicStorage.getBooleanFromKey(cpermission)
+                            ?: false else false
 
                     var isDenied = !isPermissionGranted(permission)
                     if (isDenied && hasRequestedPermission) {
-                        if(KmpAndroid.clientAppContext != null) {
+                        if (KmpAndroid.clientAppContext != null) {
                             isDenied = ActivityCompat.shouldShowRequestPermissionRationale(
                                 KmpAndroid.clientAppContext!!,
                                 cpermission

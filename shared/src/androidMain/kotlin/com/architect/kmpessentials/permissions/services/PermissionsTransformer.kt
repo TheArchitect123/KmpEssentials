@@ -34,6 +34,13 @@ internal object PermissionsTransformer {
             )
         }
 
+        if (permission == Permission.Calendar) {
+            return arrayOf(
+                Manifest.permission.READ_CALENDAR,
+                Manifest.permission.WRITE_CALENDAR
+            )
+        }
+
         return arrayOf("")
     }
 }

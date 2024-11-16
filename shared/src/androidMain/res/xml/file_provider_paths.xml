@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <external-files-path name="medias" path="." />
+    <external-files-path name="my_images" path="/" />
+    <cache-path name="mediasFile" path="." />
+    <external-cache-path name="externalMedias" path="." />
+
+    <external-path name="secure_name" path="DCIM/" />
+    <external-path name="download" path="Download/" />
+</paths>
