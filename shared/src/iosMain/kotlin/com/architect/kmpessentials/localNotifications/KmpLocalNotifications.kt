@@ -42,61 +42,65 @@ actual class KmpLocalNotifications {
             title: String,
             message: String,
             repeats: Boolean = false
-        ) {
-            KmpMainThread.runViaMainThread {
-                // Create notification content
-                val content = UNMutableNotificationContent().apply {
-                    setTitle(title)
-                    setBody(message)
-                    setSound(UNNotificationSound.defaultSound)
-                }
+        ): String {
+            // Create notification content
+            val content = UNMutableNotificationContent().apply {
+                setTitle(title)
+                setBody(message)
+                setSound(UNNotificationSound.defaultSound)
+            }
 
-                // Set up a time-based trigger for the notification
-                val trigger =
-                    UNTimeIntervalNotificationTrigger.triggerWithTimeInterval(
-                        timeInterval = (durationMS / 1000).toDouble(),
-                        repeats = repeats
-                    )
-
-
-                val uniqueId = "random_notification_id_${Random.nextInt()}_${
-                    Clock.System.now().toEpochMilliseconds()
-                }" // store in prefernces in case users need to cancel it
-
-                GlobalScope.launch {
-                    try {
-                        val uniqueLocalNotifs = NSURL.fileURLWithPath(
-                            KmpFileSystem.createDirectNameAtAppStorage(scheduledIds)
-                        ).URLByAppendingPathComponent("$uniqueId.txt")?.absoluteURL
-                        KmpFileSystem.writeTextToFileAt(
-                            uniqueLocalNotifs?.absoluteString ?: "", uniqueId
-                        )
-                    } catch (ex: Exception) {
-
-                    }
-                }
-
-                // Create a request with a unique identifier
-                val request = UNNotificationRequest.requestWithIdentifier(
-                    uniqueId, // unique identifier
-                    content = content,
-                    trigger = trigger
+            // Set up a time-based trigger for the notification
+            val trigger =
+                UNTimeIntervalNotificationTrigger.triggerWithTimeInterval(
+                    timeInterval = (durationMS / 1000).toDouble(),
+                    repeats = repeats
                 )
 
-                // Schedule the notification
-                UNUserNotificationCenter.currentNotificationCenter()
-                    .addNotificationRequest(request) { error ->
-                        if (error != null) {
-                            println("Error scheduling notification: $error")
-                        } else {
-                            println("Notification scheduled successfully!")
-                        }
-                    }
+
+            val uniqueId = "random_notification_id_${Random.nextInt()}_${
+                Clock.System.now().toEpochMilliseconds()
+            }" // store in prefernces in case users need to cancel it
+
+            GlobalScope.launch {
+                try {
+                    val uniqueLocalNotifs = NSURL.fileURLWithPath(
+                        KmpFileSystem.createDirectNameAtAppStorage(scheduledIds)
+                    ).URLByAppendingPathComponent("$uniqueId.txt")?.absoluteURL
+                    KmpFileSystem.writeTextToFileAt(
+                        uniqueLocalNotifs?.absoluteString ?: "", uniqueId
+                    )
+                } catch (ex: Exception) {
+
+                }
             }
+
+            // Create a request with a unique identifier
+            val request = UNNotificationRequest.requestWithIdentifier(
+                uniqueId, // unique identifier
+                content = content,
+                trigger = trigger
+            )
+
+            // Schedule the notification
+            UNUserNotificationCenter.currentNotificationCenter()
+                .addNotificationRequest(request) { error ->
+                    if (error != null) {
+                        println("Error scheduling notification: $error")
+                    } else {
+                        println("Notification scheduled successfully!")
+                    }
+                }
+
+            return uniqueId
         }
 
-        actual fun scheduleAlarmNotification(durationMS: Long, title: String, message: String) {
-            broadcastScheduleNotification(durationMS, title, message)
+        actual fun scheduleAlarmNotification(
+            durationMS: Long,
+            title: String,
+            message: String
+        ): String {
+            return broadcastScheduleNotification(durationMS, title, message)
         }
 
         actual fun scheduleAlarmNotificationRepeating(
@@ -104,8 +108,22 @@ actual class KmpLocalNotifications {
             intervalMs: Long,
             title: String,
             message: String
-        ) {
-            broadcastScheduleNotification(durationMS, title, message, true)
+        ): String {
+            return broadcastScheduleNotification(durationMS, title, message, true)
+        }
+
+        actual fun cancelAlarmWithId(alarmId: String) {
+            GlobalScope.launch {
+                val allLocalIds = KmpFileSystem.getAllFilePathsFromDirectoryPath(scheduledIds)
+                val ids =
+                    allLocalIds.singleOrNull { alarmId == KmpFileSystem.readTextFromFileAt(it) }
+                if (ids != null) {
+                    UNUserNotificationCenter.currentNotificationCenter()
+                        .removePendingNotificationRequestsWithIdentifiers(listOf(ids))
+
+                    KmpFileSystem.deleteFileAt(ids)
+                }
+            }
         }
 
         actual fun cancelAllRepeatingAlarms() {

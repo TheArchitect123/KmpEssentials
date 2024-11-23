@@ -11,18 +11,23 @@ expect class KmpLocalNotifications {
          * Schedules an alarm, and broadcasts a local notification with the specified Title & Message, after duration in milliseconds has passed
          * @param durationMS milliseconds until the local notification is triggered
          * */
-        fun scheduleAlarmNotification(durationMS: Long, title: String, message: String)
+        fun scheduleAlarmNotification(durationMS: Long, title: String, message: String) : String
 
         /**
          * Schedules a repeating alarm, and broadcasts a local notification with the specified Title & Message, after duration in milliseconds has passed
          * @param durationMS milliseconds until the local notification is triggered, and will repeat after every intervalMs set
          * @param intervalMs the interval in milliseconds between repeats
          * */
-        fun scheduleAlarmNotificationRepeating(durationMS: Long, intervalMs: Long, title: String, message: String)
+        fun scheduleAlarmNotificationRepeating(durationMS: Long, intervalMs: Long, title: String, message: String) : String
 
         /**
          * Discards all repeating alarms (if any)
          * */
         fun cancelAllRepeatingAlarms()
+
+        /**
+         * Discards an alarm with a specific Id
+         * */
+        fun cancelAlarmWithId(alarmId: String)
     }
 }

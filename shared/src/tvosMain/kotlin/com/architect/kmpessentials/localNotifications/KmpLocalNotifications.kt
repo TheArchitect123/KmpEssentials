@@ -11,8 +11,8 @@ actual class KmpLocalNotifications {
 
         }
 
-        actual fun scheduleAlarmNotification(durationMS: Long, title: String, message: String) {
-
+        actual fun scheduleAlarmNotification(durationMS: Long, title: String, message: String) : String{
+            return ""
         }
 
         actual fun scheduleAlarmNotificationRepeating(
@@ -20,11 +20,15 @@ actual class KmpLocalNotifications {
             intervalMs: Long,
             title: String,
             message: String
-        ) {
-
+        ) : String{
+            return ""
         }
 
         actual fun cancelAllRepeatingAlarms() {
+        }
+
+        actual fun cancelAlarmWithId(alarmId: String){
+
         }
     }
 }

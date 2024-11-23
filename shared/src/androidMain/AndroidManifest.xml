@@ -3,6 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools">
     <application
         android:requestLegacyExternalStorage="true">
+        <receiver android:name="com.architect.kmpessentials.localNotifications.receivers.LocalAlarmReceiver"
+            android:exported="true"
+            tools:node="merge"
+            >
+            <intent-filter>
+                <action android:name="com.kmpessentials.action.filter"/>
+            </intent-filter>
+        </receiver>
+
+        <service android:name="androidx.work.impl.foreground.SystemForegroundService"
+            android:foregroundServiceType="dataSync"
+            tools:node="merge"
+            />
+
         <activity
             android:name="com.architect.kmpessentials.filePicker.internals.ui.activitys.PopUpActivity"
             android:exported="false"

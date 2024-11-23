@@ -2,6 +2,8 @@ package com.architect.testclient.androidTest
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
+import android.provider.Settings.Global
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.*
@@ -38,8 +40,15 @@ class MainActivity : FragmentActivity() {
 
         KmpAndroid.initializeApp(this)
 
-        KmpSecureStorage.configureDroidPreferenceFileName("hello")
-        writeCsv()
+        KmpLocalNotifications.allowSetExact(false)
+        KmpLocalNotifications.setNotificationIcon(R.drawable.ic_launcher_background)
+        val id = KmpLocalNotifications.scheduleAlarmNotification(20000, "Hello", "Testing")
+
+        GlobalScope.launch {
+            delay(2000)
+            KmpLocalNotifications.cancelAlarmWithId(id)
+        }
+
         setContent {
             MyApplicationTheme {
                 Surface(

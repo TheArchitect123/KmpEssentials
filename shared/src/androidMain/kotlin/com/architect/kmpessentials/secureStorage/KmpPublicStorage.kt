@@ -1,12 +1,18 @@
 package com.architect.kmpessentials.secureStorage
 
+import android.content.Context
 import androidx.preference.PreferenceManager
 import com.architect.kmpessentials.KmpAndroid
 
 actual class KmpPublicStorage {
     actual companion object {
+        private lateinit var localContext : Context
         private val sharedPreference by lazy {
-            PreferenceManager.getDefaultSharedPreferences(KmpAndroid.applicationContext!!)
+            PreferenceManager.getDefaultSharedPreferences(KmpAndroid.applicationContext ?: localContext)
+        }
+
+        fun setCustomContext(customContext: Context){
+            localContext = customContext
         }
 
         actual fun clearEntireStore() {
@@ -50,6 +56,9 @@ actual class KmpPublicStorage {
         actual fun getDoubleFromKey(key: String): Double?{
             return sharedPreference.getFloat(key, 0.0f).toDouble()
         }
-    }
 
+        fun getAllKeys() : List<String>{
+            return sharedPreference.all.keys.toList()
+        }
+    }
 }
