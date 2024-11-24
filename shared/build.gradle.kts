@@ -142,6 +142,9 @@ kotlin {
         val androidMain by getting {
             dependsOn(commonMain)
             dependencies {
+                implementation("com.google.android.play:review:2.0.2")
+                implementation("com.google.android.play:review-ktx:2.0.2")
+
                 implementation("dev.tmapps:konnection:1.4.1")
                 implementation("com.liftric:kvault:1.12.0")
 
@@ -183,7 +186,7 @@ afterEvaluate {
         coordinates(
             groupId = "io.github.thearchitect123",
             artifactId = "kmpEssentials",
-            version = "1.6.0"
+            version = "1.6.3"
         )
 
         // Configure POM metadata for the published artifact

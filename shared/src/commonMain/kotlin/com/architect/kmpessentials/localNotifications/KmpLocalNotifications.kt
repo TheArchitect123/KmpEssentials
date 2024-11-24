@@ -29,5 +29,10 @@ expect class KmpLocalNotifications {
          * Discards an alarm with a specific Id
          * */
         fun cancelAlarmWithId(alarmId: String)
+
+        /**
+         * Checks to see if a notification with the alarmId is currently scheduled for running on the device (locally)
+         * */
+        fun isSchedulingAlarmWithId(alarmId: String) : Boolean
     }
 }

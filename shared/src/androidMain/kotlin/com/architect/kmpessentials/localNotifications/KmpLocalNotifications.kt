@@ -78,6 +78,11 @@ actual class KmpLocalNotifications {
             this.allowExact = allowExact
         }
 
+        private var allowDozeMode = true
+        fun allowDozeMode(allowDozeMode: Boolean) {
+            this.allowDozeMode = allowDozeMode
+        }
+
         internal fun getPendingIntentForAlarmBroadcasts(
             title: String,
             message: String
@@ -193,11 +198,22 @@ actual class KmpLocalNotifications {
             val alarmManager =
                 (KmpAndroid.applicationContext?.getSystemService(Context.ALARM_SERVICE) as AlarmManager)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // allows notification to run regardless of Doze mode
-                if (allowExact) alarmManager.setExactAndAllowWhileIdle(
-                    AlarmManager.RTC_WAKEUP,  // Use RTC_WAKEUP to wake the device when the alarm triggers
-                    relativeTimeMs,
-                    intent.second
-                ) else alarmManager.set(
+                if (allowExact) {
+                    if(allowDozeMode) {
+                        alarmManager.setExactAndAllowWhileIdle(
+                            AlarmManager.RTC_WAKEUP,  // Use RTC_WAKEUP to wake the device when the alarm triggers
+                            relativeTimeMs,
+                            intent.second
+                        )
+                    }
+                    else {
+                        alarmManager.setExact(
+                            AlarmManager.RTC_WAKEUP,  // Use RTC_WAKEUP to wake the device when the alarm triggers
+                            relativeTimeMs,
+                            intent.second
+                        )
+                    }
+                } else alarmManager.set(
                     AlarmManager.RTC_WAKEUP,  // Use RTC_WAKEUP to wake the device when the alarm triggers
                     relativeTimeMs,
                     intent.second
@@ -253,6 +269,10 @@ actual class KmpLocalNotifications {
                 alarm.second.cancel()
                 KmpPublicStorage.deleteDataForKey(alarmId)
             }
+        }
+
+        actual fun isSchedulingAlarmWithId(alarmId: String) : Boolean{
+            return repeatingAlarms.singleOrNull { it.first == alarmId } != null
         }
     }
 }

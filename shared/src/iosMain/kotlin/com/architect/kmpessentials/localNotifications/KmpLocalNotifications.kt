@@ -141,5 +141,11 @@ actual class KmpLocalNotifications {
                 }
             }
         }
+
+        actual fun isSchedulingAlarmWithId(alarmId: String) : Boolean{
+            val allLocalIds = KmpFileSystem.getAllFilePathsFromDirectoryPath(scheduledIds)
+            val ids = allLocalIds.mapNotNull { KmpFileSystem.readTextFromFileAt(it) }
+            return ids.any { it == alarmId }
+        }
     }
 }

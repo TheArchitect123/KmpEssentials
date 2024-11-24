@@ -26,5 +26,9 @@ actual class KmpLocalNotifications {
         actual fun cancelAlarmWithId(alarmId: String){
 
         }
+
+        actual fun isSchedulingAlarmWithId(alarmId: String): Boolean {
+            TODO("Not yet implemented")
+        }
     }
 }
