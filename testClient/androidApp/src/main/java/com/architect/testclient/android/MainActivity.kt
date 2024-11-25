@@ -1,9 +1,6 @@
 package com.architect.testclient.androidTest
 
-import android.content.Intent
 import android.os.Bundle
-import android.provider.Settings
-import android.provider.Settings.Global
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.*
@@ -11,28 +8,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ProcessLifecycleOwner
 import com.architect.kmpessentials.KmpAndroid
-import com.architect.kmpessentials.email.KmpEmail
-import com.architect.kmpessentials.fileSystem.KmpFileSystem
-import com.architect.kmpessentials.flashlight.KmpFlashlight
-import com.architect.kmpessentials.internal.Mimes
 import com.architect.kmpessentials.localNotifications.KmpLocalNotifications
-import com.architect.kmpessentials.permissions.KmpPermissionsManager
-import com.architect.kmpessentials.permissions.Permission
-import com.architect.kmpessentials.printing.KmpPrinting
-import com.architect.kmpessentials.secureStorage.KmpSecureStorage
-import com.architect.kmpessentials.share.KmpShare
-import com.architect.kmpessentials.toast.KmpToast
-import com.architect.testclient.Greeting
 import com.architect.testclient.android.MyApplicationTheme
-import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import java.io.FileOutputStream
-import kotlin.io.path.absolute
-import kotlin.io.path.pathString
 
 class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,14 +18,8 @@ class MainActivity : FragmentActivity() {
 
         KmpAndroid.initializeApp(this)
 
-        KmpLocalNotifications.allowSetExact(false)
-        KmpLocalNotifications.setNotificationIcon(R.drawable.ic_launcher_background)
-        val id = KmpLocalNotifications.scheduleAlarmNotification(20000, "Hello", "Testing")
-
-        GlobalScope.launch {
-            delay(2000)
-            KmpLocalNotifications.cancelAlarmWithId(id)
-        }
+//        KmpLocalNotifications.setNotificationIcon(R.drawable.ic_launcher_background)
+//        KmpLocalNotifications.scheduleAlarmNotification(5000, "Hello", "Testing")
 
         setContent {
             MyApplicationTheme {
@@ -55,7 +27,7 @@ class MainActivity : FragmentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    GreetingView(Greeting().greet())
+                   // GreetingView(Greeting().greet())
                 }
             }
         }

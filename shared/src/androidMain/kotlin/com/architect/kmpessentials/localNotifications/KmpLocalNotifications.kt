@@ -12,19 +12,21 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.architect.kmpessentials.KmpAndroid
+import com.architect.kmpessentials.backgrounding.KmpBackgrounding
+import com.architect.kmpessentials.launcher.KmpLauncher
 import com.architect.kmpessentials.localNotifications.models.AlarmSchedulers
 import com.architect.kmpessentials.localNotifications.receivers.LocalAlarmReceiver
 import com.architect.kmpessentials.secureStorage.KmpPublicStorage
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
-import java.util.UUID
 import kotlin.random.Random
 
 actual class KmpLocalNotifications {
     actual companion object {
         private const val prefixNotif = "kmp_essentials_local_notifs_"
-        private var repeatingAlarms = mutableListOf<Pair<String, PendingIntent>>()
+        private var repeatingAlarms =
+            mutableListOf<Triple<String, PendingIntent, AlarmSchedulers>>()
         private var notificationIcon: Int = 0
         private val standardChannel = "default"
         private val notificationChannelName = "Default"
@@ -32,6 +34,25 @@ actual class KmpLocalNotifications {
         private val notifManager by lazy {
             KmpAndroid.applicationContext?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         }
+
+        // cleans up the local storage from any notifications keys no longer in use
+        internal fun bootLoopTimerCheckForActiveNotifications() {
+            KmpLauncher.startTimerRepeating(30.0) {
+                KmpBackgrounding.createAndStartWorker {
+                    val alarms = repeatingAlarms.toList()
+                    alarms.forEach {
+                        val notificationTriggered =
+                            it.third.epochScheduled < System.currentTimeMillis()
+                        if (notificationTriggered) {
+                            cancelAlarmWithId(it.first)
+                        }
+                    }
+                }
+
+                true
+            }
+        }
+
 
         fun prepareStorageNotifications() {
             GlobalScope.launch {
@@ -60,7 +81,13 @@ actual class KmpLocalNotifications {
                             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                         )
 
-                        repeatingAlarms.add(Pair(intent.resultCode.toString(), alarmIntent))
+                        repeatingAlarms.add(
+                            Triple(
+                                intent.resultCode.toString(),
+                                alarmIntent,
+                                intent
+                            )
+                        )
                     }
                 }
             }
@@ -85,8 +112,9 @@ actual class KmpLocalNotifications {
 
         internal fun getPendingIntentForAlarmBroadcasts(
             title: String,
-            message: String
-        ): Pair<String, PendingIntent> {
+            message: String,
+            epochScheduled: Long
+        ): Triple<String, PendingIntent, AlarmSchedulers> {
             // Create an intent to trigger LocalAlarmReceiver
             val intent =
                 Intent(KmpAndroid.applicationContext, LocalAlarmReceiver::class.java).apply {
@@ -96,7 +124,15 @@ actual class KmpLocalNotifications {
                     action = LocalAlarmReceiver.alarmReceiverFilter
                 }
 
+
             val uniqueId = Random.nextInt()
+            val storageIntent = AlarmSchedulers(
+                uniqueId,
+                title,
+                message,
+                notificationIcon,
+                epochScheduled
+            )
             val alarmIntent = PendingIntent.getBroadcast(
                 KmpAndroid.applicationContext,
                 uniqueId,
@@ -107,11 +143,11 @@ actual class KmpLocalNotifications {
             KmpPublicStorage.persistData(
                 "$prefixNotif$uniqueId", Json.encodeToJsonElement(
                     AlarmSchedulers.serializer(),
-                    AlarmSchedulers(uniqueId, title, message, notificationIcon)
+                    storageIntent
                 ).toString()
             )
 
-            val data = Pair(uniqueId.toString(), alarmIntent)
+            val data = Triple(uniqueId.toString(), alarmIntent, storageIntent)
             repeatingAlarms.add(data)
 
             return data
@@ -193,20 +229,19 @@ actual class KmpLocalNotifications {
             title: String,
             message: String
         ): String {
-            val intent = getPendingIntentForAlarmBroadcasts(title, message)
             val relativeTimeMs = System.currentTimeMillis() + durationMS
+            val intent = getPendingIntentForAlarmBroadcasts(title, message, relativeTimeMs)
             val alarmManager =
                 (KmpAndroid.applicationContext?.getSystemService(Context.ALARM_SERVICE) as AlarmManager)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // allows notification to run regardless of Doze mode
                 if (allowExact) {
-                    if(allowDozeMode) {
+                    if (allowDozeMode) {
                         alarmManager.setExactAndAllowWhileIdle(
                             AlarmManager.RTC_WAKEUP,  // Use RTC_WAKEUP to wake the device when the alarm triggers
                             relativeTimeMs,
                             intent.second
                         )
-                    }
-                    else {
+                    } else {
                         alarmManager.setExact(
                             AlarmManager.RTC_WAKEUP,  // Use RTC_WAKEUP to wake the device when the alarm triggers
                             relativeTimeMs,
@@ -243,7 +278,7 @@ actual class KmpLocalNotifications {
         ): String {
             val relativeTimeMs = System.currentTimeMillis() + durationMS
 
-            val repeatingAlarm = getPendingIntentForAlarmBroadcasts(title, message)
+            val repeatingAlarm = getPendingIntentForAlarmBroadcasts(title, message, relativeTimeMs)
             (KmpAndroid.applicationContext?.getSystemService(Context.ALARM_SERVICE) as AlarmManager).setRepeating(
                 AlarmManager.RTC_WAKEUP,  // Use RTC_WAKEUP to wake the device when the alarm triggers
                 relativeTimeMs,
@@ -254,7 +289,7 @@ actual class KmpLocalNotifications {
             return repeatingAlarm.first
         }
 
-        actual fun cancelAllRepeatingAlarms() {
+        actual fun cancelAllAlarms() {
             repeatingAlarms.forEach {
                 it.second.cancel()
                 KmpPublicStorage.deleteDataForKey(it.first)
@@ -264,15 +299,22 @@ actual class KmpLocalNotifications {
         }
 
         actual fun cancelAlarmWithId(alarmId: String) {
-            val alarm = repeatingAlarms.singleOrNull { it.first == alarmId }
+            val alarm =
+                repeatingAlarms.singleOrNull { it.first.replace(prefixNotif, "") == alarmId }
             if (alarm != null) {
                 alarm.second.cancel()
                 KmpPublicStorage.deleteDataForKey(alarmId)
+                repeatingAlarms.remove(alarm)
             }
         }
 
-        actual fun isSchedulingAlarmWithId(alarmId: String) : Boolean{
-            return repeatingAlarms.singleOrNull { it.first == alarmId } != null
+        actual fun isSchedulingAlarmWithId(alarmId: String): Boolean {
+            return repeatingAlarms.singleOrNull {
+                it.first.replace(
+                    prefixNotif,
+                    ""
+                ) == alarmId
+            } != null
         }
     }
 }

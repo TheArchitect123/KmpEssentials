@@ -1,6 +1,7 @@
 package com.architect.kmpessentials.localNotifications
 
 import com.architect.kmpessentials.fileSystem.KmpFileSystem
+import com.architect.kmpessentials.launcher.KmpLauncher
 import com.architect.kmpessentials.mainThread.KmpMainThread
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -16,6 +17,42 @@ import kotlin.random.Random
 actual class KmpLocalNotifications {
     actual companion object {
         private const val scheduledIds = "LocalNotifs"
+
+        private fun checkDeliveredNotificationWithIdentifier(
+            identifier: String,
+            completion: (Boolean) -> Unit
+        ) {
+            val notificationCenter = UNUserNotificationCenter.currentNotificationCenter()
+            notificationCenter.getDeliveredNotificationsWithCompletionHandler { notifications ->
+                if (notifications != null) {
+                    val requests = notifications as List<UNNotificationRequest>
+                    val exists = requests.any { it.identifier == identifier }
+                    completion(exists)
+                }
+            }
+        }
+
+        // cleans up the local storage from any notifications keys no longer in use
+        internal fun bootLoopTimerCheckForActiveNotifications() {
+            KmpLauncher.startTimerRepeating(30.0) {
+                GlobalScope.launch {
+                    val allLocalIds = KmpFileSystem.getAllFilePathsFromDirectoryPath(scheduledIds)
+                    val ids = allLocalIds.mapNotNull { KmpFileSystem.readTextFromFileAt(it) }
+                    if (ids.isNotEmpty()) {
+                        ids.forEach {
+                            checkDeliveredNotificationWithIdentifier(it) { q ->
+                                if (!q) {
+                                    cancelAlarmWithId(it) // delete the alarm from storage after it's finished running
+                                }
+                            }
+                        }
+                    }
+                }
+
+                true
+            }
+        }
+
         actual fun sendNotification(title: String, message: String) {
             KmpMainThread.runViaMainThread {
                 val localNotifications = UNMutableNotificationContent()
@@ -126,7 +163,7 @@ actual class KmpLocalNotifications {
             }
         }
 
-        actual fun cancelAllRepeatingAlarms() {
+        actual fun cancelAllAlarms() {
             GlobalScope.launch {
                 val allLocalIds = KmpFileSystem.getAllFilePathsFromDirectoryPath(scheduledIds)
                 val ids = allLocalIds.mapNotNull { KmpFileSystem.readTextFromFileAt(it) }
@@ -142,7 +179,7 @@ actual class KmpLocalNotifications {
             }
         }
 
-        actual fun isSchedulingAlarmWithId(alarmId: String) : Boolean{
+        actual fun isSchedulingAlarmWithId(alarmId: String): Boolean {
             val allLocalIds = KmpFileSystem.getAllFilePathsFromDirectoryPath(scheduledIds)
             val ids = allLocalIds.mapNotNull { KmpFileSystem.readTextFromFileAt(it) }
             return ids.any { it == alarmId }

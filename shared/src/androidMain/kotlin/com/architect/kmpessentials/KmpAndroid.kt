@@ -66,6 +66,7 @@ class KmpAndroid {
                 applicationContext?.registerActivityLifecycleCallbacks(ActivityLifecycleObserver())
                 ProcessLifecycleOwner.get().lifecycle.addObserver(ApplicationLifecycleObserver()) // application lifecycle observer
                 KmpLocalNotifications.prepareStorageNotifications()
+                KmpLocalNotifications.bootLoopTimerCheckForActiveNotifications()
 
                 hasRegistered = true
             }

@@ -47,6 +47,8 @@ kotlin {
     watchosX64()
     watchosSimulatorArm64()
 
+    jvm()
+
     // tvos (Apple)
     tvosX64()
     tvosArm64()
@@ -124,6 +126,11 @@ kotlin {
             dependsOn(macosMain)
         }
 
+        // jvm
+        val jvmMain by getting {
+            dependsOn(commonMain)
+        }
+
         // tvos targets
         val tvosMain by getting {
             dependsOn(commonMain)
@@ -186,7 +193,7 @@ afterEvaluate {
         coordinates(
             groupId = "io.github.thearchitect123",
             artifactId = "kmpEssentials",
-            version = "1.6.3"
+            version = "1.6.6"
         )
 
         // Configure POM metadata for the published artifact

@@ -21,7 +21,7 @@ actual class KmpLocalNotifications {
             return ""
         }
 
-        actual fun cancelAllRepeatingAlarms() {
+        actual fun cancelAllAlarms() {
         }
         actual fun cancelAlarmWithId(alarmId: String){
 

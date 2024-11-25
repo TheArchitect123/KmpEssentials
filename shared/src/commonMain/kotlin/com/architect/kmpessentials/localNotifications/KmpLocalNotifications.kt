@@ -20,10 +20,16 @@ expect class KmpLocalNotifications {
          * */
         fun scheduleAlarmNotificationRepeating(durationMS: Long, intervalMs: Long, title: String, message: String) : String
 
+//        /**
+//         * Schedules an alarm with a customId, and broadcasts a local notification with the specified Title & Message, after duration in milliseconds has passed
+//         * @param durationMS milliseconds until the local notification is triggered
+//         * */
+//        fun scheduleAlarmNotificationWithCustomId(durationMS: Long, title: String, message: String, customAlarmId: String) : String
+
         /**
          * Discards all repeating alarms (if any)
          * */
-        fun cancelAllRepeatingAlarms()
+        fun cancelAllAlarms()
 
         /**
          * Discards an alarm with a specific Id
