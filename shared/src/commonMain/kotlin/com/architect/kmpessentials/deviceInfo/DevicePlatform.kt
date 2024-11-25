@@ -7,5 +7,6 @@ enum class DevicePlatform{
     MacOS,
     Linux,
     Tizen,
-    AppleWatch
+    AppleWatch,
+    Unknown
 }

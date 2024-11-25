@@ -3,6 +3,7 @@ import com.vanniktech.maven.publish.SonatypeHost
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
+
     kotlin("plugin.serialization") version "1.9.22"
 
     id("org.gradle.maven-publish")
@@ -47,15 +48,13 @@ kotlin {
     watchosX64()
     watchosSimulatorArm64()
 
+    // java target -- Compose UI (Mac, Linux, Desktop)
     jvm()
 
     // tvos (Apple)
     tvosX64()
     tvosArm64()
     tvosSimulatorArm64()
-
-    // java target
-    //jvm()
 
     //mac & desktop targets
     macosX64()
@@ -129,6 +128,10 @@ kotlin {
         // jvm
         val jvmMain by getting {
             dependsOn(commonMain)
+            dependencies{
+                implementation("net.java.dev.jna:jna:5.13.0")
+                implementation("org.quartz-scheduler:quartz:2.3.2")
+            }
         }
 
         // tvos targets

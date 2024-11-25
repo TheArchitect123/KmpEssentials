@@ -6,7 +6,6 @@ import com.architect.kmpessentials.battery.enums.BatteryPowerSource
 actual class KmpBattery {
     actual companion object {
         actual fun getCurrentChargeState(): BatteryChargeState {
-
             TODO()
         }
 

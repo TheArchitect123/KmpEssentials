@@ -1,6 +1,9 @@
 package com.architect.kmpessentials.launcher
 
 import com.architect.kmpessentials.aliases.DefaultActionWithBooleanReturn
+import com.architect.kmpessentials.logging.KmpLogging
+import java.awt.Desktop
+import java.net.URI
 
 actual class KmpLauncher {
     actual companion object {
@@ -28,7 +31,24 @@ actual class KmpLauncher {
         }
 
         actual fun launchExternalUrlViaBrowser(linkPath: String) {
+            // Check if the Desktop API is supported on the current platform
+            if (Desktop.isDesktopSupported()) {
+                val desktop = Desktop.getDesktop()
 
+                // Check if the BROWSE action is supported
+                if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                    desktop.browse(URI(linkPath))
+                } else {
+                    KmpLogging.writeError(
+                        "KmpEssentials", "BROWSE action not supported."
+                    )
+                }
+            } else {
+                KmpLogging.writeError(
+                    "KmpEssentials",
+                    "Desktop API is not supported on this platform."
+                )
+            }
         }
 
         actual fun launchExternalUrlViaAnyApp(linkPath: String) {

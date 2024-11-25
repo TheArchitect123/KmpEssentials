@@ -10,12 +10,15 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.architect.kmpessentials.alerts.KmpAlert
+import com.architect.kmpessentials.email.KmpEmail
 import com.architect.kmpessentials.localNotifications.KmpLocalNotifications
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 import testclientcompose.composeapp.generated.resources.Res
 import testclientcompose.composeapp.generated.resources.compose_multiplatform
+import kotlin.random.Random
 
 @Composable
 @Preview
@@ -23,7 +26,7 @@ fun App() {
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-            Button(onClick = { showContent = !showContent }) {
+            Button(onClick = { KmpLocalNotifications.sendNotification("Hello", "${Random.nextInt()}") }) {
                 Text("Click me!")
             }
             AnimatedVisibility(showContent) {

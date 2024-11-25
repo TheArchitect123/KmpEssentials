@@ -3,11 +3,9 @@ package com.architect.kmpessentials.screenshot
 import com.architect.kmpessentials.internal.ActionStringParams
 import com.architect.kmpessentials.mainThread.KmpMainThread
 import com.architect.kmpessentials.share.KmpShare
-import kotlinx.cinterop.ExperimentalForeignApi
 
 actual class KmpScreenshot {
     actual companion object {
-        @OptIn(ExperimentalForeignApi::class)
         actual fun getScreenshot(
             action: ActionStringParams,
             shareDialogTitle: String,

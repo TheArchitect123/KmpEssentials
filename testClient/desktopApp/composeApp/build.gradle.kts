@@ -10,7 +10,11 @@ kotlin {
 //    macosX64()
 //    macosArm64()
 
-    jvm("desktop")
+    jvm("desktop") {
+        compilations.all {
+            kotlinOptions.jvmTarget = "17" // Ensure compatibility with the latest JVM version
+        }
+    }
     
     sourceSets {
         val desktopMain by getting

@@ -1,18 +1,21 @@
 package com.architect.kmpessentials.appInfo
 
+import java.util.Locale
+
 actual class KmpAppInfo {
     actual companion object {
 
+        /// need to figure out how these apis will work if each platform has its own way of managing manifest files
         actual fun getPackageName(): String {
-            TODO("NOT IMPLEMENTED YET")
+            return ""
         }
 
         actual fun getPackageVersion(): String {
-            TODO("NOT IMPLEMENTED YET")
+            return ""
         }
 
         actual fun getPackageVersionCode(): Int {
-            TODO("NOT IMPLEMENTED YET")
+            return 0
         }
 
         actual fun getPackageMinOS(): Int {
@@ -20,11 +23,8 @@ actual class KmpAppInfo {
         }
 
         actual fun getSystemThemeMode(): AppDeviceTheme {
-//            if(WKApplication.sharedApplication(). ?.rootViewController?.traitCollection?.userInterfaceStyle() == UIUserInterfaceStyle.UIUserInterfaceStyleDark){
-//                return AppDeviceTheme.Dark
-//            }
-
-            return AppDeviceTheme.Light
+            val theme = System.getProperty("sun.desktop.theme", "").lowercase(Locale.getDefault())
+            return if (theme.contains("dark")) AppDeviceTheme.Dark else AppDeviceTheme.Light
         }
     }
 }

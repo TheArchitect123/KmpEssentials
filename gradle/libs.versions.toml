@@ -6,6 +6,7 @@ droidTargetSdk = "35"
 droidMinSdk = "16"
 lifecycleProcess = "2.8.7"
 swiftKlib =  "0.6.3"
+compose-multiplatform = "1.7.0"
 
 [libraries]
 androidx-lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-process", version.ref = "lifecycleProcess" }
@@ -14,3 +15,7 @@ androidx-lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-p
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 swiftklib = { id = "io.github.ttypic.swiftklib", version.ref = "swiftKlib" }
+
+
+composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
+composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
