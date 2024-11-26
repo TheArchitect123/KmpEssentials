@@ -1,7 +1,10 @@
 package com.architect.kmpessentials.appInfo
 
 import android.content.res.Configuration
+import androidx.lifecycle.ProcessLifecycleOwner
 import com.architect.kmpessentials.KmpAndroid
+import com.architect.kmpessentials.aliases.DefaultActionWithBooleanReturn
+import com.architect.kmpessentials.internal.ActionBoolParams
 
 actual class KmpAppInfo {
     actual companion object {
@@ -14,6 +17,14 @@ actual class KmpAppInfo {
 
         actual fun getPackageName(): String {
             return KmpAndroid.applicationContext?.packageName ?: ""
+        }
+
+        actual fun isRunningInBackground(action: ActionBoolParams) {
+            val appLifecycle = ProcessLifecycleOwner.get().lifecycle
+            action(
+                appLifecycle.currentState.isAtLeast(androidx.lifecycle.Lifecycle.State.STARTED)
+                    .not()
+            )
         }
 
         actual fun getPackageVersion(): String {

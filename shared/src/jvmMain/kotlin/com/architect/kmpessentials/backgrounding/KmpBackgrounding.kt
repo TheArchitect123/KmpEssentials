@@ -30,5 +30,12 @@ actual class KmpBackgrounding {
 
             jobCollection.clear()
         }
+
+        actual fun createAndStartForegroundWorker(
+            title: String,
+            message: String,
+            action: DefaultActionAsync,
+        ) {
+        }
     }
 }

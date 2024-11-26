@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <application
         android:requestLegacyExternalStorage="true">
         <receiver android:name="com.architect.kmpessentials.localNotifications.receivers.LocalAlarmReceiver"
             android:exported="true"
-            tools:node="merge"
-            >
+            tools:node="merge">
             <intent-filter>
                 <action android:name="com.kmpessentials.action.filter"/>
             </intent-filter>
         </receiver>
+
+        <service
+            android:name="com.architect.kmpessentials.backgrounding.services.KmpForegroundService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="dataSync"  />
 
         <service android:name="androidx.work.impl.foreground.SystemForegroundService"
             android:foregroundServiceType="dataSync"

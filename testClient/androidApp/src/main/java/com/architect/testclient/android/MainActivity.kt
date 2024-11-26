@@ -1,5 +1,7 @@
 package com.architect.testclient.androidTest
 
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,10 +9,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
 import com.architect.kmpessentials.KmpAndroid
+import com.architect.kmpessentials.backgrounding.KmpBackgrounding
 import com.architect.kmpessentials.localNotifications.KmpLocalNotifications
+import com.architect.kmpessentials.logging.KmpLogging
 import com.architect.testclient.android.MyApplicationTheme
+import kotlinx.coroutines.delay
 
 class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,8 +24,24 @@ class MainActivity : FragmentActivity() {
 
         KmpAndroid.initializeApp(this)
 
-//        KmpLocalNotifications.setNotificationIcon(R.drawable.ic_launcher_background)
-//        KmpLocalNotifications.scheduleAlarmNotification(5000, "Hello", "Testing")
+        KmpLocalNotifications.setNotificationIcon(R.drawable.ic_launcher_background)
+    //    KmpLocalNotifications.scheduleAlarmNotification(5000, "Hello", "Testing")
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//            val permission = android.Manifest.permission.FOREGROUND_SERVICE_DATA_SYNC
+//
+//            if (ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+//                ActivityCompat.requestPermissions(this, arrayOf(permission), 1001)
+//            }
+//        }
+
+        KmpBackgrounding.createAndStartForegroundWorker({
+            while (true){
+                delay(4000)
+                KmpLogging.writeInfo("ForegroundServiceNotification", "Sample Notification")
+          //      KmpLocalNotifications.sendNotification("Hello Foreground Service", "Hello there")
+            }
+
+        }, "Hello", "I'm running a foreground service task")
 
         setContent {
             MyApplicationTheme {
@@ -27,7 +49,7 @@ class MainActivity : FragmentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                   // GreetingView(Greeting().greet())
+                    // GreetingView(Greeting().greet())
                 }
             }
         }

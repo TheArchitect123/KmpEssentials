@@ -1,5 +1,6 @@
 package com.architect.kmpessentials.backgrounding
 
+import android.content.Intent
 import androidx.work.Constraints
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
@@ -8,6 +9,7 @@ import com.architect.kmpessentials.KmpAndroid
 import com.architect.kmpessentials.aliases.DefaultActionAsync
 import com.architect.kmpessentials.backgrounding.requests.LongRunnerJob
 import com.architect.kmpessentials.backgrounding.requests.LongRunnerJobWithoutCancel
+import com.architect.kmpessentials.backgrounding.services.KmpForegroundService
 import java.util.UUID
 
 actual class KmpBackgrounding {
@@ -42,7 +44,10 @@ actual class KmpBackgrounding {
             workManager.enqueue(singleJob)
         }
 
-        actual fun createAndStartWorkerWithoutCancel(options: BackgroundOptions?, action: DefaultActionAsync){
+        actual fun createAndStartWorkerWithoutCancel(
+            options: BackgroundOptions?,
+            action: DefaultActionAsync
+        ) {
             val constraints =
                 Constraints.Builder()
             if (options != null) {
@@ -75,6 +80,21 @@ actual class KmpBackgrounding {
 
             workerJobs.clear()
             LongRunnerJob.mutableTypes.clear()
+        }
+
+        actual fun createAndStartForegroundWorker(
+            title: String,
+            message: String,
+            action: DefaultActionAsync,
+        ) {
+            KmpForegroundService.actionToInvoke = action
+            val intent =
+                Intent(KmpAndroid.clientAppContext, KmpForegroundService::class.java).apply {
+                    putExtra(KmpForegroundService.TITLE_NOTIFICATION, title)
+                    putExtra(KmpForegroundService.MESSAGE_NOTIFICATION, message)
+                }
+
+            KmpAndroid.clientAppContext?.startService(intent)
         }
     }
 }

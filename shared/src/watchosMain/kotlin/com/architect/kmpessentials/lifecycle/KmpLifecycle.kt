@@ -1,6 +1,7 @@
 package com.architect.kmpessentials.lifecycle
 
 import com.architect.kmpessentials.aliases.DefaultAction
+import com.architect.kmpessentials.aliases.DefaultActionAsync
 
 actual class KmpLifecycle {
     actual companion object {
@@ -19,6 +20,10 @@ actual class KmpLifecycle {
          * */
         actual fun setAppLifecycleForeground(action: DefaultAction) {
             foregroundAction = action
+        }
+
+        actual suspend fun waitForAppToReturnToForeground(action: DefaultActionAsync){
+
         }
 
         /**

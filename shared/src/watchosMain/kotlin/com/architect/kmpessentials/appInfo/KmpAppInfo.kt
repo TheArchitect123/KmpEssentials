@@ -1,5 +1,7 @@
 package com.architect.kmpessentials.appInfo
 
+import com.architect.kmpessentials.aliases.DefaultActionWithBooleanReturn
+import com.architect.kmpessentials.internal.ActionBoolParams
 import platform.Foundation.NSBundle
 
 actual class KmpAppInfo {
@@ -7,6 +9,10 @@ actual class KmpAppInfo {
 
         actual fun getPackageName(): String {
             return NSBundle.mainBundle.infoDictionary?.getValue("CFBundleName") as? String ?: ""
+        }
+
+        actual fun isRunningInBackground(action: ActionBoolParams){
+
         }
 
         actual fun getPackageVersion(): String {

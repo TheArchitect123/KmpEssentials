@@ -27,7 +27,7 @@ actual class KmpLocalNotifications {
         private const val prefixNotif = "kmp_essentials_local_notifs_"
         private var repeatingAlarms =
             mutableListOf<Triple<String, PendingIntent, AlarmSchedulers>>()
-        private var notificationIcon: Int = 0
+        internal var notificationIcon: Int = 0
         private val standardChannel = "default"
         private val notificationChannelName = "Default"
 

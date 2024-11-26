@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
+
+    kotlin("plugin.serialization") version "1.9.22"
 }
 
 // Resolve paths during the configuration phase

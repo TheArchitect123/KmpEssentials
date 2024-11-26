@@ -13,6 +13,8 @@ class ApplicationLifecycleObserver : LifecycleObserver {
             "KMP_ESSENTIALS_APP_STATE",
             "App is about to be closed. Attempting to clear all workers from running"
         )
+
+        KmpLifecycle.isInForeground = false
         if (!KmpAndroid.allowWorkersToRunBeyondApp) {
             KmpBackgrounding.cancelAllRunningWorkers()
         }
@@ -22,6 +24,7 @@ class ApplicationLifecycleObserver : LifecycleObserver {
     fun onAppBackgrounded() {
         KmpLogging.writeInfo("KMP_ESSENTIALS_APP_STATE", "App is now running the background")
 
+        KmpLifecycle.isInForeground = false
         if(KmpLifecycle.backgroundAction != null) {
             KmpLifecycle.backgroundAction?.invoke()
         }
@@ -31,6 +34,7 @@ class ApplicationLifecycleObserver : LifecycleObserver {
     fun onAppForegrounded() {
         KmpLogging.writeInfo("KMP_ESSENTIALS_APP_STATE", "App is now running in the foreground")
 
+        KmpLifecycle.isInForeground = true
         if(KmpLifecycle.foregroundAction != null) {
             KmpLifecycle.foregroundAction?.invoke()
         }

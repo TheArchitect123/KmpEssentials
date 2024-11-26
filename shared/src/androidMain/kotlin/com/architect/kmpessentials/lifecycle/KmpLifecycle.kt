@@ -1,11 +1,15 @@
 package com.architect.kmpessentials.lifecycle
 
 import com.architect.kmpessentials.aliases.DefaultAction
+import com.architect.kmpessentials.aliases.DefaultActionAsync
+import kotlinx.coroutines.delay
 
 actual class KmpLifecycle {
     actual companion object {
         internal var backgroundAction: DefaultAction? = null
         internal var foregroundAction: DefaultAction? = null
+
+        internal var isInForeground: Boolean = false
 
         /**
          *  Registers an action that is run after the app enters the background state
@@ -19,6 +23,14 @@ actual class KmpLifecycle {
          * */
         actual fun setAppLifecycleForeground(action: DefaultAction) {
             foregroundAction = action
+        }
+
+        actual suspend fun waitForAppToReturnToForeground(action: DefaultActionAsync) {
+            while (!isInForeground) { // checks if the app returns to the foreground
+                delay(1000)
+            }
+
+            action()
         }
 
         /**

@@ -1,5 +1,7 @@
 package com.architect.kmpessentials.appInfo
 
+import com.architect.kmpessentials.aliases.DefaultActionWithBooleanReturn
+import com.architect.kmpessentials.internal.ActionBoolParams
 import java.util.Locale
 
 actual class KmpAppInfo {
@@ -8,6 +10,10 @@ actual class KmpAppInfo {
         /// need to figure out how these apis will work if each platform has its own way of managing manifest files
         actual fun getPackageName(): String {
             return ""
+        }
+
+        actual fun isRunningInBackground(action: ActionBoolParams){
+
         }
 
         actual fun getPackageVersion(): String {

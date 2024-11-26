@@ -33,5 +33,11 @@ actual class KmpBackgrounding {
 
         actual fun cancelAllRunningWorkers() {
         }
+        actual fun createAndStartForegroundWorker(
+            title: String,
+            message: String,
+            action: DefaultActionAsync,
+        ) {
+        }
     }
 }

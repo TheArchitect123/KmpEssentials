@@ -1,7 +1,10 @@
 package com.architect.kmpessentials.appInfo
 
+import com.architect.kmpessentials.aliases.DefaultActionWithBooleanReturn
+import com.architect.kmpessentials.internal.ActionBoolParams
 import platform.Foundation.NSBundle
 import platform.UIKit.UIApplication
+import platform.UIKit.UIApplicationState
 import platform.UIKit.UIUserInterfaceStyle
 
 actual class KmpAppInfo {
@@ -28,6 +31,11 @@ actual class KmpAppInfo {
             }
 
             return AppDeviceTheme.Light
+        }
+
+        actual fun isRunningInBackground(action: ActionBoolParams){
+            val appState = UIApplication.sharedApplication.applicationState
+            action(appState == UIApplicationState.UIApplicationStateBackground)
         }
     }
 }
