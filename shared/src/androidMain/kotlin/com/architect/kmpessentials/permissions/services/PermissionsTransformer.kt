@@ -2,6 +2,7 @@ package com.architect.kmpessentials.permissions.services
 
 import android.Manifest
 import android.os.Build
+import android.os.Build.VERSION_CODES
 import com.architect.kmpessentials.permissions.Permission
 
 internal object PermissionsTransformer {
@@ -12,13 +13,21 @@ internal object PermissionsTransformer {
             Permission.Camera -> Manifest.permission.CAMERA
             Permission.Location -> Manifest.permission.ACCESS_FINE_LOCATION
             Permission.CoarseLocation -> Manifest.permission.ACCESS_COARSE_LOCATION
-            Permission.PushNotifications -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            Permission.PushNotifications -> if (Build.VERSION.SDK_INT >= VERSION_CODES.TIRAMISU) {
                 Manifest.permission.POST_NOTIFICATIONS
             } else {
                 ""
             }
-
-            Permission.ExternalStorage -> Manifest.permission.READ_EXTERNAL_STORAGE
+            Permission.ExternalStorage -> if (Build.VERSION.SDK_INT >= VERSION_CODES.TIRAMISU) {
+                Manifest.permission.READ_MEDIA_IMAGES
+            } else {
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            }
+            Permission.PhotoGallery -> if (Build.VERSION.SDK_INT >= VERSION_CODES.TIRAMISU) {
+                Manifest.permission.READ_MEDIA_IMAGES
+            } else {
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            }
             Permission.Biometrics -> "android.permission.USE_CREDENTIALS"
             Permission.Contacts -> Manifest.permission.READ_CONTACTS
             Permission.Vibrator -> Manifest.permission.VIBRATE
