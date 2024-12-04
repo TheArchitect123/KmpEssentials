@@ -17,6 +17,17 @@ expect class KmpConnectivity {
          * Gets the current SSID of the network connected
          * */
         fun getCurrentNetworkName(): String?
+
+        /**
+         * Gets the current IPv4 address of the device
+         * */
+        suspend fun getCurrentNetworkIPv4(): String?
+
+        /**
+         * Gets the current IPv6 address of the device
+         * */
+        suspend fun getCurrentNetworkIPv6(): String?
+
         /**
          * Listens and broadcasts to connectivity state changes (True if connected, False if not)
          * */

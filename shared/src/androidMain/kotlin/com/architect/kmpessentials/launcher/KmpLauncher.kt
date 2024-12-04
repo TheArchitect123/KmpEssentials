@@ -44,7 +44,7 @@ actual class KmpLauncher {
             val launchMapsApp = Intent(Intent.ACTION_VIEW, Uri.parse(mapPrefix))
             addIntentFlags(launchMapsApp)
 
-            if(KmpAndroid.applicationContext != null) {
+            if (KmpAndroid.applicationContext != null) {
                 if (launchMapsApp.resolveActivity(KmpAndroid.applicationContext!!.packageManager) != null) {
                     KmpAndroid.applicationContext!!.startActivity(launchMapsApp)
                 }
@@ -55,13 +55,10 @@ actual class KmpLauncher {
             val browserIntent = Intent(Intent.ACTION_VIEW).apply {
                 data = Uri.parse(linkPath)
             }
+
             addIntentFlags(browserIntent)
 
-            if(KmpAndroid.applicationContext != null) {
-                if (browserIntent.resolveActivity(KmpAndroid.applicationContext!!.packageManager) != null) {
-                    KmpAndroid.applicationContext!!.startActivity(browserIntent)
-                }
-            }
+            KmpAndroid.applicationContext!!.startActivity(browserIntent)
         }
 
         actual fun launchExternalUrlViaAnyApp(linkPath: String) {
@@ -70,11 +67,7 @@ actual class KmpLauncher {
             }
             addIntentFlags(browserIntent)
 
-            if(KmpAndroid.applicationContext != null) {
-                if (browserIntent.resolveActivity(KmpAndroid.applicationContext!!.packageManager) != null) {
-                    KmpAndroid.applicationContext!!.startActivity(browserIntent)
-                }
-            }
+            KmpAndroid.applicationContext!!.startActivity(browserIntent)
         }
 
         actual fun launchAppInternalSettings() {
@@ -86,7 +79,7 @@ actual class KmpLauncher {
                 )
             }
             addIntentFlags(settingsIntent)
-            if(KmpAndroid.applicationContext != null) {
+            if (KmpAndroid.applicationContext != null) {
                 if (settingsIntent.resolveActivity(KmpAndroid.applicationContext!!.packageManager) != null) {
                     KmpAndroid.applicationContext!!.startActivity(settingsIntent)
                 }

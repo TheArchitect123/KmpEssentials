@@ -1,6 +1,7 @@
 package com.architect.kmpessentials.email
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import com.architect.kmpessentials.KmpAndroid
 import com.architect.kmpessentials.internal.ActionBoolParams
@@ -12,22 +13,22 @@ actual class KmpEmail {
         private val emailPrefix = "mailto:"
         actual fun isEmailSupported(action: ActionBoolParams) {
             KmpMainThread.runViaMainThread {
-                val emailAddress = "sample@gmail.com"
-
-                val emailIntent = Intent(Intent.ACTION_VIEW)
-                emailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                emailIntent.setData(Uri.parse(emailAddress))
+                val intent = Intent(Intent.ACTION_SENDTO).apply {
+                    data = Uri.parse(emailPrefix) // Use mailto: scheme
+                }
+                val resolvedActivities =
+                    KmpAndroid.applicationContext?.packageManager?.queryIntentActivities(
+                        intent,
+                        PackageManager.MATCH_DEFAULT_ONLY
+                    )
 
                 action(
-                    KmpAndroid.applicationContext?.packageManager?.resolveActivity(
-                        emailIntent,
-                        0
-                    ) != null
+                    !resolvedActivities.isNullOrEmpty()
                 )
             }
         }
 
-        actual fun sendEmailToAddress(address: String, emailSubject : String, emailMessage: String) {
+        actual fun sendEmailToAddress(address: String, emailSubject: String, emailMessage: String) {
             KmpMainThread.runViaMainThread {
                 try {
                     var emailAddress = address
@@ -37,7 +38,8 @@ actual class KmpEmail {
 
                     val emailIntent = Intent(Intent.ACTION_VIEW).apply {
                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        data = Uri.parse(emailAddress.plus("?subject=$emailSubject&body=$emailMessage"))
+                        data =
+                            Uri.parse(emailAddress.plus("?subject=$emailSubject&body=$emailMessage"))
                         putExtra(Intent.EXTRA_SUBJECT, emailSubject)
                         putExtra(Intent.EXTRA_TEXT, emailMessage);
                     }
@@ -49,7 +51,12 @@ actual class KmpEmail {
             }
         }
 
-        actual fun sendEmailsToCCAddress(address: String, ccAddresses: Array<String>?, emailSubject : String, emailMessage: String) {
+        actual fun sendEmailsToCCAddress(
+            address: String,
+            ccAddresses: Array<String>?,
+            emailSubject: String,
+            emailMessage: String
+        ) {
             KmpMainThread.runViaMainThread {
                 try {
                     var emailAddress = address
@@ -59,7 +66,8 @@ actual class KmpEmail {
 
                     val emailIntent = Intent(Intent.ACTION_VIEW).apply {
                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        data = Uri.parse(emailAddress.plus("?subject=$emailSubject&body=$emailMessage"))
+                        data =
+                            Uri.parse(emailAddress.plus("?subject=$emailSubject&body=$emailMessage"))
                         putExtra(Intent.EXTRA_CC, arrayOf(ccAddresses))
                         putExtra(Intent.EXTRA_SUBJECT, emailSubject)
                         putExtra(Intent.EXTRA_TEXT, emailMessage);

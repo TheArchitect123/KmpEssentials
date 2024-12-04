@@ -20,5 +20,13 @@ actual class KmpConnectivity {
                 connectionState(it != null && it != ConnectionType.UNKNOWN_CONNECTION_TYPE)
             }
         }
+
+        actual suspend fun getCurrentNetworkIPv4(): String? {
+            return ""
+        }
+
+        actual suspend fun getCurrentNetworkIPv6(): String? {
+            return ""
+        }
     }
 }

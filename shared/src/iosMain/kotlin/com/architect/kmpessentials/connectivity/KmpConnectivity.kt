@@ -19,5 +19,13 @@ actual class KmpConnectivity {
                 connectionState(hasConnection)
             }
         }
+
+        actual suspend  fun getCurrentNetworkIPv4(): String?{
+            return konnection.getInfo()?.ipv4
+        }
+
+        actual suspend  fun getCurrentNetworkIPv6(): String?{
+            return konnection.getInfo()?.ipv6
+        }
     }
 }

@@ -15,5 +15,13 @@ actual class KmpConnectivity {
         actual suspend fun listenToConnectionChange(connectionState: ActionBoolParams) {
 
         }
+
+        actual suspend  fun getCurrentNetworkIPv4(): String?{
+            return ""
+        }
+
+        actual suspend  fun getCurrentNetworkIPv6(): String?{
+            return ""
+        }
     }
 }
