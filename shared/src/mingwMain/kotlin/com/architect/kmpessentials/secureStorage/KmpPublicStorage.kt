@@ -36,5 +36,29 @@ actual class KmpPublicStorage {
         actual fun getDoubleFromKey(key: String): Double? {
             TODO()
         }
+
+        actual fun getStringFromKey(key: String, defValue: String?): String? {
+            TODO("Not yet implemented")
+        }
+
+        actual fun getIntFromKey(key: String, defValue: Int): Int {
+            TODO("Not yet implemented")
+        }
+
+        actual fun getLongFromKey(key: String, defValue: Long): Long {
+            TODO("Not yet implemented")
+        }
+
+        actual fun getFloatFromKey(key: String, defValue: Float): Float {
+            TODO("Not yet implemented")
+        }
+
+        actual fun getDoubleFromKey(key: String, defValue: Double): Double {
+            TODO("Not yet implemented")
+        }
+
+        actual fun getBooleanFromKey(key: String, defValue: Boolean): Boolean {
+            TODO("Not yet implemented")
+        }
     }
 }
