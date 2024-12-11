@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.0
 import PackageDescription
 
 let package = Package(
@@ -15,7 +15,7 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "KmpEssentials",
-            path: "./swiftPackage/shared.xcframework"
+            path: "./shared/native/shared.xcframework"
         )
     ]
 )
