@@ -33,10 +33,12 @@ KmpEssentials is now available for SwiftPackages.
 Simply add the url into **Xcode -> https://github.com/TheArchitect123/KmpEssentials**
 
 And import the library into your target. There will be specialised documentation written up just for swift, but for now, in order to use one of the modules in your project please do this:
-**module.companion.methodToInvoke()**
+
+```module.companion.methodToInvoke()```
 
 **So in order to invoke LocalNotifications, use:**
-KmpLocalNotification.companion.sendNotification("Title Of App", "Message of Notification")
+
+```KmpLocalNotification.companion.sendNotification("Title Of App", "Message of Notification")```
 ## License
 
 This software is licensed under the MIT license. See [LICENSE](./LICENSE) for full disclosure.
