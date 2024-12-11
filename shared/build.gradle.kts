@@ -23,7 +23,7 @@ tasks.register("assembleXCFramework") {
         "linkReleaseFrameworkIosSimulatorArm64"
     )
 
-    val xcFrameworkDir = layout.buildDirectory.dir("XCFrameworks/shared.xcframework")
+    val xcFrameworkDir = layout.buildDirectory.dir("XCFrameworks/KmpEssentials.xcframework")
 
     doLast {
         xcFrameworkDir.get().asFile.deleteRecursively()
@@ -33,8 +33,8 @@ tasks.register("assembleXCFramework") {
                 "xcodebuild",
                 "-create-xcframework",
 
-                "-framework", "${buildDir}/bin/iosArm64/releaseFramework/shared.framework",
-                "-framework", "${buildDir}/bin/iosSimulatorArm64/releaseFramework/shared.framework",
+                "-framework", "${buildDir}/bin/iosArm64/releaseFramework/KmpEssentials.framework",
+                "-framework", "${buildDir}/bin/iosSimulatorArm64/releaseFramework/KmpEssentials.framework",
 
 //                "-framework", "${buildDir}/bin/iosArm64/debugFramework/shared.framework",
 //                "-framework", "${buildDir}/bin/iosX64/debugFramework/shared.framework",
@@ -63,7 +63,7 @@ kotlin {
 //            }
 //        }
         it.binaries.framework {
-            baseName = "shared"
+            baseName = "KmpEssentials"
         }
     }
 

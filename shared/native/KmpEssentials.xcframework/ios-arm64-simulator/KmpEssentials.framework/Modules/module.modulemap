@@ -1,0 +1,8 @@
+framework module "KmpEssentials" {
+    umbrella header "KmpEssentials.h"
+
+    export *
+    module * { export * }
+
+    use Foundation
+}

@@ -15,7 +15,7 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "KmpEssentials",
-            path: "./shared/native/shared.xcframework"
+            path: "./shared/native/KmpEssentials.xcframework"
         )
     ]
 )
