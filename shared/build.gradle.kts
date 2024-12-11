@@ -13,6 +13,41 @@ plugins {
     id("kotlin-parcelize")
 }
 
+tasks.register("assembleXCFramework") {
+    group = "build"
+    dependsOn(
+//        "linkDebugFrameworkIosArm64",
+//        "linkDebugFrameworkIosX64",
+//        "linkDebugFrameworkIosSimulatorArm64",
+        "linkReleaseFrameworkIosArm64",
+        "linkReleaseFrameworkIosSimulatorArm64"
+    )
+
+    val xcFrameworkDir = layout.buildDirectory.dir("XCFrameworks/shared.xcframework")
+
+    doLast {
+        xcFrameworkDir.get().asFile.deleteRecursively()
+
+        exec {
+            commandLine(
+                "xcodebuild",
+                "-create-xcframework",
+
+                "-framework", "${buildDir}/bin/iosArm64/releaseFramework/shared.framework",
+                "-framework", "${buildDir}/bin/iosSimulatorArm64/releaseFramework/shared.framework",
+
+//                "-framework", "${buildDir}/bin/iosArm64/debugFramework/shared.framework",
+//                "-framework", "${buildDir}/bin/iosX64/debugFramework/shared.framework",
+//                "-framework", "${buildDir}/bin/iosSimulatorArm64/debugFramework/shared.framework",
+
+                "-output", xcFrameworkDir.get().asFile.absolutePath
+            )
+        }
+
+        println("XCFramework created at ${xcFrameworkDir.get().asFile.absolutePath}")
+    }
+}
+
 kotlin {
     kotlin.applyDefaultHierarchyTemplate()
     listOf(
@@ -80,54 +115,53 @@ kotlin {
 
         // windows desktop target
         val mingwMain by getting {
-            dependsOn(commonMain)
+
         }
         val mingwX64Main by getting {
-            dependsOn(mingwMain)
+
         }
 
         // linux
         val linuxMain by getting {
-            dependsOn(commonMain)
+
         }
         val linuxX64Main by getting {
-            dependsOn(linuxMain)
+
         }
         val linuxArm64Main by getting {
-            dependsOn(linuxMain)
+
         }
 
         // watch os target
         val watchosMain by getting {
-            dependsOn(commonMain)
+
         }
         val watchosX64Main by getting {
-            dependsOn(watchosMain)
+
         }
         val watchosArm32Main by getting {
-            dependsOn(watchosMain)
+
         }
         val watchosArm64Main by getting {
-            dependsOn(watchosMain)
+
         }
         val watchosSimulatorArm64Main by getting {
-            dependsOn(watchosMain)
+
         }
 
         // macos main
         val macosMain by getting {
-            dependsOn(commonMain)
+
         }
         val macosX64Main by getting {
-            dependsOn(macosMain)
+
         }
         val macosArm64Main by getting {
-            dependsOn(macosMain)
+
         }
 
         // jvm
         val jvmMain by getting {
-            dependsOn(commonMain)
             dependencies{
                 implementation("net.java.dev.jna:jna:5.13.0")
                 implementation("org.quartz-scheduler:quartz:2.3.2")
@@ -136,21 +170,20 @@ kotlin {
 
         // tvos targets
         val tvosMain by getting {
-            dependsOn(commonMain)
+
         }
         val tvosX64Main by getting {
-            dependsOn(tvosMain)
+
         }
         val tvosArm64Main by getting {
-            dependsOn(tvosMain)
+
         }
         val tvosSimulatorArm64Main by getting {
-            dependsOn(tvosMain)
+
         }
 
         // android & iOS targets
         val androidMain by getting {
-            dependsOn(commonMain)
             dependencies {
                 implementation("com.google.android.play:review:2.0.2")
                 implementation("com.google.android.play:review-ktx:2.0.2")
@@ -178,10 +211,6 @@ kotlin {
         val iosX64Main by getting
         val iosSimulatorArm64Main by getting
         val iosMain by getting {
-            dependsOn(commonMain)
-            iosX64Main.dependsOn(this)
-            iosArm64Main.dependsOn(this)
-            iosSimulatorArm64Main.dependsOn(this)
             dependencies {
                 implementation("dev.tmapps:konnection:1.4.1")
                 implementation("com.liftric:kvault:1.12.0")
