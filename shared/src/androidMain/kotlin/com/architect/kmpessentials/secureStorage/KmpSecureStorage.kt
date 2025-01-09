@@ -1,6 +1,5 @@
 package com.architect.kmpessentials.secureStorage
 
-import android.app.Application
 import com.architect.kmpessentials.KmpAndroid
 import com.liftric.kvault.KVault
 

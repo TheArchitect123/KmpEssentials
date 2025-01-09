@@ -19,5 +19,11 @@ actual class KmpPromptReview {
         actual fun openAppStoreLink() {
 
         }
+
+        /**
+         *  Checks if in app prompts can be invoked
+         * */
+        actual fun checkInAppReviewCapability(onResult: (Boolean) -> Unit) {
+        }
     }
 }

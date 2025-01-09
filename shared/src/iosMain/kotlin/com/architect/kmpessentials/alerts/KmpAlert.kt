@@ -11,6 +11,8 @@ import platform.UIKit.UIAlertControllerStyleAlert
 
 actual class KmpAlert {
     actual companion object {
+
+
         actual fun showAlert(message: String, title: String) {
             KmpMainThread.runViaMainThread {
                 val alertController = UIAlertController.alertControllerWithTitle(
@@ -85,6 +87,51 @@ actual class KmpAlert {
                         UIAlertActionStyleCancel
                     ) {
                         cancelAction()
+                    })
+
+                KmpiOS.getTopViewController()?.presentViewController(alertController, true, null)
+            }
+        }
+
+        actual fun showAlertWithTertiaryButtonsConfirmation(
+            message: String,
+            title: String,
+            okText: String,
+            secondaryText: String,
+            cancelText: String,
+            okAction: DefaultAction,
+            secondaryAction: DefaultAction
+        ) {
+            KmpMainThread.runViaMainThread {
+                val alertController = UIAlertController.alertControllerWithTitle(
+                    title,
+                    message,
+                    UIAlertControllerStyleAlert
+                )
+
+                alertController.addAction( // okAction
+                    UIAlertAction.actionWithTitle(
+                        okText,
+                        UIAlertActionStyleDefault
+                    ) {
+                        okAction()
+                    })
+
+                alertController.addAction(// Cancel Action
+                    UIAlertAction.actionWithTitle(
+                        secondaryText,
+                        UIAlertActionStyleCancel
+                    ) {
+                        secondaryAction()
+                    })
+
+                alertController.addAction(
+                    UIAlertAction.actionWithTitle(
+                        cancelText,
+                        UIAlertActionStyleDefault
+                    ) {
+
+                        // closes the dialog
                     })
 
                 KmpiOS.getTopViewController()?.presentViewController(alertController, true, null)

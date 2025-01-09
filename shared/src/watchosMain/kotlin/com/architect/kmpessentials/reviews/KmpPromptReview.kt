@@ -112,5 +112,11 @@ actual class KmpPromptReview {
                 task.resume()
             }
         }
+
+        /**
+         *  Checks if in app prompts can be invoked
+         * */
+        actual fun checkInAppReviewCapability(onResult: (Boolean) -> Unit) {
+        }
     }
 }

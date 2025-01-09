@@ -29,5 +29,19 @@ expect class KmpAlert {
             okAction: DefaultAction,
             cancelAction: DefaultAction
         )
+
+        /**
+         * Renders an alert popup with an action you can invoke if users press on Ok or Secondary, and a Cancel Options.
+         * Fully Configurable
+         * */
+        fun showAlertWithTertiaryButtonsConfirmation(
+            message: String,
+            title: String,
+            okText: String,
+            secondaryText: String,
+            cancelText: String = "Cancel",
+            okAction: DefaultAction,
+            secondaryAction: DefaultAction
+        )
     }
 }

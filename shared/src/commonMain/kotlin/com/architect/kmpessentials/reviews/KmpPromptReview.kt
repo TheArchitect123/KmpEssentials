@@ -6,6 +6,11 @@ import com.architect.kmpessentials.internal.ActionStringParams
 expect class KmpPromptReview {
     companion object{
         /**
+         *  Checks if in app prompts can be invoked
+         * */
+        fun checkInAppReviewCapability(onResult: (Boolean) -> Unit)
+
+        /**
          *  Prompts the user using the in-app review api.
          *  Internally checks if the user has been prompted. Allows a review only once per month.
          *  optional action to run after user has completed their review

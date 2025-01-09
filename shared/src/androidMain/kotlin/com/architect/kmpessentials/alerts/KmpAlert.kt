@@ -186,5 +186,72 @@ actual class KmpAlert {
                 alert.show()
             }
         }
+
+        actual fun showAlertWithTertiaryButtonsConfirmation(
+            message: String,
+            title: String,
+            okText: String,
+            secondaryText: String,
+            cancelText: String,
+            okAction: DefaultAction,
+            secondaryAction: DefaultAction
+        ) {
+            KmpMainThread.runViaMainThread {
+                val titleSpan = SpannableString(title)
+                if (titleStyle != 0) {
+                    titleSpan.setSpan(
+                        TextAppearanceSpan(KmpAndroid.clientAppContext, titleStyle),
+                        0, title.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                    )
+                }
+
+                val messageSpan = SpannableString(message)
+                if (messageStyle != 0) {
+                    messageSpan.setSpan(
+                        TextAppearanceSpan(KmpAndroid.clientAppContext, messageStyle),
+                        0, message.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                    )
+                }
+
+                val buttonSpan = SpannableString(okText)
+                if (buttonStyle != 0) {
+                    buttonSpan.setSpan(
+                        TextAppearanceSpan(KmpAndroid.clientAppContext, buttonStyle),
+                        0, okText.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                    )
+                }
+
+                val secondaryButtonSpan = SpannableString(secondaryText)
+                if (cancelButtonStyle != 0) {
+                    secondaryButtonSpan.setSpan(
+                        TextAppearanceSpan(KmpAndroid.clientAppContext, cancelButtonStyle),
+                        0, secondaryText.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                    )
+                }
+
+                val cancelButtonSpan = SpannableString(cancelText)
+                if (buttonStyle != 0) {
+                    cancelButtonSpan.setSpan(
+                        TextAppearanceSpan(KmpAndroid.clientAppContext, buttonStyle),
+                        0, cancelText.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                    )
+                }
+
+                val alert = AlertDialog.Builder(KmpAndroid.clientAppContext!!, alertDialogStyle)
+                    .setTitle(titleSpan)
+                    .setMessage(messageSpan)
+                    .setPositiveButton(buttonSpan) { result, dial ->
+                        okAction()
+                    }
+                    .setNegativeButton(secondaryButtonSpan) { result, dial ->
+                        secondaryAction()
+                    }
+                    .setNeutralButton(cancelButtonSpan) { result, dial ->
+
+                    }
+
+                alert.show()
+            }
+        }
     }
 }

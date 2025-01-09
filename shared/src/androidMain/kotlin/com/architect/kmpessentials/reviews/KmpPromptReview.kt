@@ -9,16 +9,29 @@ import com.architect.kmpessentials.logging.KmpLogging
 
 actual class KmpPromptReview {
     actual companion object {
+        actual fun checkInAppReviewCapability(onResult: (Boolean) -> Unit) {
+            val reviewManager = ReviewManagerFactory.create(KmpAndroid.getCurrentApplicationContext())
+            val request = reviewManager.requestReviewFlow()
+
+            request.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    onResult(true)
+                } else {
+                    onResult(false)
+                }
+            }
+        }
+
         actual fun promptReviewInApp(
             errorPromptingDialog: ActionStringParams, actionAfterClosing: ActionNoParams?
         ) {
-            val reviewManager = ReviewManagerFactory.create(KmpAndroid.applicationContext!!)
+            val reviewManager = ReviewManagerFactory.create(KmpAndroid.getCurrentApplicationContext())
 
             // Start the review flow
             val request = reviewManager.requestReviewFlow()
             if (request.isSuccessful) {
                 val reviewInfo = request.result
-                val flow = reviewManager.launchReviewFlow(KmpAndroid.clientAppContext!!, reviewInfo)
+                val flow = reviewManager.launchReviewFlow(KmpAndroid.getCurrentActivityContext(), reviewInfo)
                 flow.addOnSuccessListener {
                     // Review flow completed (success or failure)
                     // Note: The Play Store decides if the dialog is shown
@@ -51,11 +64,11 @@ actual class KmpPromptReview {
         }
 
         actual fun promptReviewViaExternal() {
-            KmpLauncher.launchExternalUrlViaBrowser("https://play.google.com/store/apps/details?id=${KmpAndroid.applicationContext!!.packageName}&reviewId=0")
+            KmpLauncher.launchExternalUrlViaBrowser("https://play.google.com/store/apps/details?id=${KmpAndroid.getCurrentApplicationContext().packageName}&reviewId=0")
         }
 
         actual fun openAppStoreLink() {
-            KmpLauncher.launchExternalUrlViaBrowser("https://play.google.com/store/apps/details?id=${KmpAndroid.applicationContext!!.packageName}")
+            KmpLauncher.launchExternalUrlViaBrowser("https://play.google.com/store/apps/details?id=${KmpAndroid.getCurrentApplicationContext().packageName}")
         }
     }
 }

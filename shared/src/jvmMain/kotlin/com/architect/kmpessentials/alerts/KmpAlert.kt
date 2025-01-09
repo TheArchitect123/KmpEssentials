@@ -42,6 +42,16 @@ actual class KmpAlert {
                 }
             }
         }
+        actual fun showAlertWithTertiaryButtonsConfirmation(
+            message: String,
+            title: String,
+            okText: String,
+            secondaryText: String,
+            cancelText: String,
+            okAction: DefaultAction,
+            secondaryAction: DefaultAction
+        ) {
+        }
 
         actual fun showAlertWithConfirmation(
             message: String,
