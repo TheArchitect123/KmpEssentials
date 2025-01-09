@@ -7,6 +7,7 @@ import com.architect.kmpessentials.KmpAndroid
 import com.architect.kmpessentials.internal.ActionBoolParams
 import com.architect.kmpessentials.mainThread.KmpMainThread
 import com.architect.kmpessentials.toast.KmpToast
+import java.net.URLEncoder
 
 actual class KmpEmail {
     actual companion object {
@@ -39,7 +40,7 @@ actual class KmpEmail {
                     val emailIntent = Intent(Intent.ACTION_VIEW).apply {
                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         data =
-                            Uri.parse(emailAddress.plus("?subject=$emailSubject&body=$emailMessage"))
+                            Uri.parse(emailAddress.plus("?subject=${emailSubject.encode()}&body=${emailMessage.encode()}"))
                         putExtra(Intent.EXTRA_SUBJECT, emailSubject)
                         putExtra(Intent.EXTRA_TEXT, emailMessage);
                     }
@@ -67,7 +68,7 @@ actual class KmpEmail {
                     val emailIntent = Intent(Intent.ACTION_VIEW).apply {
                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         data =
-                            Uri.parse(emailAddress.plus("?subject=$emailSubject&body=$emailMessage"))
+                            Uri.parse(emailAddress.plus("?subject=${emailSubject.encode()}&body=${emailMessage.encode()}"))
                         putExtra(Intent.EXTRA_CC, arrayOf(ccAddresses))
                         putExtra(Intent.EXTRA_SUBJECT, emailSubject)
                         putExtra(Intent.EXTRA_TEXT, emailMessage);
@@ -79,5 +80,11 @@ actual class KmpEmail {
                 }
             }
         }
+
+        /**
+         * '+' needs to be replaced with a whitespace code '%20'
+         * @see https://stackoverflow.com/a/4737967/889278
+         */
+        private fun String.encode() = URLEncoder.encode(this, "UTF-8").replace("+", "%20")
     }
 }
