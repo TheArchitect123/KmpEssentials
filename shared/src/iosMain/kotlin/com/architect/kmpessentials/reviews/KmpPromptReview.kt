@@ -4,15 +4,16 @@ import com.architect.kmpessentials.KmpiOS
 import com.architect.kmpessentials.internal.ActionNoParams
 import com.architect.kmpessentials.internal.ActionStringParams
 import com.architect.kmpessentials.launcher.KmpLauncher
+import com.architect.kmpessentials.logging.KmpLogging
 import com.architect.kmpessentials.mainThread.KmpMainThread
-import com.architect.kmpessentials.secureStorage.KmpPublicStorage
+import com.architect.kmpessentials.secureStorage.KmpSecureStorage
 import platform.StoreKit.SKStoreReviewController
 import platform.UIKit.UIApplication
 import platform.Foundation.*
 
 actual class KmpPromptReview {
     actual companion object {
-
+        private var hoursPassed = 0L
         private var appStoreLinkId: Long? = null
         private var appStoreAppName: String = ""
         private const val LAST_REQUEST_TIME_KEY = "last_request_time"
@@ -20,19 +21,20 @@ actual class KmpPromptReview {
         // Save the current timestamp
         private fun saveCurrentTime() {
             val currentTimeMillis = getCurrentTimeMillis()
-            KmpPublicStorage.persistData(LAST_REQUEST_TIME_KEY, currentTimeMillis)
+            KmpSecureStorage.persistData(LAST_REQUEST_TIME_KEY, currentTimeMillis)
         }
 
         // Check if 6 hours have passed since the last saved timestamp
-        private fun hasSixHoursPassed(): Boolean {
-            val lastRequestTime = KmpPublicStorage.getLongFromKey(LAST_REQUEST_TIME_KEY)
+        private fun hasExpiryTimePassed(): Boolean {
+            val lastRequestTime = KmpSecureStorage.getLongFromKey(LAST_REQUEST_TIME_KEY)
             val currentTimeMillis = getCurrentTimeMillis()
-            val sixHoursInMillis: Long = 6 * 60 * 60 * 1000 // 6 hours in milliseconds
+            val hoursInMillis = hoursPassed * 60 * 60 * 1000 // 6 hours in milliseconds
 
-            return if (lastRequestTime == null) {
+            KmpLogging.writeInfo("TIMER_REVIEW", "$hoursInMillis")
+            return if (lastRequestTime == 0L || lastRequestTime == null || hoursInMillis == 0L) {
                 true // If no timestamp exists, allow the request
             } else {
-                (currentTimeMillis - lastRequestTime) >= sixHoursInMillis
+                (currentTimeMillis - lastRequestTime) >= hoursInMillis
             }
         }
 
@@ -52,20 +54,25 @@ actual class KmpPromptReview {
             appStoreLinkId = id
         }
 
+        actual fun allowReviewRequestAfterHours(hoursToConfigure: Long){
+            hoursPassed = hoursToConfigure
+        }
+
         actual fun checkInAppReviewCapability(onResult: (Boolean) -> Unit) {
-            onResult(hasSixHoursPassed())
+            onResult(hasExpiryTimePassed())
         }
 
         actual fun promptReviewInApp(
             errorPromptingDialog: ActionStringParams,
             actionAfterClosing: ActionNoParams?
         ) {
+            saveCurrentTime()
+
             KmpMainThread.runViaMainThread {
                 val windowScene = UIApplication.sharedApplication.keyWindow?.windowScene
                 val viewController = KmpiOS.getTopViewController()
 
                 if (viewController != null && windowScene != null) {
-                    saveCurrentTime() // saves and persists
                     SKStoreReviewController.requestReviewInScene(windowScene)
                 } else {
                     errorPromptingDialog("Failed to prompt for in app review. Root Store Controller can't be found")

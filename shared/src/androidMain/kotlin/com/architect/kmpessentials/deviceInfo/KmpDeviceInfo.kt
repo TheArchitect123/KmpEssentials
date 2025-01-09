@@ -14,7 +14,7 @@ actual class KmpDeviceInfo {
         }
 
         actual fun getDeviceSpecs(): DeviceSpecs {
-            return DeviceSpecs(Build.MODEL, Build.VERSION.SDK_INT, Build.MANUFACTURER)
+            return DeviceSpecs(Build.MODEL, "${Build.VERSION.SDK_INT}", Build.MANUFACTURER)
         }
     }
 }

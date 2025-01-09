@@ -5,6 +5,10 @@ import com.architect.kmpessentials.internal.ActionStringParams
 
 actual class KmpPromptReview {
     actual companion object {
+        actual fun allowReviewRequestAfterHours(hoursToConfigure: Long){
+
+        }
+
         actual fun promptReviewInApp(
             errorPromptingDialog: ActionStringParams,
             actionAfterClosing: ActionNoParams?

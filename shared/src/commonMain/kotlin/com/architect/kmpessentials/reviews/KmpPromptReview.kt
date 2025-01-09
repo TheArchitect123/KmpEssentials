@@ -24,6 +24,13 @@ expect class KmpPromptReview {
         fun promptReviewViaExternal()
 
         /**
+         *  Configures the number of hours that has passed before an app review request is allowed to run.
+         *  After the request is finished, the lock resets, and expires again from the current time on the device
+         *  to the number of houus set
+         * */
+        fun allowReviewRequestAfterHours(hoursToConfigure: Long)
+
+        /**
          *  Opens the app store link for the running app
          * */
         fun openAppStoreLink()

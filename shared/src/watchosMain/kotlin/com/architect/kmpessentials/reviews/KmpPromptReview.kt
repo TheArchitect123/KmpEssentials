@@ -18,6 +18,10 @@ import kotlin.coroutines.resumeWithException
 
 actual class KmpPromptReview {
     actual companion object {
+        actual fun allowReviewRequestAfterHours(hoursToConfigure: Long){
+
+        }
+
         private var appStoreLink: String = ""
 
         actual fun promptReviewInApp(
