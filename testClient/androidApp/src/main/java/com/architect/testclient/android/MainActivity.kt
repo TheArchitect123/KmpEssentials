@@ -18,6 +18,7 @@ import com.architect.kmpessentials.logging.KmpLogging
 import com.architect.testclient.android.MyApplicationTheme
 import kotlinx.coroutines.delay
 
+// This is the Main Activity for testing
 class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
