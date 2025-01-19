@@ -4,11 +4,14 @@ import com.architect.kmpessentials.internal.ActionNoParams
 import com.architect.kmpessentials.internal.ActionStringParams
 
 expect class KmpPromptReview {
-    companion object{
+    companion object {
         /**
          *  Checks if in app prompts can be invoked
          * */
-        fun checkInAppReviewCapability(onResult: (Boolean) -> Unit)
+        fun checkInAppReviewCapability(
+            showInitial: Boolean = true,
+            onResult: (Boolean) -> Unit
+        )
 
         /**
          *  Prompts the user using the in-app review api.
@@ -16,7 +19,11 @@ expect class KmpPromptReview {
          *  optional action to run after user has completed their review
          *  You can present a thank you message
          * */
-        fun promptReviewInApp(errorPromptingDialog: ActionStringParams, actionAfterClosing : ActionNoParams? = null)
+        fun promptReviewInApp(
+            forceExternalIfFailed : Boolean = true,
+            errorPromptingDialog: ActionStringParams,
+            actionAfterClosing: ActionNoParams? = null
+        )
 
         /**
          *  Prompts the user with an external dialog that users can then provide for

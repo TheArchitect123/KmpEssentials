@@ -185,6 +185,8 @@ kotlin {
         // android & iOS targets
         val androidMain by getting {
             dependencies {
+                implementation("com.google.assistant.suggestion:assistant-suggestions:2.2.1")
+                implementation("androidx.core:core-google-shortcuts:1.1.0")
                 implementation("com.google.android.play:review:2.0.2")
                 implementation("com.google.android.play:review-ktx:2.0.2")
 
@@ -225,7 +227,7 @@ afterEvaluate {
         coordinates(
             groupId = "io.github.thearchitect123",
             artifactId = "kmpEssentials",
-            version = "1.7.8"
+            version = "1.8.5"
         )
 
         // Configure POM metadata for the published artifact

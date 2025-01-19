@@ -6,7 +6,7 @@ import com.architect.kmpessentials.internal.ActionStringParams
 import com.architect.kmpessentials.launcher.KmpLauncher
 import com.architect.kmpessentials.logging.KmpLogging
 import com.architect.kmpessentials.mainThread.KmpMainThread
-import com.architect.kmpessentials.secureStorage.KmpSecureStorage
+import com.architect.kmpessentials.secureStorage.KmpPublicStorage
 import platform.StoreKit.SKStoreReviewController
 import platform.UIKit.UIApplication
 import platform.Foundation.*
@@ -21,12 +21,12 @@ actual class KmpPromptReview {
         // Save the current timestamp
         private fun saveCurrentTime() {
             val currentTimeMillis = getCurrentTimeMillis()
-            KmpSecureStorage.persistData(LAST_REQUEST_TIME_KEY, currentTimeMillis)
+            KmpPublicStorage.persistData(LAST_REQUEST_TIME_KEY, currentTimeMillis)
         }
 
         // Check if 6 hours have passed since the last saved timestamp
         private fun hasExpiryTimePassed(): Boolean {
-            val lastRequestTime = KmpSecureStorage.getLongFromKey(LAST_REQUEST_TIME_KEY)
+            val lastRequestTime = KmpPublicStorage.getLongFromKey(LAST_REQUEST_TIME_KEY)
             val currentTimeMillis = getCurrentTimeMillis()
             val hoursInMillis = hoursPassed * 60 * 60 * 1000 // 6 hours in milliseconds
 
@@ -54,15 +54,23 @@ actual class KmpPromptReview {
             appStoreLinkId = id
         }
 
-        actual fun allowReviewRequestAfterHours(hoursToConfigure: Long){
+        actual fun allowReviewRequestAfterHours(hoursToConfigure: Long) {
             hoursPassed = hoursToConfigure
         }
 
-        actual fun checkInAppReviewCapability(onResult: (Boolean) -> Unit) {
+        actual fun checkInAppReviewCapability(
+            showInitial: Boolean,
+            onResult: (Boolean) -> Unit
+        ) {
+            if (!showInitial) {
+                saveCurrentTime()
+            }
+
             onResult(hasExpiryTimePassed())
         }
 
         actual fun promptReviewInApp(
+            forceExternalIfFailed: Boolean,
             errorPromptingDialog: ActionStringParams,
             actionAfterClosing: ActionNoParams?
         ) {

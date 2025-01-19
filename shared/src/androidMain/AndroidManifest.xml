@@ -2,11 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-sdk
+        android:minSdkVersion="16"
+        tools:overrideLibrary="com.google.assistant.suggestion"
+        />
+
     <queries>
         <intent>
             <action android:name="android.intent.action.SENDTO" />
             <data android:scheme="mailto" />
         </intent>
+
+        <package android:name="com.google.android.googlequicksearchbox"/>
     </queries>
 
     <application

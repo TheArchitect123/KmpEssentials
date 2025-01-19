@@ -9,6 +9,7 @@ actual class KmpPromptReview {
 
         }
         actual fun promptReviewInApp(
+            forceExternalIfFailed : Boolean,
             errorPromptingDialog: ActionStringParams,
             actionAfterClosing: ActionNoParams?
         ) {
@@ -26,7 +27,9 @@ actual class KmpPromptReview {
         /**
          *  Checks if in app prompts can be invoked
          * */
-        actual fun checkInAppReviewCapability(onResult: (Boolean) -> Unit) {
+        actual fun checkInAppReviewCapability(
+            showInitial: Boolean,
+            onResult: (Boolean) -> Unit) {
         }
     }
 }
