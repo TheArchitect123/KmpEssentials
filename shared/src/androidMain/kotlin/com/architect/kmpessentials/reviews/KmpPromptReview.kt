@@ -41,6 +41,7 @@ actual class KmpPromptReview {
                         KmpAndroid.getCurrentActivityContext(),
                         reviewInfo
                     )
+
                     flow?.addOnSuccessListener {
                         // Review flow completed (success or failure)
                         // Note: The Play Store decides if the dialog is shown
@@ -55,6 +56,12 @@ actual class KmpPromptReview {
                         )
 
                         if (forceExternalIfFailed) {
+                            promptReviewViaExternal()
+                        }
+                    }
+
+                    flow?.addOnCompleteListener { r ->
+                        if (!r.isSuccessful && forceExternalIfFailed) {
                             promptReviewViaExternal()
                         }
                     }

@@ -10,6 +10,9 @@ import platform.Foundation.NSTimer
 
 actual class KmpToast {
     actual companion object {
+        actual fun setStyleOfToast(mode: ToastMode){
+
+        }
 
         @OptIn(ExperimentalForeignApi::class)
         private fun invokeToastMessage(message: String, timer: Double){

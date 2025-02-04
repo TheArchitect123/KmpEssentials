@@ -5,6 +5,10 @@ import com.architect.kmpessentials.KmpAndroid
 
 actual class KmpToast {
     actual companion object {
+        actual fun setStyleOfToast(mode: ToastMode){
+
+        }
+
         actual fun showToastShort(message: String) {
             Toast.makeText(KmpAndroid.applicationContext, message, Toast.LENGTH_SHORT).show()
         }
