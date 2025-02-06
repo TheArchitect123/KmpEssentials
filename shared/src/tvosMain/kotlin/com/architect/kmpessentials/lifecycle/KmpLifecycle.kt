@@ -15,6 +15,7 @@ actual class KmpLifecycle {
             backgroundAction = action
         }
 
+
         /**
          *  Registers an action that is run after the app reenters the foreground state
          * */
@@ -26,6 +27,12 @@ actual class KmpLifecycle {
 
         }
 
+        actual suspend fun waitForAppToReturnToForegroundWithTimeout(
+            milliseconds: Long,
+            action: DefaultActionAsync
+        ) {
+        }
+
         /**
          *  Resets all the lifecycle actions.
          *  This is essential to invoke if using a fragment, or when an activity gets destroyed.
@@ -35,6 +42,10 @@ actual class KmpLifecycle {
         actual fun resetAppLifecycleActions() {
             backgroundAction = null
             foregroundAction = null
+        }
+
+        actual fun isCurrentlyInForeground(): Boolean {
+            return false
         }
     }
 }

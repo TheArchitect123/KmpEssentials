@@ -26,6 +26,7 @@ actual class KmpLifecycle {
 
         }
 
+
         /**
          *  Resets all the lifecycle actions.
          *  This is essential to invoke if using a fragment, or when an activity gets destroyed.

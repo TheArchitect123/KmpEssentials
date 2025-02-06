@@ -2,6 +2,7 @@ package com.architect.kmpessentials.permissions
 
 import com.architect.kmpessentials.internal.ActionBoolParams
 import com.architect.kmpessentials.internal.ActionNoParams
+import com.architect.kmpessentials.internal.ActionPermissionStatusParams
 import com.architect.kmpessentials.mainThread.KmpMainThread
 import com.architect.kmpessentials.permissions.delegates.LocationPermissionsDelegate
 import platform.AVFoundation.AVAuthorizationStatusAuthorized
@@ -19,11 +20,14 @@ import platform.Speech.SFSpeechRecognizerAuthorizationStatus
 import platform.UserNotifications.UNAuthorizationOptionAlert
 import platform.UserNotifications.UNAuthorizationOptionBadge
 import platform.UserNotifications.UNAuthorizationOptionProvisional
+import platform.UserNotifications.UNNotificationSettingDisabled
 import platform.UserNotifications.UNNotificationSettingEnabled
+import platform.UserNotifications.UNNotificationSettingNotSupported
 import platform.UserNotifications.UNUserNotificationCenter
 
 actual class KmpPermissionsManager {
     actual companion object {
+
         actual fun requestPermission(
             permission: Permission,
             runAction: ActionNoParams
@@ -83,6 +87,37 @@ actual class KmpPermissionsManager {
                     else -> {
 
                     }
+                }
+            }
+        }
+
+        actual fun getCurrentPermissionState(permission: Permission, actionResult: ActionPermissionStatusParams){
+            KmpMainThread.runViaMainThread {
+                if (permission == Permission.PushNotifications) {
+                    UNUserNotificationCenter.currentNotificationCenter()
+                        .getNotificationSettingsWithCompletionHandler {
+                            actionResult(when(it?.alertSetting()){
+                                UNNotificationSettingEnabled -> PermissionStatus.Granted
+                                UNNotificationSettingDisabled -> PermissionStatus.Denied
+                                else -> PermissionStatus.NotDetermined
+                            })
+                        }
+                } else {
+
+                        when (permission) {
+                            Permission.Camera -> AVCaptureDevice.authorizationStatusForMediaType(
+                                AVMediaTypeVideo
+                            ) == AVAuthorizationStatusAuthorized
+
+                            Permission.Speech -> SFSpeechRecognizer.authorizationStatus() == SFSpeechRecognizerAuthorizationStatus.SFSpeechRecognizerAuthorizationStatusAuthorized
+                            Permission.PhotoGallery -> PHPhotoLibrary.authorizationStatus() == PHAuthorizationStatusAuthorized
+                            Permission.Location -> CLLocationManager().authorizationStatus() == 3 || CLLocationManager().authorizationStatus() == 4
+
+//                            Permission.Microphone -> AVAudioSession.sharedInstance()
+//                                .recordPermission() == AVAudioSessionRecordPermissionGranted
+
+                            else -> false
+                        }
                 }
             }
         }

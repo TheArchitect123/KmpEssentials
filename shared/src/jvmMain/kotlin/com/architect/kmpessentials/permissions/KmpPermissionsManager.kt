@@ -2,6 +2,7 @@ package com.architect.kmpessentials.permissions
 
 import com.architect.kmpessentials.internal.ActionBoolParams
 import com.architect.kmpessentials.internal.ActionNoParams
+import com.architect.kmpessentials.internal.ActionPermissionStatusParams
 
 actual class KmpPermissionsManager {
     actual companion object {
@@ -21,6 +22,10 @@ actual class KmpPermissionsManager {
         }
 
         actual fun canShowPromptDialog(permission: Permission, actionResult: ActionBoolParams) {
+
+        }
+
+        actual fun getCurrentPermissionState(permission: Permission, actionResult: ActionPermissionStatusParams){
 
         }
     }

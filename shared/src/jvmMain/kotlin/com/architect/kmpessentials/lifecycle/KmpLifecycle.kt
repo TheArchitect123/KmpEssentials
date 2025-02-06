@@ -15,6 +15,10 @@ actual class KmpLifecycle {
             backgroundAction = action
         }
 
+        actual fun isCurrentlyInForeground(): Boolean {
+            return false
+        }
+
         /**
          *  Registers an action that is run after the app reenters the foreground state
          * */
@@ -23,6 +27,12 @@ actual class KmpLifecycle {
         }
 
         actual suspend fun waitForAppToReturnToForeground(action: DefaultActionAsync){
+
+        }
+        actual suspend fun waitForAppToReturnToForegroundWithTimeout(
+            milliseconds: Long,
+            action: DefaultActionAsync
+        ) {
 
         }
 

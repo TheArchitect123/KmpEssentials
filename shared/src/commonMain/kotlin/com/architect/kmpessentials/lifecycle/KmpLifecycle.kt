@@ -6,6 +6,10 @@ import com.architect.kmpessentials.aliases.DefaultActionAsync
 expect class KmpLifecycle {
    companion object {
        /**
+        * If true, app is running in the foreground, otherwise false
+        * */
+       fun isCurrentlyInForeground() : Boolean
+       /**
         *  Registers an action that is run after the app enters the background state
         * */
        fun setAppLifecycleBackground(action: DefaultAction)
@@ -20,6 +24,13 @@ expect class KmpLifecycle {
         * @param action action to invoke once returning to the foreground state
         * */
        suspend fun waitForAppToReturnToForeground(action: DefaultActionAsync)
+
+       /**
+        * Waits for the app to return to the foreground, and runs the action after the foreground state is achieved
+        * @param action action to invoke once returning to the foreground state
+        * @param milliseconds time to wait until the function times out, and runs the action
+        * */
+       suspend fun waitForAppToReturnToForegroundWithTimeout(milliseconds: Long, action: DefaultActionAsync)
 
        /**
         *  Resets all the lifecycle actions.

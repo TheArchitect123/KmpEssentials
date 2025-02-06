@@ -3,6 +3,7 @@ package com.architect.kmpessentials.lifecycle
 import com.architect.kmpessentials.aliases.DefaultAction
 import com.architect.kmpessentials.aliases.DefaultActionAsync
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withTimeoutOrNull
 
 actual class KmpLifecycle {
     actual companion object {
@@ -10,6 +11,10 @@ actual class KmpLifecycle {
         internal var foregroundAction: DefaultAction? = null
 
         internal var isInForeground: Boolean = false
+
+        actual fun isCurrentlyInForeground(): Boolean {
+            return isInForeground
+        }
 
         /**
          *  Registers an action that is run after the app enters the background state
@@ -31,6 +36,26 @@ actual class KmpLifecycle {
             }
 
             action()
+        }
+
+        actual suspend fun waitForAppToReturnToForegroundWithTimeout(
+            milliseconds: Long,
+            action: DefaultActionAsync
+        ) {
+            val startTime = System.currentTimeMillis()
+
+            withTimeoutOrNull(milliseconds) { // Enforce timeout
+                while (!isInForeground) {
+                    delay(1000) // Check every second
+
+                    // If the timeout is reached, exit the loop
+                    if (System.currentTimeMillis() - startTime >= milliseconds) {
+                        break
+                    }
+                }
+            }
+
+            action() // Run action after timeout or foreground detection
         }
 
         /**

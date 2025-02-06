@@ -2,9 +2,14 @@ package com.architect.kmpessentials.permissions
 
 import com.architect.kmpessentials.internal.ActionBoolParams
 import com.architect.kmpessentials.internal.ActionNoParams
+import com.architect.kmpessentials.internal.ActionPermissionStatusParams
 
 actual class KmpPermissionsManager {
     actual companion object {
+        actual fun getCurrentPermissionState(permission: Permission, actionResult: ActionPermissionStatusParams){
+
+        }
+
         actual fun requestPermission(
             permission: Permission,
             runAction: ActionNoParams

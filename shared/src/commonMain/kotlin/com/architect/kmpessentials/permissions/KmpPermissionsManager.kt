@@ -2,6 +2,7 @@ package com.architect.kmpessentials.permissions
 
 import com.architect.kmpessentials.internal.ActionBoolParams
 import com.architect.kmpessentials.internal.ActionNoParams
+import com.architect.kmpessentials.internal.ActionPermissionStatusParams
 
 expect class KmpPermissionsManager {
     companion object {
@@ -25,6 +26,11 @@ expect class KmpPermissionsManager {
          * @param True if the permission is granted, False if Denied
          * */
         fun isPermissionGranted(permission: Permission, actionResult: ActionBoolParams)
+
+        /**
+         * Gets the current permission state of the permission you've set
+         * */
+        fun getCurrentPermissionState(permission: Permission, actionResult: ActionPermissionStatusParams)
 
         /**
          * Must be invoked on the main thread (otherwise could cause a crash)

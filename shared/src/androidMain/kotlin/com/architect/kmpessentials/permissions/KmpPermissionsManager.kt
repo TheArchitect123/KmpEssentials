@@ -10,6 +10,7 @@ import com.architect.kmpessentials.KmpAndroid
 import com.architect.kmpessentials.aliases.DefaultAction
 import com.architect.kmpessentials.internal.ActionBoolParams
 import com.architect.kmpessentials.internal.ActionNoParams
+import com.architect.kmpessentials.internal.ActionPermissionStatusParams
 import com.architect.kmpessentials.logging.KmpLogging
 import com.architect.kmpessentials.logging.constants.ErrorCodes
 import com.architect.kmpessentials.mainThread.KmpMainThread
@@ -19,9 +20,38 @@ import com.architect.kmpessentials.secureStorage.KmpPublicStorage
 
 actual class KmpPermissionsManager {
     actual companion object {
+
         internal lateinit var resultLauncher: ActivityResultLauncher<String>
         internal lateinit var resultManyLauncher: ActivityResultLauncher<Array<String>>
         internal lateinit var successAction: ActionNoParams
+
+        actual fun getCurrentPermissionState(
+            permission: Permission,
+            actionResult: ActionPermissionStatusParams
+        ) {
+            KmpMainThread.runViaMainThread {
+                if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
+                    val cpermission = PermissionsTransformer.getPermissionFromEnum(permission)
+                    val state = KmpAndroid.applicationContext?.checkSelfPermission(
+                        PermissionsTransformer.getPermissionFromEnum(permission)
+                    )
+                    val showsPrompt = ActivityCompat.shouldShowRequestPermissionRationale(
+                        KmpAndroid.clientAppContext!!,
+                        cpermission
+                    )
+
+                    actionResult(
+                        when (state) {
+                            PackageManager.PERMISSION_GRANTED -> PermissionStatus.Granted
+                            PackageManager.PERMISSION_DENIED -> if (showsPrompt) PermissionStatus.Denied else PermissionStatus.DeniedAlways
+                            else -> PermissionStatus.NotDetermined
+                        }
+                    )
+                } else {
+                    actionResult(PermissionStatus.Granted)
+                }
+            }
+        }
 
         actual fun isPermissionGranted(permission: Permission, actionResult: ActionBoolParams) {
             KmpMainThread.runViaMainThread {
@@ -138,12 +168,12 @@ actual class KmpPermissionsManager {
             KmpMainThread.runViaMainThread {
                 if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
                     val cpermission = PermissionsTransformer.getPermissionFromEnum(permission)
-                    if(cpermission.isNotBlank()) {
-                        val isPromptedFirstTime = KmpPublicStorage.getBooleanFromKey(permission.toString()) ?: false
-                        if (!isPromptedFirstTime){
+                    if (cpermission.isNotBlank()) {
+                        val isPromptedFirstTime =
+                            KmpPublicStorage.getBooleanFromKey(permission.toString()) ?: false
+                        if (!isPromptedFirstTime) {
                             actionResult(true)
-                        }
-                        else {
+                        } else {
                             actionResult(
                                 ActivityCompat.shouldShowRequestPermissionRationale(
                                     KmpAndroid.clientAppContext!!,
@@ -151,8 +181,7 @@ actual class KmpPermissionsManager {
                                 )
                             )
                         }
-                    }
-                    else{
+                    } else {
                         actionResult(false)
                     }
                 } else {

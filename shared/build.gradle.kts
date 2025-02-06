@@ -91,15 +91,6 @@ kotlin {
     tvosArm64()
     tvosSimulatorArm64()
 
-    //mac & desktop targets
-    macosX64()
-    macosArm64()
-//
-    linuxX64()
-    linuxArm64()
-//
-    mingwX64()
-
     // browser
     //js().browser()
 
@@ -111,25 +102,6 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
             }
-        }
-
-        // windows desktop target
-        val mingwMain by getting {
-
-        }
-        val mingwX64Main by getting {
-
-        }
-
-        // linux
-        val linuxMain by getting {
-
-        }
-        val linuxX64Main by getting {
-
-        }
-        val linuxArm64Main by getting {
-
         }
 
         // watch os target
@@ -146,17 +118,6 @@ kotlin {
 
         }
         val watchosSimulatorArm64Main by getting {
-
-        }
-
-        // macos main
-        val macosMain by getting {
-
-        }
-        val macosX64Main by getting {
-
-        }
-        val macosArm64Main by getting {
 
         }
 
@@ -190,7 +151,7 @@ kotlin {
                 implementation("com.google.android.play:review:2.0.2")
                 implementation("com.google.android.play:review-ktx:2.0.2")
 
-                implementation("dev.tmapps:konnection:1.4.1")
+                implementation("dev.tmapps:konnection:1.4.3")
                 implementation("com.liftric:kvault:1.12.0")
 
                 implementation("io.coil-kt:coil:2.4.0")
@@ -214,7 +175,7 @@ kotlin {
         val iosSimulatorArm64Main by getting
         val iosMain by getting {
             dependencies {
-                implementation("dev.tmapps:konnection:1.4.1")
+                implementation("dev.tmapps:konnection:1.4.3")
                 implementation("com.liftric:kvault:1.12.0")
             }
         }
@@ -227,7 +188,7 @@ afterEvaluate {
         coordinates(
             groupId = "io.github.thearchitect123",
             artifactId = "kmpEssentials",
-            version = "1.8.5"
+            version = "1.8.9"
         )
 
         // Configure POM metadata for the published artifact
@@ -265,6 +226,19 @@ afterEvaluate {
         // Enable GPG signing for all publications
         signAllPublications()
     }
+}
+
+signing {
+    val privateKeyFile = project.properties["signing.privateKeyFile"] as? String
+        ?: error("No Private key file found")
+    val passphrase = project.properties["signing.password"] as? String
+        ?: error("No Passphrase found for signing")
+
+    // Read the private key from the file
+    val privateKey = File(privateKeyFile).readText(Charsets.UTF_8)
+
+    useInMemoryPgpKeys(privateKey, passphrase)
+    sign(publishing.publications)
 }
 
 android {
