@@ -17,7 +17,7 @@ An essentials library for Kotlin multiplatform that makes it easier to work with
   </a>
 
   <a href="https://github.com/TheArchitect123/kmpEssentials">
-    <img alt="GitHub" src="https://img.shields.io/badge/_Android,_AppleWatch,_iOS-white.svg,_JVM-white.svg">
+    <img alt="GitHub" src="https://img.shields.io/badge/_Android,_AppleWatch,_JVM,_iOS-white.svg">
   </a>
 </p
 
