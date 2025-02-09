@@ -6,9 +6,15 @@ import java.awt.Image
 import java.awt.SystemTray
 import java.awt.Toolkit
 import java.awt.TrayIcon
+import java.util.concurrent.Executors
+import java.util.concurrent.ScheduledFuture
+import java.util.concurrent.TimeUnit
 
 actual class KmpLocalNotifications {
     actual companion object {
+        private val scheduler = Executors.newScheduledThreadPool(1)
+        private val scheduledAlarms = mutableMapOf<String, ScheduledFuture<*>>()
+
         actual fun sendNotification(title: String, message: String) {
             KmpMainThread.runViaMainThread {
                 if (!SystemTray.isSupported()) {
@@ -23,9 +29,9 @@ actual class KmpLocalNotifications {
                         val image: Image = Toolkit.getDefaultToolkit()
                             .createImage("icon.png")  // need a custom icon that users can specify
 
-                        val trayIcon = TrayIcon(image, "App Name")
+                        val trayIcon = TrayIcon(image, title)
                         trayIcon.isImageAutoSize = true
-                        trayIcon.toolTip = "App Name"
+                        trayIcon.toolTip = title
                         tray.add(trayIcon)
 
                         // Display notification
@@ -46,7 +52,14 @@ actual class KmpLocalNotifications {
             title: String,
             message: String
         ): String {
-            return ""
+            val alarmId = System.currentTimeMillis().toString() // Generate a unique ID
+            val task = scheduler.schedule(
+                { sendNotification(title, message) },
+                durationMS, TimeUnit.MILLISECONDS
+            )
+
+            scheduledAlarms[alarmId] = task
+            return alarmId
         }
 
         actual fun scheduleAlarmNotificationRepeating(
@@ -55,19 +68,28 @@ actual class KmpLocalNotifications {
             title: String,
             message: String
         ): String {
-            return ""
+            val alarmId = System.currentTimeMillis().toString() // Unique ID
+            val task = scheduler.scheduleAtFixedRate(
+                { sendNotification(title, message) },
+                durationMS, intervalMs, TimeUnit.MILLISECONDS
+            )
+
+            scheduledAlarms[alarmId] = task
+            return alarmId
         }
 
         actual fun cancelAllAlarms() {
-
+            scheduledAlarms.values.forEach { it.cancel(true) }
+            scheduledAlarms.clear()
         }
 
         actual fun cancelAlarmWithId(alarmId: String) {
-
+            scheduledAlarms[alarmId]?.cancel(true)
+            scheduledAlarms.remove(alarmId)
         }
 
         actual fun isSchedulingAlarmWithId(alarmId: String): Boolean {
-            TODO("Not yet implemented")
+            return scheduledAlarms[alarmId]?.isCancelled == false
         }
 
     }

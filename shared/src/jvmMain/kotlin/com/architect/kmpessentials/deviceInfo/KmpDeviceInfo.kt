@@ -1,6 +1,7 @@
 package com.architect.kmpessentials.deviceInfo
 
 import kotlinx.datetime.TimeZone
+import java.net.InetAddress
 import java.util.Locale
 
 actual class KmpDeviceInfo {
@@ -23,7 +24,27 @@ actual class KmpDeviceInfo {
         }
 
         actual fun getDeviceSpecs(): DeviceSpecs {
-            throw TODO()
+            return DeviceSpecs(
+                getDeviceModelName(),
+                System.getProperty("os.version"),
+                getDeviceManufacturer()
+            )
+        }
+
+        private fun getDeviceModelName(): String {
+            return try {
+                InetAddress.getLocalHost().hostName
+            } catch (e: Exception) {
+                ""
+            }
+        }
+
+        private fun getDeviceManufacturer(): String {
+            return when (getRunningPlatform()) {
+                DevicePlatform.Windows -> "Microsoft"
+                DevicePlatform.MacOS -> "Apple"
+                else -> "Linux"
+            }
         }
     }
 }

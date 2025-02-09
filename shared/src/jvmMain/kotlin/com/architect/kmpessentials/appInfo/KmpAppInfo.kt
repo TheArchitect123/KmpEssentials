@@ -9,6 +9,16 @@ actual class KmpAppInfo {
 
         /// need to figure out how these apis will work if each platform has its own way of managing manifest files
         actual fun getPackageName(): String {
+            val stackTrace = Thread.currentThread().stackTrace
+            for (element in stackTrace) {
+                val className = element.className
+                // Skip internal JVM classes and your own library package
+                if (!className.startsWith("java.") && !className.startsWith("kotlin.") &&
+                    !className.startsWith("com.architect.kmpessentials")) {
+                    return className.substringBeforeLast('.')
+                }
+            }
+
             return ""
         }
 
@@ -25,7 +35,7 @@ actual class KmpAppInfo {
         }
 
         actual fun getPackageMinOS(): Int {
-            TODO("NOT IMPLEMENTED YET")
+            return 0
         }
 
         actual fun getSystemThemeMode(): AppDeviceTheme {

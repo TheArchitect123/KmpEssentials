@@ -1,6 +1,5 @@
 package com.architect.kmpessentials.deviceDisplay
 
-import com.architect.kmpessentials.deviceDisplay.KmpDeviceDisplay.Companion.Dxva2
 import com.architect.kmpessentials.deviceInfo.DevicePlatform
 import com.architect.kmpessentials.deviceInfo.KmpDeviceInfo
 import com.sun.jna.Library
@@ -11,7 +10,6 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
-
 
 actual class KmpDeviceDisplay {
     actual companion object {

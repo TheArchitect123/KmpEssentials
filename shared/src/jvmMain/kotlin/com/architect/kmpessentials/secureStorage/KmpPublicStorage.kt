@@ -1,65 +1,119 @@
 package com.architect.kmpessentials.secureStorage
 
+import com.architect.kmpessentials.deviceInfo.DevicePlatform
+import com.architect.kmpessentials.deviceInfo.KmpDeviceInfo
+import com.architect.kmpessentials.fileSystem.KmpFileSystem
+import jdk.internal.misc.VM.saveProperties
+import org.bytedeco.javacpp.Loader.loadProperties
+import java.io.File
+import java.util.Properties
+
 actual class KmpPublicStorage {
     actual companion object {
-        actual fun clearEntireStore() {
+        private var storageFile: File? = null
 
+        init {
+            reinitializeStoreFile()
+        }
+
+        private fun loadProperties(): MutableMap<String, String> {
+            val properties = Properties()
+            if (storageFile!!.exists()) {
+                storageFile!!.inputStream().use { properties.load(it) }
+            }
+            return properties.entries.associate { it.key.toString() to it.value.toString() }
+                .toMutableMap()
+        }
+
+        private fun saveProperties(map: MutableMap<String, String>) {
+            val properties = Properties()
+            properties.putAll(map)
+            storageFile!!.outputStream().use { properties.store(it, "KmpPublicStorage") }
+        }
+
+        private fun reinitializeStoreFile() {
+            val appDirectory = KmpFileSystem.getAppDirectory()
+            storageFile = when (KmpDeviceInfo.getRunningPlatform()) {
+                DevicePlatform.Windows -> File(appDirectory, "essentials_public_storage.txt")
+                DevicePlatform.MacOS -> File(
+                    appDirectory,
+                    "Library/Application Support/public_storage.txt"
+                )
+
+                else -> File(appDirectory, ".config/public_storage.txt")
+            }
+        }
+
+        actual fun clearEntireStore() {
+            if (storageFile!!.exists()) {
+                storageFile!!.delete()
+            }
+
+            reinitializeStoreFile()
         }
 
         actual fun deleteDataForKey(key: String) {
-
+            val properties = loadProperties()
+            if (properties.containsKey(key)) {
+                properties.remove(key)
+                saveProperties(properties)
+            }
         }
 
+
         actual fun getLongFromKey(key: String): Long? {
-            TODO()
+            return loadProperties()[key]?.toString()?.toLongOrNull()
         }
 
         actual fun <TData> persistData(key: String, item: TData) {
-
+            val properties = loadProperties()
+            properties[key] = item.toString()
+            saveProperties(properties)
         }
 
+
         actual fun getStringFromKey(key: String): String? {
-            TODO()
+            return loadProperties()[key]?.toString()
         }
 
         actual fun getIntFromKey(key: String): Int? {
-            TODO()
+            return loadProperties()[key]?.toString()?.toIntOrNull()
         }
 
         actual fun getFloatFromKey(key: String): Float? {
-            TODO()
+            return loadProperties()[key]?.toString()?.toFloatOrNull()
         }
 
         actual fun getBooleanFromKey(key: String): Boolean? {
-            TODO()
+            return loadProperties()[key]?.toString()?.toBooleanStrictOrNull()
         }
 
         actual fun getDoubleFromKey(key: String): Double? {
-            TODO()
+            return loadProperties()[key]?.toString()?.toDoubleOrNull()
         }
 
         actual fun getStringFromKey(key: String, defValue: String?): String? {
-            TODO("Not yet implemented")
+            return loadProperties()[key]?.toString()
         }
 
         actual fun getIntFromKey(key: String, defValue: Int): Int {
-            TODO("Not yet implemented")
+            return loadProperties()[key]?.toString()?.toIntOrNull() ?: 0
         }
 
         actual fun getLongFromKey(key: String, defValue: Long): Long {
-            TODO("Not yet implemented")
+            return loadProperties()[key]?.toString()?.toLongOrNull() ?: 0L
         }
 
         actual fun getFloatFromKey(key: String, defValue: Float): Float {
-            TODO("Not yet implemented")
+            return loadProperties()[key]?.toString()?.toFloatOrNull() ?: 0f
         }
 
         actual fun getDoubleFromKey(key: String, defValue: Double): Double {
-            TODO("Not yet implemented")
+            return loadProperties()[key]?.toString()?.toDoubleOrNull() ?: 0.0
         }
 
         actual fun getBooleanFromKey(key: String, defValue: Boolean): Boolean {
-            TODO("Not yet implemented")
+            return loadProperties()[key]?.toString()?.toBooleanStrictOrNull() ?: false
         }
     }
 }

@@ -124,6 +124,9 @@ kotlin {
         // jvm
         val jvmMain by getting {
             dependencies{
+                implementation("org.json:json:20250107")
+                implementation("org.bytedeco:javacv:1.5.9")
+                implementation("net.java.dev.jna:jna-platform:4.0.0")
                 implementation("net.java.dev.jna:jna:5.13.0")
                 implementation("org.quartz-scheduler:quartz:2.3.2")
             }
@@ -188,7 +191,7 @@ afterEvaluate {
         coordinates(
             groupId = "io.github.thearchitect123",
             artifactId = "kmpEssentials",
-            version = "1.8.9"
+            version = "1.9.0"
         )
 
         // Configure POM metadata for the published artifact

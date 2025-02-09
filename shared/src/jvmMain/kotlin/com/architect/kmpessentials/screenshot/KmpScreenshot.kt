@@ -1,8 +1,15 @@
 package com.architect.kmpessentials.screenshot
 
+import com.architect.kmpessentials.fileSystem.KmpFileSystem
 import com.architect.kmpessentials.internal.ActionStringParams
-import com.architect.kmpessentials.mainThread.KmpMainThread
-import com.architect.kmpessentials.share.KmpShare
+import com.architect.kmpessentials.logging.KmpLogging
+import java.awt.Rectangle
+import java.awt.Robot
+import java.awt.Toolkit
+import java.io.File
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import javax.imageio.ImageIO
 
 actual class KmpScreenshot {
     actual companion object {
@@ -10,39 +17,22 @@ actual class KmpScreenshot {
             action: ActionStringParams,
             shareDialogTitle: String,
             shareImage: Boolean
-        ) // generates a screenshot from the user's device, and returns the file path of the screenshot,
+        )
         {
-//            KmpMainThread.runViaMainThread {
-//                val root = KmpWatchKit.getRootWatchController()!!.
-//
-//                val renderer = UIGraphicsImageRenderer(root.bounds)
-//                val screenShot = renderer.imageWithActions {
-//                    root.drawViewHierarchyInRect(root.bounds, true)
-//                }
-//
-//                ALAssetsLibrary().writeImageToSavedPhotosAlbum(
-//                    screenShot.CGImage,
-//                    when (screenShot.imageOrientation) {
-//                        UIImageOrientation.UIImageOrientationUp -> ALAssetOrientation.ALAssetOrientationUp
-//                        UIImageOrientation.UIImageOrientationDown -> ALAssetOrientation.ALAssetOrientationDown
-//                        UIImageOrientation.UIImageOrientationLeft -> ALAssetOrientation.ALAssetOrientationLeft
-//                        UIImageOrientation.UIImageOrientationRight -> ALAssetOrientation.ALAssetOrientationRight
-//                        UIImageOrientation.UIImageOrientationUpMirrored -> ALAssetOrientation.ALAssetOrientationUpMirrored
-//                        UIImageOrientation.UIImageOrientationDownMirrored -> ALAssetOrientation.ALAssetOrientationDownMirrored
-//                        UIImageOrientation.UIImageOrientationLeftMirrored -> ALAssetOrientation.ALAssetOrientationLeftMirrored
-//                        else -> ALAssetOrientation.ALAssetOrientationRightMirrored
-//                    }
-//                ) { path, error ->
-//                    if (error == null) {
-//                        val pathFile = path?.absoluteString!!
-//                        action(pathFile)
-//
-//                        if (shareImage) {
-//                            KmpShare.shareFileWithAnyApp(pathFile, shareDialogTitle)
-//                        }
-//                    }
-//                }
-//            }
+            try {
+                val timestamp =
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"))
+                val outputFile =
+                    File(KmpFileSystem.getAppDirectory() + "generated_screenshot_$timestamp.png")
+                ImageIO.write(
+                    Robot().createScreenCapture(Rectangle(Toolkit.getDefaultToolkit().screenSize)),
+                    "png",
+                    outputFile
+                )
+                action(outputFile.absolutePath)
+            } catch (e: Exception) {
+                KmpLogging.writeError("JVM_APIS", e.stackTraceToString())
+            }
         }
 
         actual fun isSupported(): Boolean {

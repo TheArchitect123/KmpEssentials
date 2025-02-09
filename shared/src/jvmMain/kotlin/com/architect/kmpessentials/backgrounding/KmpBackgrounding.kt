@@ -36,6 +36,7 @@ actual class KmpBackgrounding {
             message: String,
             action: DefaultActionAsync,
         ) {
+            createAndStartWorker(null, action)
         }
     }
 }

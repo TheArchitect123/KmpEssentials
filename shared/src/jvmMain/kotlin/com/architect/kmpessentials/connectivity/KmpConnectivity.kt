@@ -3,9 +3,12 @@ package com.architect.kmpessentials.connectivity
 import com.architect.kmpessentials.deviceInfo.DevicePlatform
 import com.architect.kmpessentials.deviceInfo.KmpDeviceInfo
 import com.architect.kmpessentials.internal.ActionBoolParams
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
+import java.net.NetworkInterface
 import java.net.URL
 
 actual class KmpConnectivity {
@@ -50,12 +53,16 @@ actual class KmpConnectivity {
 
         }
 
-        actual suspend  fun getCurrentNetworkIPv4(): String?{
-            return ""
+        actual suspend fun getCurrentNetworkIPv4(): String? {
+            return NetworkInterface.getNetworkInterfaces().toList()
+                .flatMap { it.inetAddresses.toList() }
+                .firstOrNull { it is java.net.Inet4Address && !it.isLoopbackAddress }?.hostAddress
         }
 
-        actual suspend  fun getCurrentNetworkIPv6(): String?{
-            return ""
+        actual suspend fun getCurrentNetworkIPv6(): String? {
+            return NetworkInterface.getNetworkInterfaces().toList()
+                .flatMap { it.inetAddresses.toList() }
+                .firstOrNull { it is java.net.Inet6Address && !it.isLoopbackAddress }?.hostAddress
         }
     }
 }

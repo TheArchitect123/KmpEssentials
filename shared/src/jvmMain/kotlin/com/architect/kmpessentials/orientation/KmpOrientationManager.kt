@@ -7,7 +7,7 @@ actual class KmpOrientationManager {
         private lateinit var corientationChange: OrientationListener
 
         actual fun getCurrentOrientation(): OrientationState {
-           TODO()
+            return OrientationState.Unknown
         }
 
 
