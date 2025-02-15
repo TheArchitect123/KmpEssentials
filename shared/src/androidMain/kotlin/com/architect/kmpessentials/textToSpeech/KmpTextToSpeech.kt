@@ -96,6 +96,7 @@ actual class KmpTextToSpeech {
                     }
                     recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US")
 
+                    speechAction = response
                     speechToText.startListening(recognizerIntent)
                 }
             }
