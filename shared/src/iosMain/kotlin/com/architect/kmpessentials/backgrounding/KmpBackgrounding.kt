@@ -1,9 +1,9 @@
 package com.architect.kmpessentials.backgrounding
 
 import com.architect.kmpessentials.aliases.DefaultActionAsync
-import com.architect.kmpessentials.backgrounding.services.KmpForegroundService
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import platform.BackgroundTasks.BGTaskScheduler
 import platform.UIKit.UIApplication
 import platform.UIKit.UIBackgroundTaskIdentifier
 
@@ -11,6 +11,7 @@ actual class KmpBackgrounding {
     actual companion object {
         private const val appleDefaultId = "com.kmpessentials.default.backgrounding"
         private val identifiers = mutableListOf<UIBackgroundTaskIdentifier>()
+        private val foregroundServices = mutableListOf<String>()
 
         actual fun createAndStartWorkerWithoutCancel(
             options: BackgroundOptions?,
@@ -52,7 +53,14 @@ actual class KmpBackgrounding {
                 }
             }
 
+            if (foregroundServices.isNotEmpty()) {
+                foregroundServices.forEach {
+                    BGTaskScheduler.sharedScheduler.cancelTaskRequestWithIdentifier(it)
+                }
+            }
+
             identifiers.clear()
+            KmpForegroundService.stopNotificationService()
         }
 
         actual fun createAndStartForegroundWorker(
@@ -60,8 +68,7 @@ actual class KmpBackgrounding {
             message: String,
             action: DefaultActionAsync,
         ) {
-            KmpForegroundService.actionToInvoke = action
-            KmpForegroundService.invokeBackgroundService()
+            KmpForegroundService.startNotificationService(title, message, action)
         }
     }
 }

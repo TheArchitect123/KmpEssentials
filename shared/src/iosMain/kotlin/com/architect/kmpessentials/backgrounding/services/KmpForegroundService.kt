@@ -1,55 +1,83 @@
-package com.architect.kmpessentials.backgrounding.services
-
 import com.architect.kmpessentials.aliases.DefaultActionAsync
-import kotlinx.cinterop.ExperimentalForeignApi
+import com.architect.kmpessentials.backgrounding.extensions.intArrayToByteArray
+import com.architect.kmpessentials.backgrounding.extensions.loadSilentBackgroundAudioFileAsByteArray
+import com.architect.kmpessentials.logging.KmpLogging
+import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import platform.BackgroundTasks.*
+import platform.Foundation.NSDictionary
+import platform.Foundation.NSNumber
+import platform.Foundation.NSString
+import platform.Foundation.dictionaryWithObjects
+import platform.MediaPlayer.MPMediaItemPropertyArtist
+import platform.MediaPlayer.MPMediaItemPropertyTitle
+import platform.MediaPlayer.MPNowPlayingInfoCenter
+import platform.MediaPlayer.MPNowPlayingInfoPropertyPlaybackRate
 
 class KmpForegroundService {
     companion object {
-        private val appleDefaultLongRunningId =
-            "com.kmpessentials.default.backgrounding.longrunning"
-        internal var actionToInvoke: DefaultActionAsync? = null
+        private var currentTask: DefaultActionAsync? = null
+        private val isTaskRunning = atomic(false)
+        private val silentAudioService = SilentAudioService() // 🔊 Silent Audio Player
 
-        // required to be invoked by the users' app delegate before app launches
-        fun registerBackgroundService() {
-            BGTaskScheduler.sharedScheduler.registerForTaskWithIdentifier(
-                appleDefaultLongRunningId,
-                null
-            ) { task ->
-                if (task is BGProcessingTask) {
-                    handleProcessingTask(task)
-                }
+        fun startNotificationService(title: String, message: String, action: DefaultActionAsync) {
+            if (!isTaskRunning.compareAndSet(expect = false, update = true)) {
+                KmpLogging.writeError(
+                    "KMP_MEDIA_SERVICE",
+                    "⚠️ Notification service is already running."
+                )
+                return
             }
-        }
 
-        private fun handleProcessingTask(task: BGProcessingTask) {
+            currentTask = action
+            updateNotification(title, message, 0.0)
+
+            // ✅ Start silent audio to prevent iOS from suspending the app
+            silentAudioService.playAudioFromByteArray(intArrayToByteArray(SilentAudioData.mp3ByteArray))
+
             CoroutineScope(Dispatchers.Default).launch {
                 try {
-                    val action = actionToInvoke
-                    action?.invoke()
+                    KmpLogging.writeError(
+                        "KMP_MEDIA_SERVICE",
+                        "✅ Executing task inside notification service..."
+                    )
+                    action.invoke() // Run the action
 
-                    task.setTaskCompletedWithSuccess(success = true)
+                    updateNotification("Task Completed", "Finished", 100.0)
                 } catch (e: Exception) {
-                    task.setTaskCompletedWithSuccess(success = false)
+                    KmpLogging.writeError("KMP_MEDIA_SERVICE", "❌ Task failed: ${e.message}")
+                    updateNotification("Task Failed", "Error", 0.0)
+                } finally {
+                    isTaskRunning.value = false
+                    stopNotificationService() // Auto-close when done
                 }
             }
         }
 
-        @OptIn(ExperimentalForeignApi::class)
-        internal fun invokeBackgroundService() {
-            val request = BGProcessingTaskRequest(appleDefaultLongRunningId).apply {
-                requiresNetworkConnectivity = false // Set this if the task requires internet
-                requiresExternalPower = false // Set this if the task can run on battery
-            }
+        fun stopNotificationService() {
+            isTaskRunning.value = false
+            MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = null // Remove UI
+            KmpLogging.writeError("KMP_MEDIA_SERVICE", "🛑 Notification service stopped.")
 
-            try {
-                BGTaskScheduler.sharedScheduler.submitTaskRequest(request, null)
-                println("Task scheduled successfully.")
-            } catch (e: Exception) {
-            }
+            // ✅ Stop silent audio when service is stopped
+            silentAudioService.stopSilentAudio()
+        }
+
+        private fun updateNotification(title: String, subtitle: String, progress: Double) {
+            val nowPlayingInfoMap: Map<Any?, *> = mapOf(
+                MPMediaItemPropertyTitle to title as NSString,
+                MPMediaItemPropertyArtist to subtitle as NSString,
+                MPNowPlayingInfoPropertyPlaybackRate to 1.0 as NSNumber
+            )
+
+            val nowPlayingInfoNSDictionary = NSDictionary.dictionaryWithObjects(
+                nowPlayingInfoMap.values.toList(),
+                nowPlayingInfoMap.keys.toList()
+            )
+
+            MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = nowPlayingInfoNSDictionary
         }
     }
 }
+

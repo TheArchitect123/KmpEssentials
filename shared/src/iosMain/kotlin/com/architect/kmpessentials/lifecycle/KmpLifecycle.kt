@@ -12,10 +12,15 @@ actual class KmpLifecycle {
     actual companion object {
         private var backgroundAction: (() -> Unit)? = null
         private var foregroundAction: (() -> Unit)? = null
-        private var isInForeground: Boolean = false
+        private var isInForeground: Boolean
 
         init {
             // Register for lifecycle notifications
+            isInForeground = when (UIApplication.sharedApplication.applicationState) {
+                UIApplicationState.UIApplicationStateActive -> true
+                else -> false
+            }
+
             setupLifecycleObservers()
         }
 
