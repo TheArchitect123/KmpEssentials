@@ -1,19 +1,10 @@
 import com.architect.kmpessentials.aliases.DefaultActionAsync
 import com.architect.kmpessentials.backgrounding.extensions.intArrayToByteArray
-import com.architect.kmpessentials.backgrounding.extensions.loadSilentBackgroundAudioFileAsByteArray
 import com.architect.kmpessentials.logging.KmpLogging
 import kotlinx.atomicfu.atomic
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import platform.Foundation.NSDictionary
-import platform.Foundation.NSNumber
-import platform.Foundation.NSString
-import platform.Foundation.dictionaryWithObjects
-import platform.MediaPlayer.MPMediaItemPropertyArtist
-import platform.MediaPlayer.MPMediaItemPropertyTitle
+import kotlinx.coroutines.*
+import platform.UserNotifications.*
 import platform.MediaPlayer.MPNowPlayingInfoCenter
-import platform.MediaPlayer.MPNowPlayingInfoPropertyPlaybackRate
 
 class KmpForegroundService {
     companion object {
@@ -31,11 +22,19 @@ class KmpForegroundService {
             }
 
             currentTask = action
-            updateNotification(title, message, 0.0)
 
             // ✅ Start silent audio to prevent iOS from suspending the app
-            silentAudioService.playAudioFromByteArray(intArrayToByteArray(SilentAudioData.mp3ByteArray))
+            silentAudioService.playAudioFromByteArray(intArrayToByteArray(SilentAudioData.mp3ByteArray()))
 
+            // ✅ Start persistent notification loop
+            CoroutineScope(Dispatchers.Default).launch {
+                while (isTaskRunning.value) {
+                    updateNotification(title, message)
+                    delay(20_000) // ⏳ Retrigger notification every 30 seconds
+                }
+            }
+
+            // ✅ Execute the foreground task
             CoroutineScope(Dispatchers.Default).launch {
                 try {
                     KmpLogging.writeError(
@@ -43,11 +42,8 @@ class KmpForegroundService {
                         "✅ Executing task inside notification service..."
                     )
                     action.invoke() // Run the action
-
-                    updateNotification("Task Completed", "Finished", 100.0)
                 } catch (e: Exception) {
                     KmpLogging.writeError("KMP_MEDIA_SERVICE", "❌ Task failed: ${e.message}")
-                    updateNotification("Task Failed", "Error", 0.0)
                 } finally {
                     isTaskRunning.value = false
                     stopNotificationService() // Auto-close when done
@@ -62,22 +58,42 @@ class KmpForegroundService {
 
             // ✅ Stop silent audio when service is stopped
             silentAudioService.stopSilentAudio()
+
+            // ✅ Remove Notification
+            UNUserNotificationCenter.currentNotificationCenter().removePendingNotificationRequestsWithIdentifiers(
+                listOf("KmpForegroundService")
+            )
         }
 
-        private fun updateNotification(title: String, subtitle: String, progress: Double) {
-            val nowPlayingInfoMap: Map<Any?, *> = mapOf(
-                MPMediaItemPropertyTitle to title as NSString,
-                MPMediaItemPropertyArtist to subtitle as NSString,
-                MPNowPlayingInfoPropertyPlaybackRate to 1.0 as NSNumber
+        private fun updateNotification(title: String, subtitle: String) {
+            val center = UNUserNotificationCenter.currentNotificationCenter()
+            val content = UNMutableNotificationContent().apply {
+                setTitle(title)
+                setSubtitle(subtitle)
+                setBody(subtitle)
+                setSound(null) // 🔇 Silent Notification
+            }
+
+            val trigger = UNTimeIntervalNotificationTrigger.triggerWithTimeInterval(1.0, false)
+            val request = UNNotificationRequest.requestWithIdentifier(
+                "KmpForegroundService",
+                content,
+                trigger
             )
 
-            val nowPlayingInfoNSDictionary = NSDictionary.dictionaryWithObjects(
-                nowPlayingInfoMap.values.toList(),
-                nowPlayingInfoMap.keys.toList()
-            )
-
-            MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = nowPlayingInfoNSDictionary
+            center.addNotificationRequest(request) { error ->
+                if (error != null) {
+                    KmpLogging.writeError(
+                        "KMP_IOS_FOREGROUNDSERVICES",
+                        "❌ Failed to send notification: ${error.localizedDescription}"
+                    )
+                } else {
+                    KmpLogging.writeError(
+                        "KMP_IOS_FOREGROUNDSERVICES",
+                        "✅ Foreground service notification sent"
+                    )
+                }
+            }
         }
     }
 }
-

@@ -1,6 +1,6 @@
 object SilentAudioData {
-    val mp3ByteArray by lazy {
-        intArrayOf(
+    fun mp3ByteArray() : IntArray {
+        return intArrayOf(
             73,
             68,
             51,
