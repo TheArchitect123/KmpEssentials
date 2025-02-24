@@ -33,33 +33,17 @@ kotlin {
         }
     }
 
-    // Configure macOS targets
-    listOf(
-        macosX64(),
-        macosArm64()
-    ).forEach {
-        it.binaries.framework {
-            baseName = "shared"
-            outputDirectory = fatFrameworkDirProvider.get().dir(it.name).asFile
-        }
-    }
-
     sourceSets {
         val commonMain by getting {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
+                implementation(projects.kmpEssentials)
             }
         }
 
         val commonTest by getting {
             dependencies {
                 implementation(libs.kotlin.test)
-            }
-        }
-
-        val macosMain by creating {
-            dependencies {
-                // Add macOS-specific dependencies if required
             }
         }
     }

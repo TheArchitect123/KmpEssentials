@@ -8,5 +8,6 @@ enum class DevicePlatform{
     Linux,
     Tizen,
     AppleWatch,
-    Unknown
+    JS,
+    Unknown,
 }

@@ -26,7 +26,7 @@ class MainActivity : FragmentActivity() {
         KmpAndroid.initializeApp(this)
 
         KmpLocalNotifications.setNotificationIcon(R.drawable.ic_launcher_background)
-    //    KmpLocalNotifications.scheduleAlarmNotification(5000, "Hello", "Testing")
+        //    KmpLocalNotifications.scheduleAlarmNotification(5000, "Hello", "Testing")
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 //            val permission = android.Manifest.permission.FOREGROUND_SERVICE_DATA_SYNC
 //
@@ -35,14 +35,15 @@ class MainActivity : FragmentActivity() {
 //            }
 //        }
 
-        KmpBackgrounding.createAndStartForegroundWorker({
-            while (true){
-                delay(4000)
+        KmpBackgrounding.createAndStartForegroundWorker("Sample", "Notification") {
+            var delays = 100
+            while (delays >= 0) {
+                delay(1000)
+                delays--
                 KmpLogging.writeInfo("ForegroundServiceNotification", "Sample Notification")
-          //      KmpLocalNotifications.sendNotification("Hello Foreground Service", "Hello there")
+                //      KmpLocalNotifications.sendNotification("Hello Foreground Service", "Hello there")
             }
-
-        }, "Hello", "I'm running a foreground service task")
+        }
 
         setContent {
             MyApplicationTheme {

@@ -4,6 +4,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import com.architect.kmpessentials.KmpAndroid
+import com.architect.kmpessentials.internal.ActionStringParams
 
 actual class KmpClipboard {
     actual companion object {
@@ -19,6 +20,14 @@ actual class KmpClipboard {
             }
 
             return ""
+        }
+
+        actual suspend fun copyTextIntoClipboardAsync(textToCopy: ActionStringParams) {
+            if (clipBoardManager.hasPrimaryClip()) {
+                if (clipBoardManager.primaryClip!!.itemCount > 0) {
+                    textToCopy(clipBoardManager.primaryClip!!.getItemAt(0).text.toString())
+                }
+            }
         }
 
         actual fun copyTextIntoClipboard(textToCopy: String) {

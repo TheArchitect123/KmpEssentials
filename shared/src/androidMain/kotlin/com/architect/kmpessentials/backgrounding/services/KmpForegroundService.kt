@@ -13,6 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class KmpForegroundService : Service() {
     companion object {
@@ -40,7 +41,10 @@ class KmpForegroundService : Service() {
 
         // Perform the task in a coroutine
         serviceScope.launch {
-            action?.invoke()
+            runBlocking {
+                action?.invoke()
+            }
+
             stopSelf() // Stop the service when the task is done
         }
 

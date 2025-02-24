@@ -1,5 +1,6 @@
 package com.architect.kmpessentials.clipBoard
 
+import com.architect.kmpessentials.internal.ActionStringParams
 import com.architect.kmpessentials.logging.KmpLogging
 import java.awt.Toolkit
 import java.awt.datatransfer.DataFlavor
@@ -30,6 +31,10 @@ actual class KmpClipboard {
 
         actual fun isSupported(): Boolean {
             return true
+        }
+
+        actual suspend fun copyTextIntoClipboardAsync(textToCopy: ActionStringParams) {
+            textToCopy(getTextFromClipboard())
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.architect.kmpessentials.clipBoard
 
+import com.architect.kmpessentials.internal.ActionStringParams
+
 actual class KmpClipboard {
     actual companion object {
         actual fun getTextFromClipboard(): String {
@@ -12,6 +14,9 @@ actual class KmpClipboard {
 
         actual fun isSupported(): Boolean {
             return true
+        }
+        actual suspend fun copyTextIntoClipboardAsync(textToCopy: ActionStringParams) {
+            textToCopy("")
         }
     }
 }

@@ -6,12 +6,18 @@ import kotlinx.coroutines.launch
 import platform.BackgroundTasks.BGTaskScheduler
 import platform.UIKit.UIApplication
 import platform.UIKit.UIBackgroundTaskIdentifier
+import platform.UIKit.UIImage
 
 actual class KmpBackgrounding {
     actual companion object {
         private const val appleDefaultId = "com.kmpessentials.default.backgrounding"
         private val identifiers = mutableListOf<UIBackgroundTaskIdentifier>()
         private val foregroundServices = mutableListOf<String>()
+
+        var foregroundIcon: UIImage? = null
+        fun setForegroundIcon(foregroundIcon: UIImage?) {
+            this.foregroundIcon = foregroundIcon
+        }
 
         actual fun createAndStartWorkerWithoutCancel(
             options: BackgroundOptions?,

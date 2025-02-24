@@ -51,14 +51,9 @@ fun loadSilentBackgroundAudioFileAsByteArray(): ByteArray? {
 }
 
 fun intArrayToByteArray(intArray: IntArray): ByteArray {
-    val byteArray = ByteArray(intArray.size * 4)  // Each Int is 4 bytes
-    for (i in intArray.indices) {
-        // Convert each Int into its 4-byte representation
-        val byteStart = i * 4
-        byteArray[byteStart] = (intArray[i] shr 24).toByte()  // Highest byte
-        byteArray[byteStart + 1] = (intArray[i] shr 16).toByte()
-        byteArray[byteStart + 2] = (intArray[i] shr 8).toByte()
-        byteArray[byteStart + 3] = intArray[i].toByte()  // Lowest byte
+    return ByteArray(intArray.size * 4) { index ->
+        val intIndex = index / 4
+        val shift = (3 - (index % 4)) * 8
+        ((intArray[intIndex] shr shift) and 0xFF).toByte()
     }
-    return byteArray
 }
