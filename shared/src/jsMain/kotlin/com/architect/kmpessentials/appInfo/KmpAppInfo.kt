@@ -15,15 +15,15 @@ actual class KmpAppInfo {
         }
 
         actual fun getPackageVersion(): String {
-            TODO("NOT IMPLEMENTED YET")
+            return window.navigator.appName
         }
 
         actual fun getPackageVersionCode(): Int {
-            TODO("NOT IMPLEMENTED YET")
+            return 0
         }
 
         actual fun getPackageMinOS(): Int {
-            TODO("NOT IMPLEMENTED YET")
+            return 1
         }
 
         actual fun getSystemThemeMode(): AppDeviceTheme {

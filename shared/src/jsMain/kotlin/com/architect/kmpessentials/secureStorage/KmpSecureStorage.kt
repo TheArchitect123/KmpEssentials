@@ -1,5 +1,6 @@
 package com.architect.kmpessentials.secureStorage
 
+// uses the built in web crypto api for secure storage
 actual class KmpSecureStorage {
     actual companion object {
         actual fun clearEntireStore() {

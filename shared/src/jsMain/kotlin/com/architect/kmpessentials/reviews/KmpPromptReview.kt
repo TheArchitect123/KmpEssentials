@@ -8,6 +8,7 @@ actual class KmpPromptReview {
         actual fun allowReviewRequestAfterHours(hoursToConfigure: Long){
 
         }
+
         actual fun promptReviewInApp(
             forceExternalIfFailed : Boolean,
             errorPromptingDialog: ActionStringParams,

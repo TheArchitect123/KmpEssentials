@@ -1,8 +1,11 @@
 package com.architect.kmpessentials.secureStorage
 
+
+// stores all data inside browser's cookies
 actual class KmpPublicStorage {
     actual companion object {
         actual fun clearEntireStore() {
+
 
         }
 

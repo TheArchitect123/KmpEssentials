@@ -2,22 +2,51 @@ package com.architect.kmpessentials.biometrics
 
 import com.architect.kmpessentials.internal.ActionBoolParams
 import com.architect.kmpessentials.internal.ActionStringParams
+import kotlinx.browser.window
+import org.khronos.webgl.Uint8Array
 
 actual class KmpBiometrics {
     actual companion object {
 
+        fun generateWebAuthnChallenge(): Uint8Array {
+            val randomBytes = ByteArray(16) // 16-byte challenge
+            window.asDynamic().crypto.getRandomValues(randomBytes)
+            return Uint8Array(randomBytes.toTypedArray())
+        }
+
         actual fun isSupported(): Boolean {
-            TODO("NOT IMPLEMENTED YET")
-
-
+            return window.navigator.asDynamic().credentials?.get != undefined
         }
 
         actual fun setPromptInfo(title: String, message: String) {
-            TODO("NOT IMPLEMENTED YET")
+
         }
 
         actual fun scanBiometrics(actionResult: ActionBoolParams, actionError: ActionStringParams) {
-            TODO("NOT IMPLEMENTED YET")
+            if (!isSupported()) {
+                actionError("Biometric Auth is not supported on ${window.navigator.appName}")
+                actionResult(false)
+                return
+            }
+
+            val options = js(
+                """{
+            publicKey: {
+                challenge: new Uint8Array(${generateWebAuthnChallenge()}), 
+                timeout: 60000,
+                userVerification: "required"
+            }
+        }"""
+            )
+
+            window.navigator.asDynamic().credentials.get(options)
+                .then { result ->
+                    actionResult(true)
+                }
+                .catch { error ->
+                    actionResult(false)
+                    actionError("Biometric authentication failed: ${error.message}")
+                }
         }
     }
 }

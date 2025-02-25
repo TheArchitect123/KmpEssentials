@@ -7,7 +7,6 @@ import com.architect.kmpessentials.logging.KmpLogging
 import com.architect.kmpessentials.logging.constants.ErrorCodes
 import com.architect.kmpessentials.mainThread.KmpMainThread
 import com.architect.kmpessentials.permissions.delegates.LocationPermissionsDelegate
-import com.architect.kmpessentials.secureStorage.KmpPublicStorage
 import platform.AVFAudio.AVAudioSession
 import platform.AVFAudio.AVAudioSessionRecordPermissionDenied
 import platform.AVFAudio.AVAudioSessionRecordPermissionGranted
@@ -45,7 +44,6 @@ import platform.UIKit.currentUserNotificationSettings
 import platform.UIKit.isRegisteredForRemoteNotifications
 import platform.UserNotifications.UNAuthorizationOptionAlert
 import platform.UserNotifications.UNAuthorizationOptionBadge
-import platform.UserNotifications.UNAuthorizationOptionProvisional
 import platform.UserNotifications.UNAuthorizationOptionSound
 import platform.UserNotifications.UNAuthorizationStatusAuthorized
 import platform.UserNotifications.UNAuthorizationStatusDenied
@@ -54,7 +52,6 @@ import platform.UserNotifications.UNUserNotificationCenter
 
 actual class KmpPermissionsManager {
     actual companion object {
-        private val checkForLocationPermission = "checkForLocationPermission"
         actual fun requestPermission(
             permission: Permission,
             runAction: ActionNoParams
@@ -299,18 +296,7 @@ actual class KmpPermissionsManager {
 
                             Permission.Speech -> SFSpeechRecognizer.authorizationStatus() == SFSpeechRecognizerAuthorizationStatus.SFSpeechRecognizerAuthorizationStatusNotDetermined
                             Permission.PhotoGallery -> PHPhotoLibrary.authorizationStatus() == PHAuthorizationStatusNotDetermined
-                            Permission.Location -> {
-                                val hasPrompted =
-                                    KmpPublicStorage.getBooleanFromKey(checkForLocationPermission)
-                                        ?: false
-                                if (!hasPrompted) {
-                                    KmpPublicStorage.persistData(checkForLocationPermission, true)
-                                    true
-                                } else {
-                                    CLLocationManager().authorizationStatus() == kCLAuthorizationStatusNotDetermined
-                                }
-                            }
-
+                            Permission.Location -> CLLocationManager().authorizationStatus() == kCLAuthorizationStatusNotDetermined
                             Permission.Microphone -> AVAudioSession.sharedInstance()
                                 .recordPermission() == AVAudioSessionRecordPermissionUndetermined
 

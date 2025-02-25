@@ -1,5 +1,6 @@
 package com.architect.kmpessentials.deviceInfo
 
+import kotlinx.browser.window
 import kotlinx.datetime.TimeZone
 
 actual class KmpDeviceInfo {
@@ -15,9 +16,9 @@ actual class KmpDeviceInfo {
 
         actual fun getDeviceSpecs(): DeviceSpecs {
             return DeviceSpecs(
-                "",
-                "",
-                "Apple Inc"
+                window.navigator.platform,
+                window.navigator.appVersion,
+                window.navigator.appName
             )
         }
     }

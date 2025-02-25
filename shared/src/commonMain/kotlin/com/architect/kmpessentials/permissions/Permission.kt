@@ -16,6 +16,11 @@ enum class Permission {
     Biometrics,
     Contacts,
     Vibrator,
-    Calendar
+    Calendar,
+
+    // sensors (web specific)
+    Magnetometer,
+    Accelerometer,
+    Gyroscope
 }
 

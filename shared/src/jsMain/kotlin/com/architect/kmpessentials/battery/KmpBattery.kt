@@ -2,12 +2,17 @@ package com.architect.kmpessentials.battery
 
 import com.architect.kmpessentials.battery.enums.BatteryChargeState
 import com.architect.kmpessentials.battery.enums.BatteryPowerSource
+import kotlinx.browser.window
 
 actual class KmpBattery {
     actual companion object {
-        actual fun getCurrentChargeState(): BatteryChargeState {
+        fun isBatteryAPISupported(): Boolean {
+            return window.navigator.asDynamic().getBattery != undefined
+        }
 
-            TODO()
+        actual fun getCurrentChargeState(): BatteryChargeState {
+            return BatteryChargeState.Unknown
+//            window.navigator.asDynamic().getBattery().await()
         }
 
         actual fun getCurrentPowerSource(): BatteryPowerSource {
