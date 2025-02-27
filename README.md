@@ -4,7 +4,7 @@
 </p>
 
 <p align="center">
-An essentials library for Kotlin multiplatform that makes it easier to work with anything. Supports iOS, Android, AppleWatch & JVM.
+An essentials library for Kotlin multiplatform that makes it easier to work with anything. Supports iOS, Android, AppleWatch, JVM & Kotlin/JS (Browser & NodeJS).
     <br/>
 <strong>Currently only 12.3 kB in size</strong>
 
@@ -17,7 +17,7 @@ An essentials library for Kotlin multiplatform that makes it easier to work with
   </a>
 
   <a href="https://github.com/TheArchitect123/kmpEssentials">
-    <img alt="GitHub" src="https://img.shields.io/badge/_Android,_AppleWatch,_JVM,_iOS-white.svg">
+    <img alt="GitHub" src="https://img.shields.io/badge/_Android,_AppleWatch,_JVM,_JS,_JS_Node,_iOS-white.svg">
   </a>
 </p
 
