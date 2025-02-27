@@ -3,6 +3,12 @@ package com.architect.kmpessentials.secureStorage
 import com.architect.kmpessentials.deviceInfo.DevicePlatform
 import com.architect.kmpessentials.deviceInfo.KmpDeviceInfo
 import com.architect.kmpessentials.fileSystem.KmpFileSystem
+import com.architect.kmpessentials.internal.ActionBoolNullParams
+import com.architect.kmpessentials.internal.ActionDoubleNullParams
+import com.architect.kmpessentials.internal.ActionFloatNullParams
+import com.architect.kmpessentials.internal.ActionIntNullParams
+import com.architect.kmpessentials.internal.ActionLongNullParams
+import com.architect.kmpessentials.internal.ActionStringNullParams
 import jdk.internal.misc.VM.saveProperties
 import org.bytedeco.javacpp.Loader.loadProperties
 import java.io.File
@@ -114,6 +120,30 @@ actual class KmpPublicStorage {
 
         actual fun getBooleanFromKey(key: String, defValue: Boolean): Boolean {
             return loadProperties()[key]?.toString()?.toBooleanStrictOrNull() ?: false
+        }
+
+        actual suspend fun getLongFromKeyAsync(key: String, action: ActionLongNullParams) {
+            action(getLongFromKey(key))
+        }
+
+        actual suspend fun getStringFromKeyAsync(key: String, action: ActionStringNullParams) {
+            action(getStringFromKey(key))
+        }
+
+        actual suspend fun getIntFromKeyAsync(key: String, action: ActionIntNullParams) {
+            action(getIntFromKey(key))
+        }
+
+        actual suspend fun getFloatFromKeyAsync(key: String, action: ActionFloatNullParams) {
+            action(getFloatFromKey(key))
+        }
+
+        actual suspend fun getDoubleFromKeyAsync(key: String, action: ActionDoubleNullParams) {
+            action(getDoubleFromKey(key))
+        }
+
+        actual suspend fun getBooleanFromKeyAsync(key: String, action: ActionBoolNullParams) {
+            action(getBooleanFromKey(key))
         }
     }
 }

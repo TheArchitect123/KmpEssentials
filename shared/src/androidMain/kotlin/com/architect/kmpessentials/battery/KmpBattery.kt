@@ -14,6 +14,10 @@ import com.architect.kmpessentials.battery.enums.BatteryPowerSource
 import com.architect.kmpessentials.battery.models.BatteryInfo
 import com.architect.kmpessentials.battery.receivers.BatteryManagerBroadcastReceiver
 import com.architect.kmpessentials.battery.utils.BatteryInfoUtils
+import com.architect.kmpessentials.internal.ActionBatteryPowerStatusParams
+import com.architect.kmpessentials.internal.ActionBoolParams
+import com.architect.kmpessentials.internal.ActionChargeStatusParams
+import com.architect.kmpessentials.internal.ActionLongParams
 import kotlin.math.roundToLong
 
 actual class KmpBattery {
@@ -112,6 +116,22 @@ actual class KmpBattery {
 
         actual fun isEnergySaverOn(): Boolean {
             return powerManager.isPowerSaveMode
+        }
+
+        actual suspend fun getCurrentChargeLevelAsync(action: ActionLongParams) {
+            action(getCurrentChargeLevel())
+        }
+
+        actual suspend fun getCurrentChargeStateAsync(action: ActionChargeStatusParams) {
+            action(getCurrentChargeState())
+        }
+
+        actual suspend fun getCurrentPowerSourceAsync(action: ActionBatteryPowerStatusParams) {
+            action(getCurrentPowerSource())
+        }
+
+        actual suspend fun isEnergySaverOnAsync(action: ActionBoolParams) {
+            action(isEnergySaverOn())
         }
     }
 }

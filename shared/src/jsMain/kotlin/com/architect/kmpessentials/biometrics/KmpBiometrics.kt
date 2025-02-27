@@ -29,15 +29,15 @@ actual class KmpBiometrics {
                 return
             }
 
-            val options = js(
-                """{
-            publicKey: {
-                challenge: new Uint8Array(${generateWebAuthnChallenge()}), 
-                timeout: 60000,
-                userVerification: "required"
-            }
-        }"""
-            )
+            val options = js("{}")
+
+            // Create a publicKey object dynamically
+            val publicKey = js("{}")
+            publicKey.challenge = generateWebAuthnChallenge()
+            publicKey.timeout = 60000
+            publicKey.userVerification = "required"
+
+            options.publicKey = publicKey
 
             window.navigator.asDynamic().credentials.get(options)
                 .then { result ->

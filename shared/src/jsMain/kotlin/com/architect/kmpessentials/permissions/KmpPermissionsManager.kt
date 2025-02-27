@@ -5,6 +5,10 @@ import com.architect.kmpessentials.internal.ActionBoolParams
 import com.architect.kmpessentials.internal.ActionNoParams
 import com.architect.kmpessentials.internal.ActionPermissionStatusParams
 import kotlinx.browser.window
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.await
+import kotlinx.coroutines.launch
+import org.w3c.dom.clipboard.Clipboard
 import org.w3c.notifications.GRANTED
 import org.w3c.notifications.Notification
 import org.w3c.notifications.NotificationPermission
@@ -34,7 +38,7 @@ actual class KmpPermissionsManager {
         private fun checkPermission(permissionType: String, callback: (PermissionStatus) -> Unit) {
             val permissions = window.navigator.asDynamic().permissions
             if (permissions != undefined) {
-                permissions.query(js("{ name: '$permissionType' }")).then { result ->
+                permissions.query(js("{ name: 'permissionType' }")).then { result ->
                     callback(
                         when (result.asDynamic().state as String) {
                             "granted" -> PermissionStatus.Granted
@@ -92,6 +96,28 @@ actual class KmpPermissionsManager {
                     }
                 }
 
+                Permission.Clipboard -> {
+                    GlobalScope.launch {
+                        val permissions = window.navigator.asDynamic().permissions
+                        val readPermission =
+                            permissions.query(KmpWebPermission.CLIPBOARD_READ.value).await()
+                        val writePermission =
+                            permissions.query(KmpWebPermission.CLIPBOARD_WRITE.value).await()
+
+                        if (writePermission != null && readPermission != null) {
+                            checkPermission(KmpWebPermission.CLIPBOARD_WRITE.value) {
+                                if (it == PermissionStatus.Granted) {
+                                    checkPermission(KmpWebPermission.CLIPBOARD_READ.value) { read ->
+                                        if (read == PermissionStatus.Granted) {
+                                            runAction()
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
                 Permission.Magnetometer -> {
                     activateSensorPermission(KmpWebPermission.MAGNETOMETER.value, runAction)
                 }
@@ -113,7 +139,9 @@ actual class KmpPermissionsManager {
         private fun activateSensorPermission(permission: String, action: ActionNoParams) {
             val permissions = window.navigator.asDynamic().permissions
             if (permissions != undefined) {
-                permissions.query(js("{ name: '$permission' }")).then { result ->
+                val cresult = js("{ }")
+                cresult.asDynamic().name = permission
+                permissions.query(cresult).then { result ->
                     action()
                 }
             } else {

@@ -1,5 +1,12 @@
 package com.architect.kmpessentials.secureStorage
 
+import com.architect.kmpessentials.internal.ActionBoolNullParams
+import com.architect.kmpessentials.internal.ActionDoubleNullParams
+import com.architect.kmpessentials.internal.ActionFloatNullParams
+import com.architect.kmpessentials.internal.ActionIntNullParams
+import com.architect.kmpessentials.internal.ActionLongNullParams
+import com.architect.kmpessentials.internal.ActionStringNullParams
+
 /**
  * Writes to a public storage
  * For Android: Writes to Clear Text Shared Preferences
@@ -30,5 +37,13 @@ expect class KmpPublicStorage {
         fun getFloatFromKey(key: String, defValue: Float): Float
         fun getDoubleFromKey(key: String, defValue: Double): Double
         fun getBooleanFromKey(key: String, defValue: Boolean): Boolean
+
+        // async apis
+        suspend fun getLongFromKeyAsync(key: String, action: ActionLongNullParams)
+        suspend fun getStringFromKeyAsync(key: String, action: ActionStringNullParams)
+        suspend fun getIntFromKeyAsync(key: String, action: ActionIntNullParams)
+        suspend fun getFloatFromKeyAsync(key: String, action: ActionFloatNullParams)
+        suspend fun getDoubleFromKeyAsync(key: String, action: ActionDoubleNullParams)
+        suspend fun getBooleanFromKeyAsync(key: String, action: ActionBoolNullParams)
     }
 }

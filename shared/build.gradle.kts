@@ -136,6 +136,13 @@ kotlin {
             }
         }
 
+        val jsMain by getting{
+            dependencies{
+                implementation("com.diglol.crypto:crypto:0.2.0")
+                implementation("org.kotlincrypto.hash:sha2:0.6.1")
+            }
+        }
+
         // tvos targets
         val tvosMain by getting {
 
@@ -227,7 +234,7 @@ afterEvaluate {
         coordinates(
             groupId = "io.github.thearchitect123",
             artifactId = "kmpEssentials",
-            version = "2.0.6"
+            version = "2.1.3"
         )
 
         // Configure POM metadata for the published artifact

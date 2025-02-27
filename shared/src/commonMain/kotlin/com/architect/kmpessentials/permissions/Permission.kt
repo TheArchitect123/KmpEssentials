@@ -21,6 +21,7 @@ enum class Permission {
     // sensors (web specific)
     Magnetometer,
     Accelerometer,
-    Gyroscope
+    Gyroscope,
+    Clipboard,
 }
 

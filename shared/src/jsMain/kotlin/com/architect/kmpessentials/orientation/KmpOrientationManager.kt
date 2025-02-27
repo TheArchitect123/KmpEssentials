@@ -24,9 +24,9 @@ actual class KmpOrientationManager {
         actual fun startListening(orientationChange: OrientationListener) {
             val screenOrientation = window.asDynamic().screen?.orientation
             if (screenOrientation != undefined) {
-                screenOrientation.addEventListener("change", {
+                screenOrientation.addEventListener("change") {
                     orientationChange(getCurrentOrientation())
-                })
+                }
             } else {
                 // Fallback for older browsers
                 window.addEventListener("resize", {
@@ -38,9 +38,9 @@ actual class KmpOrientationManager {
         actual fun stopListening() {
             val screenOrientation = window.asDynamic().screen?.orientation
             if (screenOrientation != undefined) {
-                screenOrientation.removeEventListener("change", {
+                screenOrientation.removeEventListener("change") {
 
-                })
+                }
             } else {
                 window.removeEventListener("resize", {
 

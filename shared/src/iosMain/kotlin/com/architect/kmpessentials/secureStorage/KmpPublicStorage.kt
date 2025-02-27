@@ -1,5 +1,11 @@
 package com.architect.kmpessentials.secureStorage
 
+import com.architect.kmpessentials.internal.ActionBoolNullParams
+import com.architect.kmpessentials.internal.ActionDoubleNullParams
+import com.architect.kmpessentials.internal.ActionFloatNullParams
+import com.architect.kmpessentials.internal.ActionIntNullParams
+import com.architect.kmpessentials.internal.ActionLongNullParams
+import com.architect.kmpessentials.internal.ActionStringNullParams
 import platform.Foundation.NSUserDefaults
 
 actual class KmpPublicStorage {
@@ -27,31 +33,62 @@ actual class KmpPublicStorage {
         }
 
         actual fun getLongFromKey(key: String): Long? {
-            return NSUserDefaults.standardUserDefaults.integerForKey(key)
+            val longKey = NSUserDefaults.standardUserDefaults.objectForKey(key)
+            if (longKey != null) {
+                return NSUserDefaults.standardUserDefaults.integerForKey(key)
+            } else {
+                return null
+            }
         }
 
         actual fun getIntFromKey(key: String): Int? {
-            return NSUserDefaults.standardUserDefaults.integerForKey(key).toInt()
+            val intKey = NSUserDefaults.standardUserDefaults.objectForKey(key)
+            if (intKey != null) {
+                return NSUserDefaults.standardUserDefaults.integerForKey(key).toInt()
+            } else {
+                return null
+            }
         }
 
         actual fun getFloatFromKey(key: String): Float? {
-            return NSUserDefaults.standardUserDefaults.floatForKey(key)
+            val checkKey = NSUserDefaults.standardUserDefaults.objectForKey(key)
+            if (checkKey != null) {
+                return NSUserDefaults.standardUserDefaults.floatForKey(key)
+            }
+
+            return null
         }
 
         actual fun getBooleanFromKey(key: String): Boolean? {
-            return NSUserDefaults.standardUserDefaults.boolForKey(key)
+            val checkKey = NSUserDefaults.standardUserDefaults.objectForKey(key)
+            if (checkKey != null) {
+                return NSUserDefaults.standardUserDefaults.boolForKey(key)
+            }
+
+            return null
         }
 
         actual fun getDoubleFromKey(key: String): Double? {
-            return NSUserDefaults.standardUserDefaults.doubleForKey(key)
+            val checkKey = NSUserDefaults.standardUserDefaults.objectForKey(key)
+            if (checkKey != null) {
+                return NSUserDefaults.standardUserDefaults.doubleForKey(key)
+            }
+
+            return null
         }
 
         actual fun getStringFromKey(key: String, defValue: String?): String? {
-            return NSUserDefaults.standardUserDefaults.stringForKey(key) ?: defValue
+            val checkKey = NSUserDefaults.standardUserDefaults.objectForKey(key)
+            if (checkKey != null) {
+                return NSUserDefaults.standardUserDefaults.stringForKey(key) ?: defValue
+            }
+
+            return null
         }
 
         actual fun getIntFromKey(key: String, defValue: Int): Int {
-            return (NSUserDefaults.standardUserDefaults.objectForKey(key) as Long?)?.toInt() ?: defValue
+            return (NSUserDefaults.standardUserDefaults.objectForKey(key) as Long?)?.toInt()
+                ?: defValue
         }
 
         actual fun getLongFromKey(key: String, defValue: Long): Long {
@@ -72,6 +109,29 @@ actual class KmpPublicStorage {
         ): Boolean {
             return (NSUserDefaults.standardUserDefaults.objectForKey(key) as Boolean?) ?: defValue
         }
-    }
 
+        actual suspend fun getLongFromKeyAsync(key: String, action: ActionLongNullParams) {
+            action(getLongFromKey(key))
+        }
+
+        actual suspend fun getStringFromKeyAsync(key: String, action: ActionStringNullParams) {
+            action(getStringFromKey(key))
+        }
+
+        actual suspend fun getIntFromKeyAsync(key: String, action: ActionIntNullParams) {
+            action(getIntFromKey(key))
+        }
+
+        actual suspend fun getFloatFromKeyAsync(key: String, action: ActionFloatNullParams) {
+            action(getFloatFromKey(key))
+        }
+
+        actual suspend fun getDoubleFromKeyAsync(key: String, action: ActionDoubleNullParams) {
+            action(getDoubleFromKey(key))
+        }
+
+        actual suspend fun getBooleanFromKeyAsync(key: String, action: ActionBoolNullParams) {
+            action(getBooleanFromKey(key))
+        }
+    }
 }

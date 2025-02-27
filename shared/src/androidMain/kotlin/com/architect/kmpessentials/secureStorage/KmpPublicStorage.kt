@@ -3,15 +3,23 @@ package com.architect.kmpessentials.secureStorage
 import android.content.Context
 import androidx.preference.PreferenceManager
 import com.architect.kmpessentials.KmpAndroid
+import com.architect.kmpessentials.internal.ActionBoolNullParams
+import com.architect.kmpessentials.internal.ActionDoubleNullParams
+import com.architect.kmpessentials.internal.ActionFloatNullParams
+import com.architect.kmpessentials.internal.ActionIntNullParams
+import com.architect.kmpessentials.internal.ActionLongNullParams
+import com.architect.kmpessentials.internal.ActionStringNullParams
 
 actual class KmpPublicStorage {
     actual companion object {
-        private lateinit var localContext : Context
+        private lateinit var localContext: Context
         private val sharedPreference by lazy {
-            PreferenceManager.getDefaultSharedPreferences(KmpAndroid.applicationContext ?: localContext)
+            PreferenceManager.getDefaultSharedPreferences(
+                KmpAndroid.applicationContext ?: localContext
+            )
         }
 
-        fun setCustomContext(customContext: Context){
+        fun setCustomContext(customContext: Context) {
             localContext = customContext
         }
 
@@ -53,11 +61,11 @@ actual class KmpPublicStorage {
             return sharedPreference.getBoolean(key, false)
         }
 
-        actual fun getDoubleFromKey(key: String): Double?{
+        actual fun getDoubleFromKey(key: String): Double? {
             return sharedPreference.getFloat(key, 0.0f).toDouble()
         }
 
-        fun getAllKeys() : List<String>{
+        fun getAllKeys(): List<String> {
             return sharedPreference.all.keys.toList()
         }
 
@@ -86,6 +94,30 @@ actual class KmpPublicStorage {
             defValue: Boolean
         ): Boolean {
             return sharedPreference.getBoolean(key, defValue)
+        }
+
+        actual suspend fun getLongFromKeyAsync(key: String, action: ActionLongNullParams) {
+            action(getLongFromKey(key))
+        }
+
+        actual suspend fun getStringFromKeyAsync(key: String, action: ActionStringNullParams) {
+            action(getStringFromKey(key))
+        }
+
+        actual suspend fun getIntFromKeyAsync(key: String, action: ActionIntNullParams) {
+            action(getIntFromKey(key))
+        }
+
+        actual suspend fun getFloatFromKeyAsync(key: String, action: ActionFloatNullParams) {
+            action(getFloatFromKey(key))
+        }
+
+        actual suspend fun getDoubleFromKeyAsync(key: String, action: ActionDoubleNullParams) {
+            action(getDoubleFromKey(key))
+        }
+
+        actual suspend fun getBooleanFromKeyAsync(key: String, action: ActionBoolNullParams) {
+            action(getBooleanFromKey(key))
         }
     }
 }

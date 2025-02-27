@@ -1,5 +1,8 @@
 package com.architect.kmpessentials.fileSystem
 
+import com.architect.kmpessentials.internal.ActionBoolParams
+import com.architect.kmpessentials.internal.ActionListStringParams
+import com.architect.kmpessentials.internal.ActionStringNullParams
 import com.architect.kmpessentials.internal.ActionStringParams
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.UnsafeNumber
@@ -136,6 +139,75 @@ actual class KmpFileSystem {
             val directoryUrl = NSURL.fileURLWithPath(directoryPath)
             val combinedUrl = directoryUrl.URLByAppendingPathComponent(fileName)
             return combinedUrl?.path
+        }
+
+
+        actual suspend fun getAllFilePathsFromDirectoryPathAsync(
+            directoryPath: String,
+            action: ActionListStringParams
+        ) {
+            action(getAllFilePathsFromDirectoryPath(directoryPath))
+        }
+
+        actual suspend fun createDirectNameAtAppStorageAsync(
+            directoryName: String,
+            action: ActionStringParams
+        ) {
+            action(createDirectNameAtAppStorage(directoryName))
+        }
+
+        actual suspend fun getAppDirectoryAsync(action: ActionStringParams) {
+            action(getAppDirectory())
+        }
+
+        actual suspend fun getTempCacheDirectoryAsync(action: ActionStringParams) {
+            action(getTempCacheDirectory())
+        }
+
+        actual suspend fun getExternalStorageDirectoryAsync(action: ActionStringParams) {
+            action(getExternalStorageDirectory())
+        }
+
+        actual suspend fun deleteFileAtAsync(path: String) {
+            deleteFileAtAsync(path)
+        }
+
+        actual suspend fun createFileAtAsync(path: String) {
+            createFileAtAsync(path)
+        }
+
+        actual suspend fun wipeAllFilesFromDirectoryPathAsync(
+            directoryPath: String,
+            action: ActionBoolParams
+        ) {
+            action(wipeAllFilesFromDirectoryPath(directoryPath))
+        }
+
+        actual suspend fun listenToChangesToFileAtAsync(path: String, events: ActionStringParams) {
+            listenToChangesToFileAt(path, events)
+        }
+
+        actual suspend fun writeTextToFileAtAsync(
+            filePath: String,
+            content: String,
+            action: ActionBoolParams
+        ) {
+            action(writeTextToFileAt(filePath, content))
+        }
+
+        actual suspend fun readTextFromFileAtAsync(
+            filePath: String,
+            action: ActionStringNullParams
+        ) {
+            action(readTextFromFileAt(filePath))
+        }
+
+        actual suspend fun getMergedFilePathFromDirectoryAsync(
+            directoryPath: String,
+            fileName: String,
+            action: ActionStringNullParams
+        ) {
+            action(getMergedFilePathFromDirectory(directoryPath, fileName))
         }
     }
 }

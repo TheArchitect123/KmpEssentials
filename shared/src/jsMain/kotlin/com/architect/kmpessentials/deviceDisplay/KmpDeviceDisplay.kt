@@ -27,13 +27,16 @@ actual class KmpDeviceDisplay {
         }
 
         actual fun adjustScreenBrightness(brightness: Double) {
-            val brightnessCommand = js("new Uint8Array([0x10, $brightness])")
+            val brightnessCommand = js("new Uint8Array(2)")
+            brightnessCommand[0] = 0x10
+            brightnessCommand[1] = brightness
+
             window.navigator.asDynamic().serial.requestPort().then { port ->
                 port.open(js("{ baudRate: 9600 }")).then {
                     val writer = port.writable.getWriter()
                     writer.write(brightnessCommand)
                     writer.releaseLock()
-                    console.log("Brightness adjusted to $brightness")
+                    console.log("Brightness adjusted to brightness")
                 }
             }.catch { error ->
                 console.log("Failed to adjust brightness: ${error.message}")
